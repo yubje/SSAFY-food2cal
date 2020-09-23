@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Post, Comment
-from .serializers import PostListSerializer, PostSerializer, PostUpdateSerializer, CommentListSerializer, CommentSerializer, CommentUpdateSerailzer
+from .serializers import PostListSerializer, PostSerializer, PostUpdateSerializer, CommentListSerializer, CommentSerializer, CommentUpdateSeriailzer
 
 # from diets.views import diet_create
 
@@ -74,7 +74,7 @@ def comment_detail(request, post_id, comment_id):
     if request.user == comment.user:
         # 댓글 수정 
         if request.method == 'PUT':
-            serializer = CommentUpdateSerializer(data=request.data, instance=comment)
+            serializer = CommentUpdateSeriailzer(data=request.data, instance=comment)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response({'message': 'success'})
