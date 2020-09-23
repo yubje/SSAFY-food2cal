@@ -70,7 +70,7 @@ def comment_list(request, post_id):
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def comment_detail(request, post_id, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_pk)
+    comment = get_object_or_404(Comment, pk=comment_id)
     if request.user == comment.user:
         # 댓글 수정 
         if request.method == 'PUT':
