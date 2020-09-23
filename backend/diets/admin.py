@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Diet, Food, Nutrition
+
+admin.site.register(Diet)
+admin.site.register(Food)
+admin.site.register(Nutrition)

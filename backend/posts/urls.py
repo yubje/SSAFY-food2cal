@@ -4,7 +4,7 @@ from . import views
 app_name = 'posts'
 
 urlpatterns = [
-    path('page/<int:page_id>/', views.post_list, name='post_list'),
+    path('pages/<int:page_id>/', views.post_list, name='post_list'),
     path('', views.post_create, name='post_create'),
     path('<int:post_id>/', views.post_detail, name='post_detail'),
     path('<int:post_id>/comments/', views.comment_list, name='comment_list'),
