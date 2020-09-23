@@ -34,7 +34,7 @@ def get_secret(setting, secrets=secrets):
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'cl$06$&n9y1uk_&063ippwtk09m)z_)&$1(%+@y7m(4wv=6=e4'
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -63,8 +63,8 @@ INSTALLED_APPS = [
     'rest_auth.registration',
 
     # apps
-    'articles',
-    'accounts',
+    'posts',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -180,4 +180,4 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
 }
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'users.User'
