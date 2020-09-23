@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+import constants from '@/libs/constants'
+
+import Home from '@/views/Home.vue'
+// import Camera from '@/views/uploads/Camera'
+// import Canvas from '@/views/uploads/Canvas'
+
+
 
 Vue.use(VueRouter)
 
@@ -11,12 +18,14 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/camera',
+    name: constants.URL_TYPE.UPLOAD.CAMERA,
+    component: () => import('@/views/uploads/Camera')
+  },
+  {
+    path: '/canvas',
+    name: constants.URL_TYPE.UPLOAD.CANVAS,
+    component: () => import('@/views/uploads/Canvas')
   }
 ]
 

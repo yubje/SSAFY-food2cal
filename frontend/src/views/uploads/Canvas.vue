@@ -1,15 +1,15 @@
 <template>
-  <div class="home">
-    
+  <div>
+    canvas 영역입니다.
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'Home',
-  components: {
-    
-  }
+  name: 'Canvas'
 }
 </script>
+
+<style>
+
+</style>
