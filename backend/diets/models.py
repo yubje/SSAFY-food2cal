@@ -3,15 +3,15 @@ from django.conf import settings
 
 from posts.models import Post
 
-class Diet:
+class Diet(models.Model):
     diet_image_path = models.CharField()
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.OneToOneField(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, unique=True)
 
 
 
-class Food:
+class Food(models.Model):
     food_name = models.CharField(max_length=100)
     amount = models.IntegerField()
     calorie = models.IntegerField()
@@ -21,7 +21,7 @@ class Food:
     diet = models.ForeignKey(Diet, on_delete=models.CASCADE)
 
 
-class Nutrition:
+class Nutrition(models.Model):
     food_name = models.CharField()
     amount = models.IntegerField() 
     calorie = models.IntegerField() 
