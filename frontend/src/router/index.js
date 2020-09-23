@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+import constants from '@/libs/constants'
+
+import Home from '@/views/Home.vue'
+import Camera from '@/views/uploads/Camera'
+
+
 
 Vue.use(VueRouter)
 
@@ -9,6 +15,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/camera',
+    name: constants.URL_TYPE.UPLOAD.CAMERA,
+    component: Camera
   }
 ]
 

@@ -8,7 +8,9 @@ export default {
     PAGE_NOT_FOUND: '',
   },
   URL_TYPE: {
-    INTRO: 'intro',
+    UPLOAD: {
+      CAMERA: 'camera'
+    },
     USER: {
       JOIN: 'join',
       LOGIN: 'login',

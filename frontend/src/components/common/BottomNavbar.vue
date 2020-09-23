@@ -9,26 +9,37 @@
       <v-icon>mdi-history</v-icon>
     </v-btn>
 
-    <v-btn>
-      <span>Favorites</span>
-      <v-icon>mdi-heart</v-icon>
+    <v-btn @click="goToCamera">
+      <span>Camera</span>
+      <v-icon>mdi-camera</v-icon>
     </v-btn>
-
+    
     <v-btn>
-      <span>Nearby</span>
-      <v-icon>mdi-map-marker</v-icon>
+      <span>Calendar</span>
+      <v-icon>mdi-calendar</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>
 
 <script>
+import constants from '@/libs/constants'
+
 export default {
   name: 'BottomNavbar',
+  components: {
+    
+  },
   data () {
     return {
+      constants,
       activeBtn: 1,
     }
   },
+  methods: {
+    goToCamera() {
+      this.$router.push({ name: constants.URL_TYPE.UPLOAD.CAMERA })
+    }
+  }
 }
 </script>
 
