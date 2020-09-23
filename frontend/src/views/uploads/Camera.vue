@@ -23,13 +23,15 @@
 </template>
 
 <script>
+import constants from '@/libs/constants'
 import { uploadPicture } from '@/components/mixins/uploadPicture'
-import AWS from 'aws-sdk'
+// import AWS from 'aws-sdk'
 
 export default {
   name: 'Camera',
   data () {
     return {
+      constants,
       file: null,
       fileUrl: null
     }
@@ -46,9 +48,22 @@ export default {
         alert('Cannot get Media Devices')
       }
     },
+    createName() {
+      const fileName = this.createImageFileName()
+      const fileType = this.file.name.split('.')[1]
+      const name = fileName + '.' + fileType
+      return name      
+    },
     handleFileUpload() {
       this.file = this.$refs.inputUpload.files[0]
-      console.log(this.file)
+      const fileName = this.createName()
+      const fileData = {
+        file: this.file,
+        name: fileName
+      }
+      this.upload(fileData)
+      this.file = null
+      this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
     },
     dataURItoBlob(dataURI) {
       const binary = atob(dataURI.split(',')[1]);
@@ -58,45 +73,53 @@ export default {
       }
       return new Blob([new Uint8Array(arr)], {type: 'image/png'})
     },
-    upload(name) {
-      const s3 = new AWS.S3({
-        accessKeyId: process.env.VUE_APP_ACCESS_KEY_ID,
-        secretAccessKey: process.env.VUE_APP_SECRECT_ACCESS_KEY,
-        region : process.env.VUE_APP_REGION
-      })
-      const param = {
-        'Bucket' : process.env.VUE_APP_BUCKET,
-        'Key' : `image/` + name,
-        'ACL' : 'public-read',
-        'Body' : this.file,
-        'ContentType': this.file.type
-      }
-      s3.upload(param, (err, data) => {
-        if(err) {
-          console.log('image upload err : ' + err)
-          return
-        }
-        console.log(data)
-      })
-    },
+    // upload(name) {
+    //   const s3 = new AWS.S3({
+    //     accessKeyId: process.env.VUE_APP_ACCESS_KEY_ID,
+    //     secretAccessKey: process.env.VUE_APP_SECRECT_ACCESS_KEY,
+    //     region : process.env.VUE_APP_REGION
+    //   })
+    //   const param = {
+    //     'Bucket' : process.env.VUE_APP_BUCKET,
+    //     'Key' : `image/` + name,
+    //     'ACL' : 'public-read',
+    //     'Body' : this.file,
+    //     'ContentType': this.file.type
+    //   }
+    //   s3.upload(param, (err, data) => {
+    //     if(err) {
+    //       console.log('image upload err : ' + err)
+    //       return
+    //     }
+    //     console.log(data)
+    //   })
+    // },
     takePicture() {
-      let ratio = (window.innerHeight < window.innerWidth) ? 16/9: 9/16;
-      const picture = document.querySelector('canvas');
-      picture.width = (window.innerWidth < 1200) ? window.innerWidth : 1200;
-      picture.height = window.innerWidth / ratio;
-      const ctx = picture.getContext('2d');
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(document.querySelector('video'), 0, 0);
-      console.log(1)
-      const dataUrl = picture.toDataURL('image/png');
+      // let ratio = (window.innerHeight < window.innerWidth) ? 16/9: 9/16;
+      const picture = document.querySelector('canvas')
+      // picture.width = (window.innerWidth < 1200) ? window.innerWidth : 1200;
+      picture.width = 414
+      picture.height = 408
+      // console.log(document.querySelector('video'))
+      // picture.height = window.innerWidth / ratio;
+      const ctx = picture.getContext('2d')
+      ctx.imageSmoothingEnabled = true
+      ctx.imageSmoothingQuality = 'high'
+      ctx.drawImage(document.querySelector('video'), 0, 0, 414, 350)
+      const dataUrl = picture.toDataURL('image/png')
       const blobData = this.dataURItoBlob(dataUrl);
       const fileName = this.createImageFileName()
-      const file = new File([blobData], fileName + '.png', {type: blobData.type})
-      console.log(file)
+      const file = new File([blobData], fileName + '.png', { type: blobData.type })
+      // console.log(file)
       this.file = file
-      this.upload(this.file.name)
+      const fileData = {
+        file: this.file,
+        name: this.file.name
+      }
+      // this.upload(this.file.name)
+      this.upload(fileData)
       this.file = null
+      this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
     }
   },
   mixins: [
