@@ -16,7 +16,7 @@ def post_list(request, page_id=0):
     return Response(serializer.data)
 
 # 글 생성 
-@api_view(['POST']):
+@api_view(['POST'])
 def post_create(request):
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):

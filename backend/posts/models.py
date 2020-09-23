@@ -9,7 +9,6 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # diet = models.models.OneToOneField(Diet, on_delete=models.CASCADE)
     vote_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='vote_posts')
     CATEGORY_CHOICES = (
         ('MO', '아침'), ('LU', '점심'), ('DI', '저녁'), ('SN', '간식기타')

@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     # apps
     'posts',
     'users',
+    'diets',
 ]
 
 MIDDLEWARE = [
