@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 import constants from '@/libs/constants'
 
 import Home from '@/views/Home.vue'
-import Camera from '@/views/uploads/Camera'
+// import Camera from '@/views/uploads/Camera'
+// import Canvas from '@/views/uploads/Canvas'
 
 
 
@@ -19,7 +20,12 @@ const routes = [
   {
     path: '/camera',
     name: constants.URL_TYPE.UPLOAD.CAMERA,
-    component: Camera
+    component: () => import('@/views/uploads/Camera')
+  },
+  {
+    path: '/canvas',
+    name: constants.URL_TYPE.UPLOAD.CANVAS,
+    component: () => import('@/views/uploads/Canvas')
   }
 ]
 

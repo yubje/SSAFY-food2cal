@@ -9,7 +9,8 @@ export default {
   },
   URL_TYPE: {
     UPLOAD: {
-      CAMERA: 'camera'
+      CAMERA: 'camera',
+      CANVAS: 'canvas'
     },
     USER: {
       JOIN: 'join',
@@ -28,7 +29,7 @@ export default {
       DETAIL: 'detail',
       TEMPORARY: 'temporary',
       RECOMMEND: 'recommend',
-      KIND : 'kind',
+      KIND : 'kind'
     }
   },
 }
