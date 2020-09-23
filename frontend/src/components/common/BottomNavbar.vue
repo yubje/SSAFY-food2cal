@@ -4,16 +4,16 @@
     fixed
     color="#FF890E"
   >
-    <v-btn>
-      <span>Recents</span>
-      <v-icon>mdi-history</v-icon>
-    </v-btn>
-
     <v-btn @click="goToCamera">
       <span>Camera</span>
       <v-icon>mdi-camera</v-icon>
     </v-btn>
-    
+
+    <v-btn @click="goToHome">
+      <span>Home</span>
+      <v-icon>mdi-home</v-icon>
+    </v-btn>
+
     <v-btn>
       <span>Calendar</span>
       <v-icon>mdi-calendar</v-icon>
@@ -37,7 +37,22 @@ export default {
   },
   methods: {
     goToCamera() {
-      this.$router.push({ name: constants.URL_TYPE.UPLOAD.CAMERA })
+      this.$router
+        .push({ name: constants.URL_TYPE.UPLOAD.CAMERA })
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ){
+            throw err
+          }
+        })
+    },
+    goToHome() {
+      this.$router
+        .push('/')
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ){
+            throw err
+          }
+        })
     }
   }
 }
