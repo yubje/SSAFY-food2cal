@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Post
 from .serializers import PostListSerializer, PostSerializer
 
+# from diets.views import diet_create
+
 # 글 리스트 
 @api_view(['GET'])
 def post_list(request, page_id=0):
@@ -18,9 +20,12 @@ def post_list(request, page_id=0):
 # 글 생성 
 @api_view(['POST'])
 def post_create(request):
+    print(request.data)
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user)
+        # serializer.save(user=request.user)
+        serializer.save()
+        # diet_create(request.data, post_id)
         return Response(serializer.data)
 
 
