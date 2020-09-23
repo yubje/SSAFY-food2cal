@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Post
-from .serializers import PostListSerializer, PostSerializer
+from .models import Post, Comment
+from .serializers import PostListSerializer, PostSerializer, PostUpdateSerializer, CommentListSerializer, CommentSerializer, CommentUpdateSerailzer
 
 # from diets.views import diet_create
 
@@ -40,7 +40,7 @@ def post_detail(request, post_id):
     elif request.user == post.user:
         # 댓글 수정 
         if request.method == 'PUT':
-            serializer = PostSerializer(data=request.data, instance=post)
+            serializer = PostUpdateSerializer(data=request.data, instance=post)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response({'message': 'success'})
@@ -74,7 +74,7 @@ def comment_detail(request, post_id, comment_id):
     if request.user == comment.user:
         # 댓글 수정 
         if request.method == 'PUT':
-            serializer = CommentSerializer(data=request.data, instance=comment)
+            serializer = CommentUpdateSerializer(data=request.data, instance=comment)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response({'message': 'success'})
@@ -82,6 +82,7 @@ def comment_detail(request, post_id, comment_id):
         else:
             comment.delete()
             return Response({'message': 'success'})
+
 
 
 

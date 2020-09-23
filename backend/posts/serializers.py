@@ -20,6 +20,13 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'user', 'created_at', 'updated_at')
 
+class PostUpdateSerializer(serializers.ModelSerilizer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+        read_only_fields = ('id', 'user', 'created_at')
+
+
 class CommentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -31,5 +38,14 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+        read_only_fields = ('id', 'user','created_at', 'updated_at')
+
+class CommentUpdateSerializer(serializers.ModelSerializer):
+    # user = UserSerializer(required=False)
+    class Meta:
+        model = Comment
+        fields = '__all__'
         read_only_fields = ('id', 'user','created_at')
+
+
 
