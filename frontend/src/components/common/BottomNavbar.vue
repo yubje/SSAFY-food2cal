@@ -20,16 +20,16 @@
       <v-icon>mdi-calendar</v-icon>
     </v-btn>
 
-    <!-- 로그인 상태 false -->
-    <v-btn @click="goToLogin">
+    <!-- 로그인(false) -->
+    <v-btn v-if="!this.islogin" @click="goToLogin">
       <span>Login</span>
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
 
-    <!-- 로그인 상태 true -->
-    <!-- <v-btn @click="goToMypage">
+    <!-- 마이페이지(true) -->
+    <!-- <v-btn v-if="this.islogin" @click="goToMypage">
       <span>Mypage</span>
-      <v-icon>mdi-pencil</v-icon>
+      <v-icon>mdi-pencil</v-`icon>
     </v-btn> -->
 
     <v-btn @click="goToDiary">
@@ -50,6 +50,7 @@ export default {
     return {
       constants,
       activeBtn: 1,
+      islogin: false,
     }
   },
   methods: {
@@ -83,7 +84,25 @@ export default {
             throw err
           }
         })
+    },
+    UserLogout() {
+      const config = {
+        headers: {'Authorization': `jwt ${this.$cookies.get('auth-token')}`}
+      }
+      if (this.islogin === true) {
+        this.$http
+          .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/logout/', null, config)
+          .catch(err=>console.log(err.response))
+          .finally(() => {
+            this.$cookies.remove('auth-token')
+            this.islogin != this.islogin
+            this.$router.push({ name:'home'})
+          })
+      }
     }
+  },
+  mounted() {
+    this.islogin = this.$cookies.isKey('auth-token')
   }
 }
 </script>
