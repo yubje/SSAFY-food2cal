@@ -15,10 +15,10 @@ from posts.models import Post
 def diet_create(request, post_id):
     serializer = DietSerializer(data=request.data.get("diet"))
     if serializer.is_valid(raise_exception=True):
-        # serializer.save(user=request.user, post_id=post_id)
+        serializer.save(user=request.user, post_id=post_id)
         serializer.save(post_id=post_id)
-        print(serializer.data)
-        print(request.data["food"])
+        # print(serializer.data)
+        # print(request.data["food"])
         for food in request.data["food"]:
             food_create(request, food, serializer.data["id"])
         return Response(serializer.data)
@@ -27,7 +27,7 @@ def diet_create(request, post_id):
 def diet_list(post_id):
     diets = Diet.objects.filter(post_id=post_id)
     serializer = DietListSerializer(diets, many=True)
-    print(serializer.data)
+    # print(serializer.data)
     for i in range(len(serializer.data)):
         serializer.data[i]["food"] = food_list(serializer.data[i]["id"])
     return json.dumps(serializer.data)
@@ -37,7 +37,7 @@ def diet_list(post_id):
 def food_create(request, food, diet_id):
     serializer = FoodSerializer(data=food)
     if serializer.is_valid(raise_exception=True):
-        # serializer.save(user=request.user, diet_id=diet_id)
+        serializer.save(user=request.user, diet_id=diet_id)
         serializer.save(diet_id=diet_id)
         return Response(serializer.data)
 

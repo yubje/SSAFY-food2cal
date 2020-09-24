@@ -27,7 +27,7 @@ class CommentListSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'user', 'created_at')
 
 class CommentSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False)
+    user = UserSerializer(required=False)
     class Meta:
         model = Comment
         fields = '__all__'
@@ -35,7 +35,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 # 게시글 상세정보
 class PostSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False)
+    user = UserSerializer(required=False)
     # commments = CommentSerializer(many=True, read_only=True)
     # diets = DietSerializer(many=True, read_only=True)
     class Meta:
@@ -44,7 +44,7 @@ class PostSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'user', 'created_at', 'updated_at')
 
 class CommentUpdateSeriailzer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False)
+    user = UserSerializer(required=False)
     class Meta:
         model = Comment
         fields = '__all__'

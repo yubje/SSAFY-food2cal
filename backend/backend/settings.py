@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'posts',
     'users',
     'diets',
+    'ai',
 ]
 
 MIDDLEWARE = [
