@@ -15,7 +15,7 @@ class Food(models.Model):
     food_name = models.CharField(max_length=100)
     amount = models.IntegerField()
     calorie = models.IntegerField()
-    carbyhydrate = models.IntegerField()
+    carbohydrate = models.IntegerField()
     protein = models.IntegerField()
     fat = models.IntegerField()
     diet = models.ForeignKey(Diet, on_delete=models.CASCADE)
