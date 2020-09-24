@@ -15,7 +15,7 @@ from diets.views import diet_create, diet_list, food_list
 # 글 리스트 
 @api_view(['GET'])
 def post_list(request, page_id=0):
-    posts = Post.objects.order_by('-pk')[:page_id*10]
+    posts = Post.objects.order_by('-pk')[:page_id*5]
     serializer = PostListSerializer(posts, many=True)
     return Response(serializer.data)
 
