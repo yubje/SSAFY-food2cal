@@ -26,7 +26,17 @@ const routes = [
     path: '/canvas',
     name: constants.URL_TYPE.UPLOAD.CANVAS,
     component: () => import('@/views/uploads/Canvas')
-  }
+  },
+  {
+    path: '/login',
+    name: constants.URL_TYPE.USER.LOGIN,
+    component: () => import('@/views/users/UsersLogin')
+  },
+  {
+    path: '/join',
+    name: constants.URL_TYPE.USER.JOIN,
+    component: () => import('@/views/users/UsersJoin')
+  },
 ]
 
 const router = new VueRouter({
