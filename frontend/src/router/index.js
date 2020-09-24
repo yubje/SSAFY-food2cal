@@ -26,6 +26,11 @@ const routes = [
     path: '/canvas',
     name: constants.URL_TYPE.UPLOAD.CANVAS,
     component: () => import('@/views/uploads/Canvas')
+  },
+  {
+    path: '/diary',
+    name: constants.URL_TYPE.CALENDAR.DIARY,
+    component: () => import('@/views/calendar/Diary')
   }
 ]
 

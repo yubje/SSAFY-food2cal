@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import AWS from 'aws-sdk'
+import axios from 'axios'
 
 
 Vue.use(Vuex)
@@ -37,7 +38,11 @@ export default new Vuex.Store({
         // console.log(data.Location)
         commit('SET_FILE_URL', data.Location)
         // return data.Location
-        // console.log(data)
+        console.log(data.Location)
+        axios.post('http://8a945e2757a9.ngrok.io/predict/', data.Location)
+          .then((res) => {
+            console.log(res)
+          })
       })
     }
   },

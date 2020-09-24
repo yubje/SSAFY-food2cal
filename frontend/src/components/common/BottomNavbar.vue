@@ -3,6 +3,7 @@
     :value="activeBtn"
     fixed
     color="#FF890E"
+    class="mt-10"
   >
     <v-btn @click="goToCamera">
       <span>Camera</span>
@@ -17,6 +18,10 @@
     <v-btn>
       <span>Calendar</span>
       <v-icon>mdi-calendar</v-icon>
+    </v-btn>
+    <v-btn @click="goToDiary">
+      <span>Diary</span>
+      <v-icon>mdi-book-open-outline</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>
@@ -48,6 +53,15 @@ export default {
     goToHome() {
       this.$router
         .push('/')
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ){
+            throw err
+          }
+        })
+    },
+    goToDiary() {
+      this.$router
+        .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
         .catch(err => {
           if(err.name != "NavigationDuplicated" ){
             throw err
