@@ -177,3 +177,233 @@ label3
               f.close()
   ```
 
+
+
+#### 5. Training - 명령어를 이용해 학습 시키기
+
+```python
+python flow --model cfg/my-tiny.cfg --load bin/yolov2-tiny-voc.weights --train --annotation train/Annotations --dataset train/images --gpu 0.5 --epoch 100 --save 100 --keep 5
+```
+
+| arg          | meaning                                                      |
+| ------------ | ------------------------------------------------------------ |
+| --model      | cfg 파일 지정                                                |
+| --load       | pretrained weights 지정 혹은 체크포인트로부터 불러오기 ex) 5150 (ckpt no.) or -1 (가장 최근) |
+| --train      | 학습 명령어                                                  |
+| --annotation | xml파일이 위치한 Annotation 경로 지정                        |
+| --dataset    | 학습시킬 이미지 파일 경로                                    |
+| --gpu        | gpu 사용할 값 지정. 0 ~ 1 사이                               |
+| --save       | 지정된 수 만큼의 학습 이후 체크포인트 생성                   |
+| --keep       | 지정된 수 만큼 마지막으로부터 weight 및 meta정보 유지(저장)  |
+
+
+
+- darkflow 실행시 지정해 줄 수 있는 명령어들
+
+  - darkflow/defaults.py 내부 코드
+
+  ```python
+      def setDefaults(self):
+          self.define('imgdir', './sample_img/', 'path to testing directory with images')
+          self.define('binary', './bin/', 'path to .weights directory')
+          self.define('config', './cfg/', 'path to .cfg directory')
+          self.define('dataset', '../pascal/VOCdevkit/IMG/', 'path to dataset directory')
+          self.define('labels', 'labels.txt', 'path to labels file')
+          self.define('backup', './ckpt/', 'path to backup folder')
+          self.define('summary', '', 'path to TensorBoard summaries directory')
+          self.define('annotation', '../pascal/VOCdevkit/ANN/', 'path to annotation directory')
+          self.define('threshold', -0.1, 'detection threshold')
+          self.define('model', '', 'configuration of choice')
+          self.define('trainer', 'rmsprop', 'training algorithm')
+          self.define('momentum', 0.0, 'applicable for rmsprop and momentum optimizers')
+          self.define('verbalise', True, 'say out loud while building graph')
+          self.define('train', False, 'train the whole net')
+          self.define('load', '', 'how to initialize the net? Either from .weights or a checkpoint, or even from scratch')
+          self.define('savepb', False, 'save net and weight to a .pb file')
+          self.define('gpu', 0.0, 'how much gpu (from 0.0 to 1.0)')
+          self.define('gpuName', '/gpu:0', 'GPU device name')
+          self.define('lr', 1e-5, 'learning rate')
+          self.define('keep',20,'Number of most recent training results to save')
+          self.define('batch', 16, 'batch size')
+          self.define('epoch', 1000, 'number of epoch')
+          self.define('save', 2000, 'save checkpoint every ? training examples')
+          self.define('demo', '', 'demo on webcam')
+          self.define('queue', 1, 'process demo in batch')
+          self.define('json', False, 'Outputs bounding box information in json format.')
+          self.define('saveVideo', False, 'Records video from input video or camera')
+          self.define('pbLoad', '', 'path to .pb protobuf file (metaLoad must also be specified)')
+          self.define('metaLoad', '', 'path to .meta file generated during --savepb that corresponds to .pb file')
+  ```
+
+
+
+#### 6. Test - 명령어 이용 이미지 예측하기
+
+```python
+python flow --model cfg/my-tiny.cfg --load -1 --imgdir sample_img --gpu 0.5 --threshold 0.25
+```
+
+| args        | meaning                                                      |
+| ----------- | ------------------------------------------------------------ |
+| --load      | 지정된 ckpt weight 불러오기. -1: 가장 최근                   |
+| --imgdir    | 예측할 이미지 파일 경로                                      |
+| --threshold | 이미지에 대한 confidence 값이 설정한 임계점 이상일 경우에 라벨링 해줌 |
+
+
+
+##### 6-1. save포인트와 load를 이용, 학습시킨 weights를 저장하고 불러올 수 있음
+
+```
+python flow --model cfg/my-tiny.cfg --load bin/yolov2-tiny-voc.weights --train --annotation train/Annotations --dataset train/Images --gpu 0.5 --epoch 300 --save 50 --keep 5
+```
+
+```python
+python flow --model cfg/my-tiny.cfg --load -1 --imgdir sample_img --threshold 0.25
+```
+
+
+
+#### 7. 학습된 모델 .pb(protobuf file)로 저장하기
+
+[참고링크](https://stackoverflow.com/questions/50618968/converting-checkpoints-generated-to-weights-darkflow)
+
+The trained checkpoint files `yolov2-3c-5500.data` file is actually your weight file. If you want to convert to .pb file, use the below command
+
+```python
+python flow --model cfg/Your_ConfigFile.cfg --load Your_required_checkpoint-chkptNumber --savepb
+```
+
+flow --model cfg/my-tiny.cfg --load 5151 --savepb
+
+flow --model cfg/my-tiny.cfg --load -1 --savepb
+
+
+
+- .pb & .meta 파일을 이용한 예측 명령어
+
+```python
+python flow --pbLoad built_graph/my-tiny.pb --metaLoad built_graph/my-tiny.meta --threshold 0.25 --gpu 0.5 --imgdir training
+```
+
+
+
+#### 8. 저장된 .pb 파일과 .meta 파일을 이용해 이미지 결과 예측값 리턴하기
+
+```python
+# 저장된 .pb 파일과 .meta 파일을 이용해 이미지 결과 예측값 리턴하기
+from darkflow.net.build import TFNet
+import cv2
+
+options = {"pbLoad": "built_graph/my-tiny.pb", "metaLoad": "built_graph/my-tiny.meta", "threshold": 0.2}
+
+tfnet = TFNet(options)
+
+imgcv = cv2.imread("./sample_img/jajangmyun (273).jpg")
+
+# cv2.imshow('image', imgcv)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+result = tfnet.return_predict(imgcv)
+print(result)
+```
+
+
+
+
+
+- darkflow\darkflow\dark\darknet.py", line 47
+  - def get_weight_src(self, FLAGS):
+
+```python
+from ..utils.process import cfg_yielder
+from .darkop import create_darkop
+from ..utils import loader
+import warnings
+import time
+import os
+
+class Darknet(object):
+
+    _EXT = '.weights'
+
+    def __init__(self, FLAGS):
+        self.get_weight_src(FLAGS)
+        self.modify = False
+
+        print('Parsing {}'.format(self.src_cfg))
+        src_parsed = self.parse_cfg(self.src_cfg, FLAGS)
+        self.src_meta, self.src_layers = src_parsed
+        
+        if self.src_cfg == FLAGS.model:
+            self.meta, self.layers = src_parsed
+        else: 
+        	print('Parsing {}'.format(FLAGS.model))
+        	des_parsed = self.parse_cfg(FLAGS.model, FLAGS)
+        	self.meta, self.layers = des_parsed
+
+        self.load_weights()
+
+    def get_weight_src(self, FLAGS):
+        """
+        analyse FLAGS.load to know where is the 
+        source binary and what is its config.
+        can be: None, FLAGS.model, or some other
+        """
+        self.src_bin = FLAGS.model + self._EXT
+        self.src_bin = FLAGS.binary + self.src_bin
+        self.src_bin = os.path.abspath(self.src_bin)
+        exist = os.path.isfile(self.src_bin)
+
+        if FLAGS.load == str(): FLAGS.load = int()
+        if type(FLAGS.load) is int:
+            self.src_cfg = FLAGS.model
+            if FLAGS.load: self.src_bin = None
+            elif not exist: self.src_bin = None
+        else:
+            assert os.path.isfile(FLAGS.load +".meta"), \
+            '{} not found'.format(FLAGS.load)
+            self.src_bin = FLAGS.load
+            name = loader.model_name(FLAGS.load)
+            cfg_path = os.path.join(FLAGS.config, name + '.cfg')
+            if not os.path.isfile(cfg_path):
+                warnings.warn(
+                    '{} not found, use {} instead'.format(
+                    cfg_path, FLAGS.model))
+                cfg_path = FLAGS.model
+            self.src_cfg = cfg_path
+            FLAGS.load = int()
+
+
+    def parse_cfg(self, model, FLAGS):
+        """
+        return a list of `layers` objects (darkop.py)
+        given path to binaries/ and configs/
+        """
+        args = [model, FLAGS.binary]
+        cfg_layers = cfg_yielder(*args)
+        meta = dict(); layers = list()
+        for i, info in enumerate(cfg_layers):
+            if i == 0: meta = info; continue
+            else: new = create_darkop(*info)
+            layers.append(new)
+        return meta, layers
+
+    def load_weights(self):
+        """
+        Use `layers` and Loader to load .weights file
+        """
+        print('Loading {} ...'.format(self.src_bin))
+        start = time.time()
+
+        args = [self.src_bin, self.src_layers]
+        wgts_loader = loader.create_loader(*args)
+        for layer in self.layers: layer.load(wgts_loader)
+        
+        stop = time.time()
+        print('Finished in {}s'.format(stop - start))
+```
+
+- .pb 파일 생성할 때 ".meta" 확장자가 붙지 않아 에러:
+  - +".meta" 붙여줘 수정
+    - 학습시킬 땐 없어야함
