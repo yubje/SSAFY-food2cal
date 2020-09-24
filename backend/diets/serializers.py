@@ -17,7 +17,7 @@ class FoodSerializer(serializers.ModelSerializer):
 
 # 식단 상세정보
 class DietSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=False)
+    # user = UserSerializer(required=False)
     food = FoodSerializer(many=True, read_only=True)
     class Meta:
         model = Diet
