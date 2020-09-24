@@ -140,20 +140,20 @@
     },
     methods: {
       UserLogout() {
-      const config = {
-        headers: {'Authorization': `jwt ${this.$cookies.get('auth-token')}`}
+        const config = {
+          headers: {'Authorization': `jwt ${this.$cookies.get('auth-token')}`}
+        }
+        if (this.islogin === true) {
+          this.$http
+            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/logout/', null, config)
+            .catch(err=>console.log(err.response))
+            .finally(() => {
+              this.$cookies.remove('auth-token')
+              this.islogin != this.islogin  
+              this.$router.push({ name:'home'})
+            })
+        }
       }
-      if (this.islogin === true) {
-        this.$http
-          .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/logout/', null, config)
-          .catch(err=>console.log(err.response))
-          .finally(() => {
-            this.$cookies.remove('auth-token')
-            this.islogin != this.islogin
-            this.$router.push({ name:'home'})
-          })
-      }
-    }
     }
   }
 </script>
