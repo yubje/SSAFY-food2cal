@@ -30,6 +30,9 @@ export default {
       TEMPORARY: 'temporary',
       RECOMMEND: 'recommend',
       KIND : 'kind'
+    },
+    CALENDAR: {
+      DIARY: 'diary'
     }
   },
 }

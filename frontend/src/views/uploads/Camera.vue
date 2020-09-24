@@ -25,6 +25,7 @@
 <script>
 import constants from '@/libs/constants'
 import { uploadPicture } from '@/components/mixins/uploadPicture'
+import { mapActions } from 'vuex'
 // import AWS from 'aws-sdk'
 
 export default {
@@ -36,7 +37,10 @@ export default {
       fileUrl: null
     }
   },
+  computed: {
+  },
   methods: {
+    ...mapActions(['upload']),
     init() {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         navigator.mediaDevices.getUserMedia({video: true}).then(stream => {
@@ -94,7 +98,7 @@ export default {
     //     console.log(data)
     //   })
     // },
-    takePicture() {
+    async takePicture() {
       // let ratio = (window.innerHeight < window.innerWidth) ? 16/9: 9/16;
       const picture = document.querySelector('canvas')
       // picture.width = (window.innerWidth < 1200) ? window.innerWidth : 1200;
@@ -117,7 +121,7 @@ export default {
         name: this.file.name
       }
       // this.upload(this.file.name)
-      this.upload(fileData)
+      this.fileUrl = await this.upload(fileData)
       this.file = null
       this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
     }
