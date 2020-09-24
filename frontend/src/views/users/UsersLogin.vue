@@ -93,7 +93,7 @@ export default {
         password: null
       },
     }
-  },
+  }, // 9b32cef1b0714379dc2839ac826ada74fd059e53
   methods: {
     UserLogin(LoginData) {
       if (this.islogin === false) {
@@ -117,6 +117,9 @@ export default {
       this.$cookies.set('auth-token',token)
       this.islogin = !this.islogin
     },
+  },
+  mounted() {
+    this.islogin = this.$cookies.isKey('auth-token')
   }
 }
 </script>
