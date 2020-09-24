@@ -32,6 +32,11 @@ const routes = [
     name: constants.URL_TYPE.USER.LOGIN,
     component: () => import('@/views/users/UsersLogin')
   },
+  {
+    path: '/join',
+    name: constants.URL_TYPE.USER.JOIN,
+    component: () => import('@/views/users/UsersJoin')
+  },
 ]
 
 const router = new VueRouter({
