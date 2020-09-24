@@ -19,10 +19,18 @@
       <v-icon>mdi-calendar</v-icon>
     </v-btn>
 
+    <!-- 로그인 상태 false -->
     <v-btn @click="goToLogin">
       <span>Login</span>
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
+
+    <!-- 로그인 상태 true -->
+    <!-- <v-btn @click="goToMypage">
+      <span>Mypage</span>
+      <v-icon>mdi-pencil</v-icon>
+    </v-btn> -->
+
   </v-bottom-navigation>
 </template>
 
