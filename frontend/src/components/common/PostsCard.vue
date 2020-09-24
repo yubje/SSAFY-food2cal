@@ -11,13 +11,22 @@
       </v-list-item-content>
     </v-list-item>
 
+    <!-- <v-img
+      :src="post.diet_image_path"
+      :style="{ backgroundImage: 'url( '+ require('../../assets/img/MAATKKUN.png') +' )' }"
+      height="194"
+    ></v-img> -->
+
     <v-img
-      src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
+      :src="post.diet_image_path"
+      :style="{ backgroundImage: 'url(https://cdn.vuetifyjs.com/images/cards/sunshine.jpg)' }"
       height="194"
     ></v-img>
 
+
+
     <v-card-text>
-      Visit ten places on our planet that are undergoing the biggest changes today.
+      {{ post.content }}
     </v-card-text>
 
     <v-card-actions>
@@ -46,6 +55,11 @@
 
 <script>
 export default {
-  name: 'Card'
+  name: 'Card',
+  props: {
+    post: {
+      type: Object
+    }
+  }
 }
 </script>

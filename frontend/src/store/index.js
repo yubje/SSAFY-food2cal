@@ -9,11 +9,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    fileUrl: null
+    fileUrl: null,
+    foodInfo: null
   },
   mutations: {
     SET_FILE_URL(state, fileUrl) {
       state.fileUrl = fileUrl
+    },
+    SET_FOOD_INFO(state, foodInfo) {
+      state.foodInfo = foodInfo
+      console.log(state.foodInfo)
     }
   },
   actions: {
@@ -41,7 +46,7 @@ export default new Vuex.Store({
         console.log(data.Location)
         axios.post('http://8a945e2757a9.ngrok.io/predict/', data.Location)
           .then((res) => {
-            console.log(res)
+            commit('SET_FOOD_INFO', res.data[0])
           })
       })
     }
