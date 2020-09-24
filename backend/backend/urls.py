@@ -40,17 +40,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/signup/', include('rest_auth.registration.urls')),
-    path('posts/', include('posts.urls'))
+    path('posts/', include('posts.urls')),
 
     path('api/token/', obtain_jwt_token),
     path('api/token/verify/', verify_jwt_token),
     path('api/token/refresh/', refresh_jwt_token),
 
     path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/signup/', include('rest_auth.registration'))
+    path('rest-auth/signup/', include('rest_auth.registration')),
     path('posts/', include('posts.urls')),
     path('diets/', include('diets.urls')),
-    path('ai/', include('ai.urls')),
+    path('predict/', include('ai.urls')),
     # swagger
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'), 
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), 
