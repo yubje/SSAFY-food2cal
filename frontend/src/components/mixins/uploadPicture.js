@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+// import AWS from 'aws-sdk'
 
 export const uploadPicture = {
   methods: {
@@ -14,26 +14,28 @@ export const uploadPicture = {
       let milliseconds = time.getMilliseconds().toString()
       return year+month+date+day+hours+minutes+seconds+milliseconds
     },
-    upload(fileData) {
-      const s3 = new AWS.S3({
-        accessKeyId: process.env.VUE_APP_ACCESS_KEY_ID,
-        secretAccessKey: process.env.VUE_APP_SECRECT_ACCESS_KEY,
-        region : process.env.VUE_APP_REGION
-      })
-      const param = {
-        'Bucket' : process.env.VUE_APP_BUCKET,
-        'Key' : `image/` + fileData.name,
-        'ACL' : 'public-read',
-        'Body' : fileData.file,
-        'ContentType': fileData.file.type
-      }
-      s3.upload(param, (err, data) => {
-        if(err) {
-          console.log('image upload err : ' + err)
-          return
-        }
-        console.log(data)
-      })
-    }
+    // upload(fileData) {
+    //   const s3 = new AWS.S3({
+    //     accessKeyId: process.env.VUE_APP_ACCESS_KEY_ID,
+    //     secretAccessKey: process.env.VUE_APP_SECRECT_ACCESS_KEY,
+    //     region : process.env.VUE_APP_REGION
+    //   })
+    //   const param = {
+    //     'Bucket' : process.env.VUE_APP_BUCKET,
+    //     'Key' : `image/` + fileData.name,
+    //     'ACL' : 'public-read',
+    //     'Body' : fileData.file,
+    //     'ContentType': fileData.file.type
+    //   }
+    //   s3.upload(param, (err, data) => {
+    //     if(err) {
+    //       console.log('image upload err : ' + err)
+    //       return
+    //     }
+    //     console.log(data.Location)
+    //     return data.Location
+    //     // console.log(data)
+    //   })
+    // }
   }
 }
