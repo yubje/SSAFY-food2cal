@@ -12,8 +12,7 @@ import django
 wb = openpyxl.load_workbook('nutrition.xlsx')
 sheet = wb['Sheet1']
 rows = sheet['A2':'U2660']
-category = ['후라이드치킨', '갈비탕', '콩자반', '갈비구이', '만두', '식혜', '순대', '새우튀김', '소세지볶음', '수정과', '육회', '깻잎장아찌', '찜닭', '계란찜',
-    '김치찌개', '김밥', '꼬막찜', '갈치구이', '된장찌개', '한과', '떡볶이', '배추김치', '삼계탕', '약과', '해물찜', '족발', '물회', '자장면', '감자채볶음', '피자']
+
 
 # for row in rows:
 #     if row[5].value not in category:
@@ -42,37 +41,40 @@ result = []
 
 
 def excel_to_list(filename):
-    wb = openpyxl.load_workbook(filename)
-    ws = wb.active
-    tmp_data = []
-    for row in ws.rows:
-        # if str(row[5].value) not in category:
-        #     continue
-        print(row[5].value)
-        id = row[0].value
-        food_name = row[5].value
-        ammount = row[10].value
-        calorie = row[14].value
-        carbohydrate = row[20].value
-        protein = row[18].value
-        fat = row[19].value
+	wb = openpyxl.load_workbook(filename)
+	ws = wb.active
+	tmp_data = []
+	db_list = []
+	category = ['후라이드치킨', '갈비탕', '콩자반', '갈비구이', '만두', '식혜', '순대', '새우튀김', '소세지볶음', '수정과', '육회', '깻잎장아찌', '찜닭', '계란찜',
+    '김치찌개', '김밥', '꼬막찜', '갈치구이', '된장찌개', '한과', '떡볶이', '배추김치', '삼계탕', '약과', '해물찜', '족발', '물회', '자장면', '감자채볶음', '피자']
+	for row in ws.rows:
+		if row[5].value in category and row[5].value not in db_list:
+			print(row[5].value)
+			id = row[0].value
+			food_name = row[5].value
+			ammount = row[10].value
+			calorie = row[14].value
+			carbohydrate = row[20].value
+			protein = row[18].value
+			fat = row[19].value
 
-        tmp_data.append(id)
-        tmp_data.append(food_name)
-        tmp_data.append(ammount)
-        tmp_data.append(calorie)
-        tmp_data.append(carbohydrate)
-        tmp_data.append(protein)
-        tmp_data.append(fat)
+			# tmp_data.append(id)
+			tmp_data.append(food_name)
+			tmp_data.append(ammount)
+			tmp_data.append(calorie)
+			tmp_data.append(carbohydrate)
+			tmp_data.append(protein)
+			tmp_data.append(fat)
 
-        result.append(tuple(tmp_data))
-        tmp_data = []
+			result.append(tuple(tmp_data))
+			tmp_data = []
+			db_list.append(food_name)
 
 # mysql 테이블에 튜플 데이터 삽입
 def mysql_insert(db,table,data):
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO "+table+" (id, food_name, ammount, calorie, carbohydrate, protein, fat) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+		sql = "INSERT INTO "+table+" (food_name, ammount, calorie, carbohydrate, protein, fat) VALUES (%s, %s, %s, %s, %s, %s)"
 		cursor.executemany(sql,data)
 		db.commit()
 		print("[+] Insertion success\n")
