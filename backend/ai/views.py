@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Nutrition
@@ -11,6 +12,8 @@ import numpy as np
 import os
 import io
 
+import copy
+
 from PIL import Image
 import os, glob
 import numpy as np
@@ -18,50 +21,58 @@ from sklearn.model_selection import train_test_split
 from openpyxl import load_workbook
 from urllib.request import urlopen
 
+
+
 # Create your views here.
-@api_view(['GET'])
+@api_view(['POST'])
 def predict(request):
-    if __name__ == '__main__':
-        category = ['후라이드치킨', '갈비탕', '콩자반', '갈비구이', '만두', '식혜', '순대', '새우튀김', '소세지볶음', '수정과', '육회', '깻잎장아찌', '찜닭', '계란찜', '김치찌개', '김밥', '꼬막찜', '갈치구이', '된장찌개', '한과', '떡볶이', '배추김치', '삼계탕', '약과', '해물찜', '족발', '물회', '자장면', '감자채볶음', '피자']
-        classes_number = len(category)
-        
-        model = Sequential()
-        model.add(Conv2D(32, (3, 3), input_shape=(150, 150, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.25))
 
-        model.add(Conv2D(32, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        model.add(Conv2D(64, (3, 3), padding='same'))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.25))
+    category = {"0": "후라이드치킨", "1": "갈비탕", "2": "콩자반", "3": "갈비구이", "4": "만두", "5": "식혜", "6": "순대", "7": "새우튀김", "8": "소세지볶음", "9": "수정과", "10": "육회", "11": "깻잎장아찌", "12": "찜닭", "13": "계란찜", "14": "김치찌개", "15": "김밥", "16": "꼬막찜", "17": "갈치구이", "18": "된장찌개", "19": "한과", "20": "떡볶이", "21": "배추김치", "22": "삼계탕", "23": "약과", "24": "해물찜", "25": "족발", "26": "물회", "27": "자장면", "28": "감자채볶음", "29": "피자"}
 
-        model.add(Flatten())    # 벡터형태로 reshape
-        model.add(Dense(512))   # 출력
-        model.add(Activation('relu'))
+    
+    classes_number = 30
 
-        model.add(Dense(128))   # 출력
-        model.add(Activation('relu'))
-        model.add(Dropout(0.5))
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), input_shape=(150, 150, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-        model.add(Dense(classes_number))
-        model.add(Activation('softmax'))
+    model.add(Conv2D(32, (3, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        model.compile(loss='binary_crossentropy',   # 최적화 함수 지정
-            optimizer='adam',
-            metrics=['accuracy'])
+    model.add(Conv2D(64, (3, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-        hdf5_file = "./08-0.0872.hdf5"
-        model.load_weights(hdf5_file)
+    model.add(Flatten())    # 벡터형태로 reshape
+    model.add(Dense(512))   # 출력
+    model.add(Activation('relu'))
+
+    model.add(Dense(128))   # 출력
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+
+    model.add(Dense(classes_number))
+    model.add(Activation('softmax'))
+
+    model.compile(loss='binary_crossentropy',   # 최적화 함수 지정
+        optimizer='adam',
+        metrics=['accuracy'])
+
+    hdf5_file = "08-0.0872.hdf5"
+    model.load_weights("ai/08-0.0872.hdf5")
 
     try:
         # 업로드 파일 처리 분기
-        url = list(request.form.to_dict().keys())[0]
+
+        url = list(dict(request.data).keys())[0]
+        print(url)
         res = urlopen(url).read()
+      
 
         image = Image.open(io.BytesIO(res))
         image = image.convert("RGB")
@@ -70,16 +81,16 @@ def predict(request):
         I = [image_data]
         I = np.array(I)
         I = I.astype("float") / 255
+  
 
         result = model.predict(I)
         idx = result[0].argmax()
-        food_name = category[idx]
+        food_name = category[str(idx)]
         nutritions = Nutrition.objects.filter(food_name=food_name)
+ 
         serializer = NutritionSerializer(nutritions, many=True)
-        print(serializer.data)
         return Response(serializer.data)
-        # data = {'result': category[idx]}
-        # return data
+
 
     except Exception as e:
         return {'error': str(e)}
