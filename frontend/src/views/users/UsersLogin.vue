@@ -12,7 +12,7 @@
           <div class="input_field">
             <v-text-field
               outlined
-              placeholder="아이디"
+              placeholder="이메일"
               hide-details
               name="id"
               v-model="LoginData.username"
@@ -99,9 +99,10 @@ export default {
       if (this.islogin === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/login/', LoginData)
+            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/login/', LoginData)
             .then(res => {
               this.setCookie(res.data.key)
+              this.$emit('submit-login')
               this.$router.push({ name: 'Home'})
             })
             .catch(err => console.log(err))
