@@ -43,11 +43,13 @@ export default {
     ...mapActions(['upload']),
     init() {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        navigator.mediaDevices.getUserMedia({video: true}).then(stream => {
-          const videoPlayer = document.querySelector('video')
-          videoPlayer.srcObject = stream;
-          videoPlayer.play()
-        })
+        navigator.mediaDevices.getUserMedia({video: true})
+          .then(stream => {
+            const videoPlayer = document.querySelector('video')
+            videoPlayer.srcObject = stream;
+            videoPlayer.play()
+          })
+          .catch(err => {console.log(err)})
       } else {
         alert('Cannot get Media Devices')
       }
