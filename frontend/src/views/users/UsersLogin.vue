@@ -109,7 +109,7 @@ export default {
       if (this.islogin === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/login/', LoginData)
+            .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/login/', LoginData)
             .then(res => {
               this.setCookie(res.data.key)
               this.$emit('submit-login')

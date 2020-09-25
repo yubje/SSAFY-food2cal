@@ -128,7 +128,7 @@ export default {
       if (UserJoinData.username.trim()) {
         if (UserJoinData.password1.trim() === UserJoinData.password2.trim()) {
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/signup/', UserJoinData)
+            .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/signup/', UserJoinData)
             .then(() => {
               // this.setCookie(res.data.key)
               this.$router.push({ name: 'Home'})

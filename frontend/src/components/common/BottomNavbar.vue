@@ -91,7 +91,7 @@ export default {
       }
       if (this.islogin === true) {
         this.$http
-          .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/logout/', null, config)
+          .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/logout/', null, config)
           .catch(err=>console.log(err.response))
           .finally(() => {
             this.$cookies.remove('auth-token')
