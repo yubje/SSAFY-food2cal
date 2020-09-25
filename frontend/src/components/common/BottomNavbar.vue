@@ -5,7 +5,7 @@
     color="#FF890E"
     class="mt-10"
   >
-    <v-btn @click="goToCamera">
+    <v-btn @click="goToCamera" class="px-0">
       <span>Camera</span>
       <v-icon>mdi-camera</v-icon>
     </v-btn>
@@ -15,15 +15,15 @@
       <v-icon>mdi-home</v-icon>
     </v-btn>
 
-    <v-btn>
+    <!-- <v-btn>
       <span>Calendar</span>
       <v-icon>mdi-calendar</v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <!-- 로그인(false) -->
     <v-btn v-if="!this.islogin" @click="goToLogin">
       <span>Login</span>
-      <v-icon>mdi-pencil</v-icon>
+      <v-icon>mdi-account</v-icon>
     </v-btn>
 
     <!-- 마이페이지(true) -->
