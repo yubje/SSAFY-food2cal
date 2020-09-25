@@ -24,7 +24,7 @@ google-pasta==0.2.0
 grpcio==1.32.0
 h5py==2.10.0
 idna==2.10
-importlib-metadata==2.0.0
+# importlib-metadata==2.0.0
 inflection==0.5.1
 itypes==1.2.0
 jdcal==1.4.1
