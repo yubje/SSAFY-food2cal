@@ -93,7 +93,7 @@ export default {
         ]
       }
       this.$http
-        .post(process.env.VUE_APP_SERVER_URL + '/posts/', postData, config)
+        .post(process.env.VUE_APP_SERVER_URL + 'posts/', postData, config)
         .then(res => {
           console.log(res.data)
         })
