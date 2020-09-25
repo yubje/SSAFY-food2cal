@@ -1,10 +1,19 @@
 <template>
   <v-app>
-    <AppBar />
+    <AppBar
+      v-if="rerenderflag"
+      @submit-logout="forceRerender"
+    />
     <v-main class="mb-16">
-      <router-view :key="$route.fullPath"></router-view>
+      <router-view 
+        :key="$route.fullPath"
+        @submit-login="forceRerender"
+      ></router-view>
     </v-main>
-    <BottomNavbar />
+    <BottomNavbar
+      v-if="rerenderflag"
+      @submit-logout="forceRerender"
+    />
   </v-app>
 </template>
 
@@ -21,8 +30,16 @@ export default {
   },
 
   data: () => ({
-    //
+    rerenderflag:true,
   }),
+  methods: {
+    forceRerender() {
+        this.rerenderflag = false;
+        this.$nextTick(() => {
+          this.rerenderflag = true;
+        })
+      },
+  }
 };
 </script>
 
