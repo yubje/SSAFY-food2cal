@@ -123,7 +123,6 @@ export default {
       // this.upload(this.file.name)
       this.fileUrl = await this.upload(fileData)
       this.file = null
-      this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
     }
   },
   mixins: [
