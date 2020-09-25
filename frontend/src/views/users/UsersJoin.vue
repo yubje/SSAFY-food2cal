@@ -9,23 +9,34 @@
           <div class="input_field">
             <v-text-field
               outlined
-              placeholder="아이디를 입력해주세요"
+              placeholder="닉네임을 입력해주세요"
+              hide-details
+              name="email"
+              v-model="UserJoinData.email"
+            >
+            </v-text-field>
+          </div>
+          <div class="input_field">
+            <v-text-field
+              outlined
+              placeholder="이메일을 입력해주세요"
               hide-details
               name="username"
               v-model="UserJoinData.username"
             >
             </v-text-field>
-            <!-- ** 아이디 중복체크 버튼 ** -->
-            <v-btn
-              @click="CheckId"
-              class="checkid-btn white--text"
+            <!-- ** 이메일 중복체크 버튼 ** -->
+            <!-- <v-btn
+              v-if="!emailflag"
+              @click="CheckEmail"
+              class="checkemail-btn white--text"
               block 
               depressed 
               color="#FF4500"
               height="48px"
             >
-              중복확인
-            </v-btn>
+              이메일 중복확인
+            </v-btn> -->
           </div>
           <div class="input_field">
             <v-text-field
@@ -92,32 +103,37 @@ export default {
     return {
       UserJoinData: {
         username: null,
+        email: null,
         password1: null,
         password2: null,
         // weight: null,
         // height: null,
       },
+      // emailflag: false
     }
   },
   methods: {
-    // ** 아이디 중복체크 **
-    CheckId() {
-      // this.$http.post(process.env.VUE_SERVER_URL + '/rest-auth/signup/verify-email/')
-      this.$http.post('http://8a945e2757a9.ngrok.io' + '/rest-auth/signup/verify-email/')
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-    },
+    // ** 이메일 중복체크 **
+    // CheckEmail() {
+    //   this.$http
+    //     .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/signup/verify-email/', {'Key': this.UserJoinData.email})
+    //     .then(res => {
+    //       console.log(res)
+    //       this.emailflag =! this.emailflag  
+    //     })
+    //     .catch(err => console.log(err))
+    // },
     // 회원가입
     UserJoin(UserJoinData) {
       if (UserJoinData.username.trim()) {
         if (UserJoinData.password1.trim() === UserJoinData.password2.trim()) {
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/signup/', UserJoinData)
-            .then(res => {
-              this.setCookie(res.data.key)
+            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/signup/', UserJoinData)
+            .then(() => {
+              // this.setCookie(res.data.key)
               this.$router.push({ name: 'Home'})
             })
-            // .catch(err => console.log(err))
+            .catch(err => console.log(err))
         } else {
           alert('비밀번호가 일치하지 않습니다.')
         }
@@ -129,23 +145,15 @@ export default {
       this.$cookies.set('auth-token',token)
       this.islogin = !this.islogin
     },
-    // join(joinData){
-    //   axios.post(SERVER_URL + '/rest-auth/signup/', joinData)
-    //   .then(res=>{
-    //     this.setCookie(res.data.key)
-    //     this.$router.push({name:'Home'})
-    //   })
-    //   .catch(err=>console.log(err.response))
-    // },
   },
-  created() {
-    console.log(process.env)
-  }
 }
 </script>
 
 <style>
 .input_field {
+  margin: 6px auto;
+}
+.checkemail-btn {
   margin: 6px auto;
 }
 </style>

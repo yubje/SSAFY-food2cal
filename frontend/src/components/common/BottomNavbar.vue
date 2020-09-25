@@ -95,6 +95,7 @@ export default {
           .catch(err=>console.log(err.response))
           .finally(() => {
             this.$cookies.remove('auth-token')
+            this.$emit('submit-logout')
             this.islogin != this.islogin
             this.$router.push({ name:'home'})
           })
@@ -102,6 +103,9 @@ export default {
     }
   },
   mounted() {
+    this.islogin = this.$cookies.isKey('auth-token')
+  },
+  computed() {
     this.islogin = this.$cookies.isKey('auth-token')
   }
 }
