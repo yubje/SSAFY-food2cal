@@ -2,7 +2,7 @@
   <v-app>
     <AppBar />
     <v-main class="mb-16">
-      <router-view></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </v-main>
     <BottomNavbar />
   </v-app>
