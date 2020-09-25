@@ -7,7 +7,17 @@
 
       <!-- 로그인 폼 -->
       <v-col cols="8" md="6">
-        <h1>F2C</h1>
+        <!-- <v-row>
+          <v-col cols="1"></v-col>
+          <v-img 
+            src="../../assets/logo.png"
+            width="10"
+          >
+          </v-img>
+          <v-col cols="1" style="padding-left=0px"></v-col>
+          <h1>F2C</h1>
+          <v-col cols="6"></v-col>
+        </v-row> -->
         <v-form name="form" @submit.prevent>
           <div class="input_field">
             <v-text-field
