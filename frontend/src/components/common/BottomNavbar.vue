@@ -103,6 +103,9 @@ export default {
   },
   mounted() {
     this.islogin = this.$cookies.isKey('auth-token')
+  },
+  computed() {
+    this.islogin = this.$cookies.isKey('auth-token')
   }
 }
 </script>
