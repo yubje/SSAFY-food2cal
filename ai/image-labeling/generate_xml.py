@@ -10,12 +10,11 @@ def write_xml(folder, img, objects, tl, br, savedir):
         os.mkdir(savedir)
 
     image = cv2.imread(img.path)
-    # print(img.path)
     heigth, width, depth = image.shape
 
     annotation = ET.Element('annotation')
     ET.SubElement(annotation, 'folder').text = folder
-    ET.SubElement(annotation, 'filename').text = img_name[cnt]
+    ET.SubElement(annotation, 'filename').text = img.path[7:]
     ET.SubElement(annotation, 'segmented').text = '0'
     size = ET.SubElement(annotation, 'size')
     ET.SubElement(size, 'width').text = str(width)
@@ -42,12 +41,12 @@ def write_xml(folder, img, objects, tl, br, savedir):
         temp_xml.write(xml_str)
 
 folder = 'images'
-img_name = [name for name in os.listdir('images') if 'Img_047' in name]
+img_name = [name for name in os.listdir('images') if 'Img_' in name]
 # print(img_name)
-img = [im for im in os.scandir('images') if 'Img_047' in im.name][0]
+img = [im for im in os.scandir('images') if 'Img_' in im.name][0]
 
 # ** 앞과 똑같이 음식 이름 하나만 넣어두면 됨.
-objects = ['']    # 바꿔야할 곳
+objects = ['kimchijjigae']    # 바꿔야할 곳
 
 tl = [(10, 10)]
 br = [(100, 100)]
