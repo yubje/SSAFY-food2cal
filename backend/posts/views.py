@@ -28,8 +28,8 @@ def post_create(request):
     serializer = PostSerializer(data=request.data.get("post"))
     if serializer.is_valid(raise_exception=True):
         print(request.user)
-        # serializer.save(user=request.user)
-        serializer.save()
+        serializer.save(user=request.user)
+        # serializer.save()
         diet_create(request, serializer.data["id"])
         return Response(serializer.data)
 
