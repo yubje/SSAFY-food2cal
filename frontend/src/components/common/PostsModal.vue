@@ -71,11 +71,17 @@ export default {
           Authorization: `jwt ${this.$cookies.get(`auth-token`)}`
         }
       }
+      var response_category = ''
+      if (this.category === '아침') {response_category = 'MO'}
+      else if (this.category === '점심') {response_category = 'LU'}
+      else if (this.category === '저녁') {response_category = 'DI'}
+      else if (this.category === '간식기타') {response_category = 'SN'}
+
       const postData = {
         post: {
           title: this.title,
           content: this.content,
-          category: 'LU',
+          category: response_category,
           diet_image_path: this.fileUrl
         },
         diet: {
