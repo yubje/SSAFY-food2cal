@@ -1,6 +1,6 @@
 <template>
   <v-card
-    max-width="344"
+    max-width="370"
     class="mx-auto mt-6"
   >
     <v-list-item>
@@ -13,12 +13,11 @@
 
     <!-- <v-img
       :src="post.diet_image_path"
-      :style="{ backgroundImage: 'url( '+ require('../../assets/img/MAATKKUN.png') +' )' }"
+      :style="{ backgroundImage: 'url(https://cdn.vuetifyjs.com/images/cards/sunshine.jpg)' }"
       height="194"
     ></v-img> -->
 
     <v-img
-      :src="post.diet_image_path"
       :style="{ backgroundImage: 'url(https://cdn.vuetifyjs.com/images/cards/sunshine.jpg)' }"
       height="194"
     ></v-img>
@@ -26,7 +25,7 @@
 
 
     <v-card-text>
-      {{ post.content }}
+      본문 내용
     </v-card-text>
 
     <v-card-actions>
