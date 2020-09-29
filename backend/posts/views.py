@@ -10,7 +10,7 @@ from .serializers import PostListSerializer, PostSerializer, PostUpdateSerialize
 
 from diets.models import Diet, Food
 from diets.serializers import DietListSerializer, FoodSerializer
-from diets.views import diet_create, diet_list, food_list
+from diets.views import diet_create, food_list
 
 # 글 리스트 
 @api_view(['GET'])
@@ -81,8 +81,8 @@ def comment_list(request, post_id):
     elif request.method == 'POST':
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(post_id=post_id)
-            # serializer.save(user=request.user, post_id=post_id)
+            # serializer.save(post_id=post_id)
+            serializer.save(user=request.user, post_id=post_id)
         
         return Response(serializer.data)
 

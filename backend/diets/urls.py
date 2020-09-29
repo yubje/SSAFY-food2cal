@@ -4,7 +4,7 @@ from . import views
 app_name = 'diets'
 
 urlpatterns = [
-    path('<int:post_id>/', views.diet_list, name='diet_list'),
+    path('<year_month>/', views.diet_calendar, name='diet_calendar'),
     path('foods/', views.food_list, name='food_list'),
 ]
 
