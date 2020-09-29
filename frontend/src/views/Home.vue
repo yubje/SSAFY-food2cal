@@ -1,8 +1,9 @@
 <template>
   <div class="home">
-    <div v-for="post in posts" :key="post.id">
+    <!-- <div v-for="post in posts" :key="post.id">
       <PostsCard :post="post" />
-    </div>
+    </div> -->
+    <PostsCard />
   </div>
 </template>
 
@@ -31,7 +32,7 @@ export default {
     }
   },
   created() {
-    this.getPostList()
+    // this.getPostList()
   }
 }
 </script>

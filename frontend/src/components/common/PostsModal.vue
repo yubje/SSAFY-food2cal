@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 
 export default {
   name: 'PostsModal',
@@ -59,16 +59,16 @@ export default {
     diet_image_path: null
   }),
   computed: {
-    ...mapState([
-      'fileUrl',
-      'foodInfo'
-    ])
+    // ...mapState([
+    //   'fileUrl',
+    //   'foodInfo'
+    // ])
   },
   methods: {
     createPost() {
       const config = {
         headers: {
-          Authorization: `jwt ${this.$cookies.get(`auth-token`)}`
+          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
         }
       }
       var response_category = ''
@@ -100,8 +100,9 @@ export default {
       }
       this.$http
         .post(process.env.VUE_APP_SERVER_URL + 'posts/', postData, config)
-        .then(res => {
-          console.log(res.data)
+        .then(() => {
+          // console.log(res.data)
+          this.$router.push('/')
         })
         .catch(err => console.log(err.response.data))
     }
