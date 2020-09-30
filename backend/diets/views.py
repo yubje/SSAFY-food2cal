@@ -32,14 +32,21 @@ def diet_calendar(request, year_month):
         serializer.data[i]["food"] = food_list(serializer.data[i]["id"])
     return Response(serializer.data)
 
-# post 생성에 사용 
+@api_view(['GET'])
+def diet_statistics(request):
+    diets = Diet.objects.filter(user=request.user).order_by('-pk')
+    print(diets)
+    serializer = DietListSerializer(diets, many=True)
+    return Response(serializer.data)
+
+# post 생성에 사용, api 없음
 def food_create(request, food, diet_id):
     serializer = FoodSerializer(data=food)
     if serializer.is_valid(raise_exception=True):
         serializer.save(diet_id=diet_id)
         return Response(serializer.data)
 
-# post 상세조회에 사용 
+# post 상세조회에 사용, api 없음 
 def food_list(diet_id):
     foods = Food.objects.filter(diet_id=diet_id)
     serializer = FoodSerializer(foods, many=True)

@@ -5,6 +5,6 @@ app_name = 'diets'
 
 urlpatterns = [
     path('<year_month>/', views.diet_calendar, name='diet_calendar'),
-    path('foods/', views.food_list, name='food_list'),
+    path('statistics/', views.diet_statistics, name='diet_statistics'),
 ]
 
