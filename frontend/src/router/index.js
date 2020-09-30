@@ -41,7 +41,12 @@ const routes = [
     path: '/diary',
     name: constants.URL_TYPE.CALENDAR.DIARY,
     component: () => import('@/views/calendar/Diary')
-  }
+  },
+  {
+    path: '/mypage',
+    name: constants.URL_TYPE.USER.MYPAGE,
+    component: () => import('@/views/users/Mypage')
+  },
 ]
 
 const router = new VueRouter({
