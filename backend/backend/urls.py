@@ -34,18 +34,12 @@ schema_view = get_schema_view(
 
 
 
-from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/signup/', include('rest_auth.registration.urls')),
     path('posts/', include('posts.urls')),
-
-    path('api/token/', obtain_jwt_token),
-    path('api/token/verify/', verify_jwt_token),
-    path('api/token/refresh/', refresh_jwt_token),
-
     path('diets/', include('diets.urls')),
     path('predict/', include('ai.urls')),
     # swagger

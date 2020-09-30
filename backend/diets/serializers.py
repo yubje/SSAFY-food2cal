@@ -15,14 +15,15 @@ class FoodSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'user', 'created_at', 'diet')
 
-# 식단 상세정보
+# 식단 생성
 class DietSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False)
-    food = FoodSerializer(many=True, read_only=True)
+    user = UserSerializer(required=False)
+    # food = FoodSerializer(many=True, read_only=True)
     class Meta:
         model = Diet
         fields = '__all__'
         read_only_fields = ('id', 'user', 'created_at', 'post')
+
 
 # 식단 리스트
 class DietListSerializer(serializers.ModelSerializer):

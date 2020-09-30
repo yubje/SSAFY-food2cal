@@ -35,7 +35,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 # 게시글 상세정보
 class PostSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False, read_only=True)
+    user = UserSerializer(required=False)
     # commments = CommentSerializer(many=True, read_only=True)
     # diets = DietSerializer(many=True, read_only=True)
     class Meta:
