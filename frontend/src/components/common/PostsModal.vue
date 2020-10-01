@@ -19,12 +19,12 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
+              <!-- <v-col cols="12" sm="6" md="4">
                 <v-text-field label="Title*" required v-model="title"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field label="Content*" v-model="content"></v-text-field>
-              </v-col>
+              </v-col> -->
               <v-col cols="12" sm="6">
                 <v-select
                   :items="['아침', '점심', '저녁', '간식/기타']"
@@ -39,7 +39,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click.prevent="dialog = false; createPost();">Save</v-btn>
+          <v-btn color="blue darken-1" text @click.prevent="dialog = false; addDiet();">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'PostsModal',
@@ -59,33 +59,46 @@ export default {
     diet_image_path: null
   }),
   computed: {
-    // ...mapState([
-    //   'fileUrl',
-    //   'foodInfo'
-    // ])
+    ...mapState([
+      'fileUrl',
+      'foodInfo'
+    ])
   },
   methods: {
-    createPost() {
+    getToday() {
+      let time = new Date()
+      let year = time.getFullYear()
+      let month = time.getMonth() + 1
+      month = month >= 10 ? month: '0' + month
+      let date = time.getDate()
+      date = date >= 10 ? date: '0' + date
+      return year + '-' + month + '-' + date
+    },
+    addDiet() {
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get(`auth-token`)}`
         }
       }
-      var response_category = ''
+
+      let response_category = ''
       if (this.category === '아침') {response_category = 'MO'}
       else if (this.category === '점심') {response_category = 'LU'}
       else if (this.category === '저녁') {response_category = 'DI'}
-      else if (this.category === '간식기타') {response_category = 'SN'}
+      else if (this.category === '간식/기타') {response_category = 'SN'}
 
-      const postData = {
-        post: {
-          title: this.title,
-          content: this.content,
-          category: response_category,
-          diet_image_path: this.fileUrl
-        },
+      const today = this.getToday()
+
+      const dietData = {
+        // post: {
+        //   title: this.title,
+        //   content: this.content,
+        //   category: response_category,
+        //   diet_image_path: this.fileUrl
+        // },
         diet: {
-          diet_image_path: this.fileUrl
+          date: today,
+          category: response_category,
         },
         food: [
           {
@@ -99,9 +112,8 @@ export default {
         ]
       }
       this.$http
-        .post(process.env.VUE_APP_SERVER_URL + 'posts/', postData, config)
+        .post(process.env.VUE_APP_SERVER_URL + '/createDiet/', dietData, config)
         .then(() => {
-          // console.log(res.data)
           this.$router.push('/')
         })
         .catch(err => console.log(err.response.data))
