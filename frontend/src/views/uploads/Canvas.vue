@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img class="image-area" src="https://photo-storage-ftc.s3.ap-northeast-2.amazonaws.com/image/2020929295140209.jpeg" alt="s3-image">
+    <img class="image-area" :src="fileUrl" alt="s3-image">
     <!-- <div class="nutrition">
       <p>음식: {{ foodInfo.food_name }}</p>
       <p>열량: {{ foodInfo.calorie }} kcal</p>
@@ -97,18 +97,21 @@
     </div>
 
     <div class="mt-10">
-      <PostsModal />
+      <DietModal />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import PostsModal from '@/components/common/PostsModal'
-import SERVER from '@/libs/api'
+import DietModal from '@/components/common/DietModal'
+// import SERVER from '@/libs/api'
 
 export default {
   name: 'Canvas',
+  components: {
+    DietModal
+  },
   data() {
     return {
       show: false,
@@ -116,15 +119,15 @@ export default {
       remain: 0,
       items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       remains: [0, 0.25, 0.5, 0.75],
-      gram: 100,
-      kcal: 100,
-      carbohydrate: 100,
-      protein: 100,
-      fat: 100
+      AdjFoodInfo: {
+        foodName: null,
+        gram: 0,
+        kcal: 0,
+        carbohydrate: 0,
+        protein: 0,
+        fat: 0
+      },
     }
-  },
-  components: {
-    PostsModal
   },
   computed: {
     ...mapState([
@@ -133,25 +136,16 @@ export default {
     ])
   },
   methods: {
-    addDiet() {
-      const config = {
-        headers: {
-          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
-        }
-      }
-  
-      this.$http.post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, config)
-    }
-    // sendUrl(fileUrl) {
-    //   console.log(fileUrl)
-    //   axios.get('http://8a945e2757a9.ngrok.io/predict/', fileUrl)
-    //     .then((res) => {
-    //       console.log(res.data.amount)
-    //     })
-    // },
+    // setFoodInfo() {
+    //   this.AdjFoodInfo.foodName = this.foodInfo.food_name
+    //   this.AdjFoodInfo.kcal = (this.serving + this.remain) * this.foodInfo.calorie
+    //   this.AdjFoodInfo.carbohydrate = (this.serving + this.remain) * this.foodInfo.carbohydrate
+    //   this.AdjFoodInfo.protein = (this.serving + this.remain) * this.foodInfo.protein
+    //   this.AdjFoodInfo.fat = (this.serving + this.remain) * this.foodInfo.fat
+    // }
   },
-  beforeMount() {
-
+  mounted() {
+    // this.setFoodInfo()
   },
 }
 </script>

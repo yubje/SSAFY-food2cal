@@ -1,6 +1,7 @@
 export default{
   ROUTES: {
     predict: '/predict/',
-    createDiet: '/diet/'
+    createDiet: '/diets/',
+    createPost: '/posts/'
   }
 }
