@@ -33,6 +33,7 @@
       color="#F84A0D"
       text
       large
+      @click="createPost()"
     >
       Submit
     </v-btn>
