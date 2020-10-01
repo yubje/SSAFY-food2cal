@@ -10,7 +10,7 @@
         mdi-upload
       </v-icon>
     </div>
-    <input v-show="false" ref="inputUpload" type="file" @change="handleFileUpload">
+    <input v-show="false" ref="inputUpload" type="file" @change="uploadFile">
 
     <video autoplay class="feed"></video>
   
@@ -54,22 +54,28 @@ export default {
         alert('Cannot get Media Devices')
       }
     },
-    createName() {
-      const fileName = this.createImageFileName()
-      const fileType = this.file.name.split('.')[1]
-      const name = fileName + '.' + fileType
-      return name      
-    },
-    handleFileUpload() {
-      this.file = this.$refs.inputUpload.files[0]
-      const fileName = this.createName()
-      const fileData = {
-        file: this.file,
-        name: fileName
-      }
-      this.upload(fileData)
-      this.file = null
+    // createName() {
+    //   const fileName = this.createImageFileName()
+    //   const fileType = this.file.name.split('.')[1]
+    //   const name = fileName + '.' + fileType
+    //   return name      
+    // },
+    // handleFileUpload() {
+    //   this.file = this.$refs.inputUpload.files[0]
+    //   const fileName = this.createName()
+    //   const fileData = {
+    //     file: this.file,
+    //     name: fileName
+    //   }
+    //   this.upload(fileData)
+    //   this.file = null
+    // },
+    goToCanvas() {
       this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
+    },
+    async uploadFile() {
+      await this.handleFileUpload(this.$refs.inputUpload.files[0])
+      await this.goToCanvas()
     },
     dataURItoBlob(dataURI) {
       const binary = atob(dataURI.split(',')[1]);
@@ -116,15 +122,13 @@ export default {
       const blobData = this.dataURItoBlob(dataUrl);
       const fileName = this.createImageFileName()
       const file = new File([blobData], fileName + '.png', { type: blobData.type })
-      // console.log(file)
       this.file = file
       const fileData = {
         file: this.file,
         name: this.file.name
       }
-      // this.upload(this.file.name)
-      this.fileUrl = await this.upload(fileData)
-      this.file = null
+      await this.upload(fileData)
+      await this.goToCanvas()
     }
   },
   mixins: [

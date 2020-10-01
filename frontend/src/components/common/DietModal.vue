@@ -8,6 +8,7 @@
           large
           v-bind="attrs"
           v-on="on"
+          class="my-auto"
         >
           Submit
         </v-btn>
@@ -36,10 +37,10 @@
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="d-flex align-center">
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click.prevent="dialog = false; addDiet();">Save</v-btn>
+          <v-btn color="blue darken-1" text @click.prevent="dialog = false; tmp();"><SelectModal /></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -48,16 +49,23 @@
 
 <script>
 import { mapState } from 'vuex'
+import SelectModal from '@/components/common/SelectModal'
 
 export default {
-  name: 'PostsModal',
-  data: () => ({
-    dialog: false,
-    title: null,
-    content: null,
-    category: null,
-    diet_image_path: null
-  }),
+  name: 'DietModal',
+  components: {
+    SelectModal
+  },
+  data () {
+    return {
+      dialog: false,
+      title: null,
+      content: null,
+      category: null,
+      diet_image_path: null,
+      isSelectModal: false
+    }
+  },
   computed: {
     ...mapState([
       'fileUrl',
@@ -73,6 +81,9 @@ export default {
       let date = time.getDate()
       date = date >= 10 ? date: '0' + date
       return year + '-' + month + '-' + date
+    },
+    tmp() {
+      this.isSelectModal = true
     },
     addDiet() {
       const config = {
@@ -114,7 +125,8 @@ export default {
       this.$http
         .post(process.env.VUE_APP_SERVER_URL + '/createDiet/', dietData, config)
         .then(() => {
-          this.$router.push('/')
+          // this.$router.push('/')
+          this.isSelectModal = true
         })
         .catch(err => console.log(err.response.data))
     }
