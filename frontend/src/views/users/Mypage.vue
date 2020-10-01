@@ -84,17 +84,53 @@
         </v-btn>
       </v-card-actions> -->
     </v-card>
-    <chartjs-doughnut
-      :labels="doughnut.labels"
-      :datasets="doughnut.datasets"
-      :option="options"
-    ></chartjs-doughnut>
+    <button class="button" @click="addExperience">Add experience</button>
+    <div class="Chart">
+      <Doughnut
+        ref="skills_chart"
+        :chart-data="chartData"
+        :options="options">
+      </Doughnut>
+
+      <div v-for="(val, i) in currentDataSet" :key="i">
+        <input
+          type="range" 
+          min="0" 
+          max="8"
+          placeholder="name"
+          :value="currentDataSet[i]"
+          @input="updateAmount($event.target.value, i)"
+        >
+        <span>
+          {{ currentDataSet[i] }} years
+        </span>
+        <input type="text" :value="chartData.labels[i]" @input="updateName($event.target.value, i)">
+        <button @click="remove(i)">remove</button>
+      </div>
+
+    </div>
   </v-container>
 </template>
 
 <script>
+//
+import Doughnut from '@/components/chart/Doughnut'
+// 무작위 컬러 라이브러리
+import randomColor from 'randomcolor'
+
+const options = {
+  responsive: true, 
+  maintainAspectRatio: false, 
+  animation: {
+    animateRotate: false
+  }
+}
+
 export default {
   name: 'Mypage',
+  components: {
+    Doughnut
+  },
   data() {
     return {
       dates: [
@@ -106,35 +142,55 @@ export default {
         610,
         760,
       ],
-      doughnut: {
-        datasets: [{
-          data: [10, 20, 30]
-        }],
-
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-          'Red',
-          'Yellow',
-          'Blue'
+      options, 
+        chartData: {
+        labels: ['skill1'],
+        datasets: [
+          {
+            backgroundColor: [randomColor()],
+            data: [1]
+          }
         ]
-      },
-      options: {
-        title: {
-          display: true,
-          position: "bottom",
-          text: "Fruits"
-        }
       }
     }
   },
 
   computed: {
+    currentDataSet () {
+      return this.chartData.datasets[0].data
+    }
   },
 
   created() {
   },
 
   methods: {
+    // Doughnut Chart Data
+    updateChart () {
+      this.$refs.skills_chart.update();
+    },
+    updateAmount (amount, index) {
+      this.chartData.datasets[0].data.splice(index, 1, amount)
+      this.updateChart();
+    },
+    updateName (text, index) {
+      this.chartData.labels.splice(index, 1, text)
+      this.updateChart();
+    },
+    addExperience() {
+      const currentDataset = this.chartData.datasets[0]
+      this.chartData.labels.push(`Skill ${currentDataset.data.length + 1}`)
+      currentDataset.data.push(0)
+      currentDataset.backgroundColor.push(randomColor())
+      this.updateChart();
+    },
+    remove (index) {
+      const currentDataset = this.chartData.datasets[0]
+      currentDataset.data.splice(index, 1)
+      this.chartData.labels.splice(index, 1)
+      currentDataset.backgroundColor.splice(index, 1)
+      this.updateChart()
+    }
   },
 }
 </script>
