@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import AWS from 'aws-sdk'
 import axios from 'axios'
 import constants from '@/libs/constants'
+import SERVER from '@/libs/api'
 
 
 Vue.use(Vuex)
@@ -11,7 +12,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     fileUrl: null,
-    foodInfo: null
+    foodInfo: []
   },
   mutations: {
     SET_FILE_URL(state, fileUrl) {
@@ -19,7 +20,6 @@ export default new Vuex.Store({
     },
     SET_FOOD_INFO(state, foodInfo) {
       state.foodInfo = foodInfo
-      console.log(state.foodInfo)
     }
   },
   actions: {
@@ -41,20 +41,15 @@ export default new Vuex.Store({
           console.log('image upload err : ' + err)
           return
         }
-        // console.log(data.Location)
         commit('SET_FILE_URL', data.Location)
-        // return data.Location
         console.log(data.Location)
-        axios.post(process.env.VUE_APP_SERVER_URL + 'predict/', data.Location)
+        axios.post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.predict, data.Location)
           .then((res) => {
-            commit('SET_FOOD_INFO', res.data[0])
+            commit('SET_FOOD_INFO', res.data)
             console.log(res.data)
           })
           .then(() => {
             this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
-            // setTimeout(() => {
-              
-            // }, 3000)
           })
       })
     }
