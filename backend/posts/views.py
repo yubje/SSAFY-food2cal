@@ -10,7 +10,7 @@ from .serializers import PostListSerializer, PostSerializer, PostUpdateSerialize
 
 from diets.models import Diet, Food
 from diets.serializers import DietListSerializer, FoodSerializer
-from diets.views import diet_create, diet_list, food_list
+from diets.views import diet_create, food_list
 
 # 글 리스트 
 @api_view(['GET'])
@@ -21,40 +21,37 @@ def post_list(request, page_id=0):
 
 # 글 생성 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def post_create(request):
-
-    print(request.data)
     serializer = PostSerializer(data=request.data.get("post"))
     if serializer.is_valid(raise_exception=True):
-        print(request.user)
-        # serializer.save(user=request.user)
-        serializer.save()
-        diet_create(request, serializer.data["id"])
+        serializer.save(user=request.user)
+        # serializer.save()
         return Response(serializer.data)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    # 댓글 상세조회 
+    # 상세조회 
     if request.method == 'GET':
         serializer = PostSerializer(post)
-        diets = Diet.objects.filter(post_id=post_id)
-        diet_serializer = DietListSerializer(diets, many=True)
-        print(f'diet serializer data: {diet_serializer.data}')
+        return Response(serializer.data)
+        # diets = Diet.objects.filter(post_id=post_id)
+        # diet_serializer = DietListSerializer(diets, many=True)
+        # print(f'diet serializer data: {diet_serializer.data}')
 
-        diet_data = []
-        for i in range(len(diet_serializer.data)):
-            tmp = dict(diet_serializer.data[i])
-            tmp["food"] = food_list(diet_serializer.data[i]["id"])
-            diet_data.append(tmp)
+        # diet_data = []
+        # for i in range(len(diet_serializer.data)):
+        #     tmp = dict(diet_serializer.data[i])
+        #     tmp["food"] = food_list(diet_serializer.data[i]["id"])
+        #     diet_data.append(tmp)
 
-        return_data = serializer.data
-        return_data["diet"] = diet_data
+        # return_data = serializer.data
+        # return_data["diet"] = diet_data
 
-        return Response(return_data)
+        # return Response(return_data)
 
     elif request.user == post.user:
         # 댓글 수정 
@@ -81,8 +78,7 @@ def comment_list(request, post_id):
     elif request.method == 'POST':
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(post_id=post_id)
-            # serializer.save(user=request.user, post_id=post_id)
+            serializer.save(user=request.user, post_id=post_id)
         
         return Response(serializer.data)
 
@@ -97,11 +93,11 @@ def comment_detail(request, post_id, comment_id):
             serializer = CommentUpdateSeriailzer(data=request.data, instance=comment)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                return Response({'message': 'success'})
+                return Response({'status': 200})
         # 댓글 삭제 
         else:
             comment.delete()
-            return Response({'message': 'success'})
+            return Response({'status': 200})
 
 
 

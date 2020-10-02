@@ -20,16 +20,7 @@ export default {
       EDIT: 'userEdit'
     },
     POST: {
-      MAIN: 'main',
-      LIKE: 'like',
-      VIEWS: 'views',
-      STAR: 'star',
-      SEARCH: 'search',
       CREATE: 'create',
-      DETAIL: 'detail',
-      TEMPORARY: 'temporary',
-      RECOMMEND: 'recommend',
-      KIND : 'kind'
     },
     CALENDAR: {
       DIARY: 'diary'
