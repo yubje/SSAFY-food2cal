@@ -11,6 +11,8 @@ from .serializers import DietSerializer, FoodSerializer, DietListSerializer
 from users.serializers import UserSerializer
 
 from posts.models import Post
+import datetime
+from collections import defaultdict
 
 # 식단 생성 
 @api_view(['POST'])
@@ -50,10 +52,20 @@ def diet_calendar(request, year_month):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def diet_statistics(request):
-    diets = Diet.objects.filter(user=request.user).order_by('-pk')[:15]
+    diets = Diet.objects.filter(user=request.user, created_at__range=(datetime.date.today()-datetime.timedelta(days=15), datetime.date.today())).order_by('-pk')
     serializer = DietListSerializer(diets, many=True)
-    return Response(serializer.data)
+    return_data = defaultdict(lambda: {'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0})
+    for i in range(len(serializer.data)):
+        date = serializer.data[i]["created_at"][:10]
+        food_lst = food_list(serializer.data[i]["id"])
+        for food in food_lst:
+            return_data[date]['calorie'] += food['calorie']
+            return_data[date]['carbohydrate'] += food['carbohydrate']
+            return_data[date]['protein'] += food['protein']
+            return_data[date]['fat'] += food['fat']
+    return Response(return_data)
 
 # post 생성에 사용, api 없음
 def food_create(request, food, diet_id):
