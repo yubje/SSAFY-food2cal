@@ -31,7 +31,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('id', 'user','created_at', 'updated_at')
+        read_only_fields = ('id', 'user','created_at', 'updated_at', 'post')
 
 # 게시글 상세정보
 class PostSerializer(serializers.ModelSerializer):
@@ -48,7 +48,7 @@ class CommentUpdateSeriailzer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('id', 'user','created_at')
+        read_only_fields = ('id', 'user','created_at', 'post')
 
 
 

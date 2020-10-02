@@ -15,7 +15,8 @@ from diets.views import diet_create, food_list
 # 글 리스트 
 @api_view(['GET'])
 def post_list(request, page_id=0):
-    posts = Post.objects.order_by('-pk')[:page_id*5]
+    posts = Post.objects.order_by('-pk')[:page_id*5+1]
+    print(posts)
     serializer = PostListSerializer(posts, many=True)
     return Response(serializer.data)
 
@@ -23,7 +24,7 @@ def post_list(request, page_id=0):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def post_create(request):
-    serializer = PostSerializer(data=request.data.get("post"))
+    serializer = PostSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         # serializer.save()
@@ -38,20 +39,6 @@ def post_detail(request, post_id):
     if request.method == 'GET':
         serializer = PostSerializer(post)
         return Response(serializer.data)
-        # diets = Diet.objects.filter(post_id=post_id)
-        # diet_serializer = DietListSerializer(diets, many=True)
-        # print(f'diet serializer data: {diet_serializer.data}')
-
-        # diet_data = []
-        # for i in range(len(diet_serializer.data)):
-        #     tmp = dict(diet_serializer.data[i])
-        #     tmp["food"] = food_list(diet_serializer.data[i]["id"])
-        #     diet_data.append(tmp)
-
-        # return_data = serializer.data
-        # return_data["diet"] = diet_data
-
-        # return Response(return_data)
 
     elif request.user == post.user:
         # 댓글 수정 
@@ -59,13 +46,13 @@ def post_detail(request, post_id):
             serializer = PostUpdateSerializer(data=request.data, instance=post)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                return Response({'message': 'success'})
+                return Response({'message': 200})
         # 댓글 삭제 
         elif request.method == 'DELETE':
             post.delete()
-            return Response({'message': 'success'})
+            return Response({'message': 200})
     else:
-        return Response({"status": "FORBIDDEN"})
+        return Response({"status": 401})
 
 @api_view(['GET', 'POST'])
 def comment_list(request, post_id):
