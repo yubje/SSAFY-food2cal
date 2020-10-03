@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'rest_auth.registration',
     'rest_framework.authtoken',
 
@@ -74,6 +75,9 @@ INSTALLED_APPS = [
     'diets',
     'ai',
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = "uploads"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,7 +133,10 @@ DATABASES = {
     #     'OPTIONS': {
     #         'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
     #     }
+<<<<<<< backend/backend/settings.py
 
+=======
+>>>>>>> backend/backend/settings.py
     # },
 }
 
@@ -175,6 +182,9 @@ STATIC_URL = '/static/'
 # rest-auth
 SITE_ID=1
 
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = (True)
+
 # REST_FRAMEWORK = {
 #     'DEFAULT_PERMISSION_CLASSES': [
 #         # 'rest_framework.permissions.IsAuthenticated',
@@ -185,10 +195,12 @@ SITE_ID=1
 #         # 'rest_framework.authentication.TokenAuthentication',
 #     ]
 # }
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
@@ -208,7 +220,7 @@ REST_FRAMEWORK = {
 
 #     'JWT_RESPONSE_PAYLOAD_HANDLER':
 #         'rest_framework_jwt.utils.jwt_response_payload_handler',
-        
+
 #     'JWT_SECRET_KEY': get_secret("JWT_SECRET_KEY"),
 #     'JWT_GET_USER_SECRET_KEY': None,
 #     'JWT_PUBLIC_KEY': None,

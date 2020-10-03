@@ -8,6 +8,7 @@
 
 <script>
 import PostsCard from '@/components/common/PostsCard'
+import SERVER from '@/libs/api'
 
 export default {
   name: 'Home',
@@ -22,7 +23,7 @@ export default {
   methods: {
     getPostList() {
       this.$http
-        .get(process.env.VUE_APP_SERVER_URL + 'posts/pages/1/')
+        .get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.getPost + '1/')
         .then(res => {
           this.posts = res.data
           console.log(res.data)

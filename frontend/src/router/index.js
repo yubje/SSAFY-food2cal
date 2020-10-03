@@ -41,6 +41,11 @@ const routes = [
     path: '/diary',
     name: constants.URL_TYPE.CALENDAR.DIARY,
     component: () => import('@/views/calendar/Diary')
+  },
+  {
+    path: '/posts/:id',
+    name: constants.URL_TYPE.POST.CREATE,
+    component: () => import('@/views/posts/PostsCreate')
   }
 ]
 
