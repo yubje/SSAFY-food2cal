@@ -8,7 +8,7 @@ class Diet(models.Model):
     CATEGORY_CHOICES = (
         ('MO', '아침'), ('LU', '점심'), ('DI', '저녁'), ('SN', '간식기타')
     )
-    category = models.CharField(max_length=2, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=CATEGORY_CHOICES[0][0])
 
 
 class Food(models.Model):

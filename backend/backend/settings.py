@@ -133,10 +133,6 @@ DATABASES = {
     #     'OPTIONS': {
     #         'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
     #     }
-<<<<<<< backend/backend/settings.py
-
-=======
->>>>>>> backend/backend/settings.py
     # },
 }
 
