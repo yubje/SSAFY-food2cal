@@ -39,10 +39,12 @@
           color="primary"
           @click="e1 = 2"
         >
-          Continue
+          다음
         </v-btn>
-        <v-btn text>
-          Cancel
+        <v-btn text
+          color="primary"
+        >
+          로그인 화면으로
         </v-btn>
       </v-stepper-content>
 
@@ -57,13 +59,13 @@
           color="primary"
           @click="e1 = 3"
         >
-          Continue
+          다음
         </v-btn>
 
         <v-btn text
           @click="e1 = 1"
         >
-          Cancel
+          이전
         </v-btn>
       </v-stepper-content>
 
@@ -164,7 +166,7 @@
         <v-btn text
           @click="e1 = 2"
         >
-          Cancel
+          이전
         </v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -183,7 +185,11 @@ export default {
         password1: null,
         password2: null,
         // weight: null,
+        // goalweight: null,
         // height: null,
+        // age: null,
+        // preference: null,
+        // gender: null,
       },
       // emailflag: false
     }
