@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from users.serializers import UserSerializer
-from .models import Post, Comment
+from .models import Post, Comment, Vote
 
 from diets.serializers import DietSerializer, DietListSerializer
 
 # post 리스트
 class PostListSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
     class Meta:
         model = Post
         # 게시글 제목이랑 작성자만 보여주기
@@ -21,6 +22,7 @@ class PostUpdateSerializer(serializers.ModelSerializer):
 
 
 class CommentListSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
     class Meta:
         model = Comment
         fields='__all__'
@@ -50,5 +52,10 @@ class CommentUpdateSeriailzer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'user','created_at', 'post')
 
-
+class VoteSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    class Meta:
+        model = Vote
+        fields = '__all__'
+        read_only_fields = ('user',)
 
