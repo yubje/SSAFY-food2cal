@@ -134,6 +134,13 @@ export default {
   mixins: [
     uploadPicture
   ],
+  created() {
+    if (this.$route.query.date) {
+      console.log(1)
+    } else {
+      console.log(0)
+    }
+  },
   beforeMount() {
     this.init()
   }

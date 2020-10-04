@@ -10,7 +10,8 @@ export default {
   URL_TYPE: {
     UPLOAD: {
       CAMERA: 'camera',
-      CANVAS: 'canvas'
+      CANVAS: 'canvas',
+      DIET: 'diet'
     },
     USER: {
       JOIN: 'join',
