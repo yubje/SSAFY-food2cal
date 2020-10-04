@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 
 import AWS from 'aws-sdk'
 // import constants from '@/libs/constants'
-// import SERVER from '@/libs/api'
+import SERVER from '@/libs/api'
+import axios from 'axios'
 
 
 Vue.use(Vuex)
@@ -41,12 +42,13 @@ export default new Vuex.Store({
           return
         }
         commit('SET_FILE_URL', data.Location)
-        // console.log(data.Location)
-        // this.$http.post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.predict, data.Location)
-        //   .then((res) => {
-        //     commit('SET_FOOD_INFO', res.data)
-        //     console.log(res.data)
-        //   })
+        console.log(data.Location)
+        axios.post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.predict, data.Location)
+          .then((res) => {
+            commit('SET_FOOD_INFO', res.data)
+            console.log(res.data)
+          })
+          .catch(err => console.log(err))
           // .then(() => {
           //   this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
           // })
