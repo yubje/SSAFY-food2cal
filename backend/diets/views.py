@@ -11,6 +11,7 @@ from .serializers import DietSerializer, FoodSerializer, DietListSerializer
 from users.serializers import UserSerializer
 
 from posts.models import Post
+from ai.models import Nutrition
 import datetime
 from collections import defaultdict
 
@@ -111,3 +112,13 @@ def food_delete(request, diet_id, food_id):
     if request.user == diet.user:
         food.delete()
         return Response({'status': 200})
+
+@api_view(['POST'])
+def food_search(request):
+    food = Nutrition.objects.filter(food_name=request.data["food_name"])
+    if food:
+        food = Nutrition.objects.get(food_name=request.data["food_name"])
+        serializer = FoodSerializer(food)
+        return Response(serializer.data)
+    else:
+        return Response({'status': 404, 'message': 'does not exist'})
