@@ -3,7 +3,7 @@ from django.conf import settings
 from posts.models import Post
 
 class Diet(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.CharField(max_length=100)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     CATEGORY_CHOICES = (
         ('MO', '아침'), ('LU', '점심'), ('DI', '저녁'), ('SN', '간식기타')
