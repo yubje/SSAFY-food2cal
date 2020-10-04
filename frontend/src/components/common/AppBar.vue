@@ -30,12 +30,8 @@
         </template>
         <!-- 3 dots 옵션 -->
         <v-list>
-          <v-list-item
-            v-for="n in 5"
-            :key="n"
-            @click="() => {}"
-          >
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
+          <v-list-item>
+            <router-link :to="{ name: constants.URL_TYPE.POST.CREATE, params: {id: 1} }">게시글 작성</router-link>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -138,6 +134,7 @@ import constants from '@/libs/constants'
 
 export default {
   data: () => ({
+    constants,
     drawer: false,
     group: null,
     islogin: false,
@@ -150,7 +147,7 @@ export default {
   methods: {
     UserLogout() {
       const config = {
-        headers: {'Authorization': `jwt ${this.$cookies.get('auth-token')}`}
+        headers: {'Authorization': `Token ${this.$cookies.get('auth-token')}`}
       }
       if (this.islogin === true) {
         this.$http

@@ -9,5 +9,6 @@ urlpatterns = [
     path('<int:post_id>/', views.post_detail, name='post_detail'),
     path('<int:post_id>/comments/', views.comment_list, name='comment_list'),
     path('<int:post_id>/comments/<int:comment_id>/', views.comment_detail, name='comment_detail'),
+    path('<int:post_id>/votes/<int:vote_id>/', views.vote, name='vote'),
 ]
 

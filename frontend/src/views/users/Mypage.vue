@@ -84,29 +84,12 @@
         </v-btn>
       </v-card-actions> -->
     </v-card>
-    <button class="button" @click="addExperience">Add experience</button>
     <div class="Chart">
       <Doughnut
         ref="skills_chart"
         :chart-data="chartData"
         :options="options">
       </Doughnut>
-
-      <div v-for="(val, i) in currentDataSet" :key="i">
-        <input
-          type="range" 
-          min="0" 
-          max="8"
-          placeholder="name"
-          :value="currentDataSet[i]"
-          @input="updateAmount($event.target.value, i)"
-        >
-        <span>
-          {{ currentDataSet[i] }} years
-        </span>
-        <input type="text" :value="chartData.labels[i]" @input="updateName($event.target.value, i)">
-        <button @click="remove(i)">remove</button>
-      </div>
 
     </div>
   </v-container>
@@ -144,11 +127,11 @@ export default {
       ],
       options, 
         chartData: {
-        labels: ['skill1'],
+        labels: ['테스트1', '테스트2'],
         datasets: [
           {
             backgroundColor: [randomColor()],
-            data: [1]
+            data: [1, 2]
           }
         ]
       }
@@ -160,37 +143,15 @@ export default {
       return this.chartData.datasets[0].data
     }
   },
-
+  
   created() {
   },
 
   methods: {
-    // Doughnut Chart Data
+    // Doughnut Chart Data Update
     updateChart () {
       this.$refs.skills_chart.update();
     },
-    updateAmount (amount, index) {
-      this.chartData.datasets[0].data.splice(index, 1, amount)
-      this.updateChart();
-    },
-    updateName (text, index) {
-      this.chartData.labels.splice(index, 1, text)
-      this.updateChart();
-    },
-    addExperience() {
-      const currentDataset = this.chartData.datasets[0]
-      this.chartData.labels.push(`Skill ${currentDataset.data.length + 1}`)
-      currentDataset.data.push(0)
-      currentDataset.backgroundColor.push(randomColor())
-      this.updateChart();
-    },
-    remove (index) {
-      const currentDataset = this.chartData.datasets[0]
-      currentDataset.data.splice(index, 1)
-      this.chartData.labels.splice(index, 1)
-      currentDataset.backgroundColor.splice(index, 1)
-      this.updateChart()
-    }
   },
 }
 </script>

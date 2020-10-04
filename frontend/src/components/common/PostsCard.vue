@@ -1,65 +1,71 @@
 <template>
   <v-card
-    max-width="344"
-    class="mx-auto mt-6"
+    class="mx-auto mt-7"
+    max-width="370"
   >
-    <v-list-item>
-      <v-list-item-avatar color="grey"></v-list-item-avatar>
-      <v-list-item-content>
-        <!-- <v-list-item-title class="headline">Our Changing Planet</v-list-item-title> -->
-        <v-list-item-subtitle>by Kurt Wagner</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-
-    <!-- <v-img
-      :src="post.diet_image_path"
-      :style="{ backgroundImage: 'url( '+ require('../../assets/img/MAATKKUN.png') +' )' }"
-      height="194"
-    ></v-img> -->
-
     <v-img
       :src="post.diet_image_path"
       :style="{ backgroundImage: 'url(https://cdn.vuetifyjs.com/images/cards/sunshine.jpg)' }"
-      height="194"
+      height="200px"
     ></v-img>
 
+    <v-card-title>
+      {{ post.title }} by {{ post.user.username }}
+    </v-card-title>
 
-
-    <v-card-text>
+    <v-card-subtitle>
       {{ post.content }}
-    </v-card-text>
+    </v-card-subtitle>
 
     <v-card-actions>
-      <v-btn
-        text
-        color="deep-purple accent-4"
-      >
-        
-      </v-btn>
-      <v-btn
-        text
-        color="deep-purple accent-4"
-      >
-        
-      </v-btn>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-share-variant</v-icon>
+
+      <v-btn
+        icon
+        @click="show = !show"
+      >
+        <!-- <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon> -->
+        <v-icon>
+          mdi-comment
+        </v-icon>
       </v-btn>
     </v-card-actions>
+
+    <v-expand-transition>
+      <div v-show="show">
+        <v-divider></v-divider>
+        <Comment :postId="post.id" />
+        <!-- <CommentCreate /> -->
+      </div>
+    </v-expand-transition>
   </v-card>
 </template>
 
 <script>
+import Comment from '@/components/comment/Comment'
+// import CommentCreate from '@/components/comment/CommentCreate'
+
 export default {
-  name: 'Card',
+  name: 'PostsCard',
   props: {
     post: {
       type: Object
     }
+  },
+  components: {
+    Comment,
+    // CommentCreate
+  },
+  data () {
+    return {
+      show: false,
+      // commentForm: {
+      //   content: ''
+      // },
+    }
+  },
+  methods: {
+    
   }
 }
 </script>

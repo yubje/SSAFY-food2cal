@@ -47,6 +47,11 @@ const routes = [
     name: constants.URL_TYPE.USER.MYPAGE,
     component: () => import('@/views/users/Mypage')
   },
+  {
+    path: '/posts/:id',
+    name: constants.URL_TYPE.POST.CREATE,
+    component: () => import('@/views/posts/PostsCreate')
+  }
 ]
 
 const router = new VueRouter({
