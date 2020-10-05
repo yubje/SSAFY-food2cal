@@ -96,7 +96,18 @@
 
     </div>
 
-    <div class="mt-10">
+    <div v-if="$route.query.date" class="d-flex align-center justify-center">
+      <v-btn
+        color="#F84A0D"
+        text
+        large
+        class="mx-auto"
+        @click="addDiet"
+      >
+        Submit
+      </v-btn>
+    </div>
+    <div v-else class="mt-10">
       <DietModal />
     </div>
   </div>
@@ -105,7 +116,7 @@
 <script>
 import { mapState } from 'vuex'
 import DietModal from '@/components/common/DietModal'
-// import SERVER from '@/libs/api'
+import SERVER from '@/libs/api'
 
 export default {
   name: 'Canvas',
@@ -143,6 +154,39 @@ export default {
     //   this.AdjFoodInfo.protein = (this.serving + this.remain) * this.foodInfo.protein
     //   this.AdjFoodInfo.fat = (this.serving + this.remain) * this.foodInfo.fat
     // }
+    addDiet() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
+        }
+      }
+
+      const dietData = {
+        diet: {
+          created_at: this.$route.query.date,
+          category: this.$route.query.type,
+        },
+        food: []
+      }
+
+      this.foodInfo.forEach(food => {
+        dietData.food.push({
+          food_name: food.food_name,
+          amount: food.amount,
+          calorie: food.calorie,
+          carbohydrate: food.carbohydrate,
+          protein: food.protein,
+          fat: food.fat
+        })
+      })
+      
+      this.$http
+        .post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, dietData, config)
+        .then(() => {
+          this.$router.push('/')
+        })
+        .catch(err => console.log(err.response.data))
+    }
   },
   mounted() {
     // this.setFoodInfo()

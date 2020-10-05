@@ -135,7 +135,8 @@
 </template>
 
 <script>
-import SERVER from '@/libs/api'
+// import SERVER from '@/libs/api'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data: () => ({
@@ -148,16 +149,25 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    dietMonthInfo: null
+    // dietMonthInfo: null
   }),
   mounted () {
     this.$refs.calendar.checkChange()
-    this.getMonthDiets()
+    const yearMon = this.setYearMon(this.$refs.calendar.title)
+    this.getMonthDiets(yearMon)
   },
   updated() {
     
   },
+  computed: {
+    ...mapState([
+      'dietMonthInfo'
+    ])
+  },
   methods: {
+    ...mapActions([
+      'getMonthDiets'
+    ]),
     // viewDay({ date }) {
     //   this.focus = date
     //   this.type = 'day'
@@ -168,16 +178,26 @@ export default {
     // setToday() {
     //   this.focus = ''
     // },
+    setYearMon(title) {
+      const date = title.split(' ')
+      let year = +date[1]
+      let month = +date[0].slice(0, -1)
+      month = month >= 10 ? month: '0' + month
+      const yearMon = year + '-' + month
+      return yearMon
+    },
     prev() {
       this.$refs.calendar.prev()
       setTimeout(() => {
-        this.getMonthDiets()
+        const yearMon = this.setYearMon(this.$refs.calendar.title)
+        this.getMonthDiets(yearMon)
       }, 10)
     },
     next() {
       this.$refs.calendar.next()
       setTimeout(() => {
-        this.getMonthDiets()
+        const yearMon = this.setYearMon(this.$refs.calendar.title)
+        this.getMonthDiets(yearMon)
       }, 10)
     },
     sendDate() {
@@ -185,33 +205,35 @@ export default {
         const arr = this.dietMonthInfo
         const date = this.$refs.calendar.value
         this.$emit('date', date)
-        this.$emit('select-date', arr[date])
+        // this.$emit('food-info', arr[date])
+        this.$emit('food-info', arr)
       }, 10)
     },
-    getMonthDiets() {
-      const config = {
-        headers: {
-          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
-        }
-      }
+    // getMonthDiets() {
+    //   const config = {
+    //     headers: {
+    //       Authorization: `Token ${this.$cookies.get(`auth-token`)}`
+    //     }
+    //   }
       
-      const date = this.$refs.calendar.title.split(' ')
-      let year = +date[1]
-      let month = +date[0].slice(0, -1)
-      month = month >= 10 ? month: '0' + month
-      const yearMon = year + '-' + month
+    //   const date = this.$refs.calendar.title.split(' ')
+    //   let year = +date[1]
+    //   let month = +date[0].slice(0, -1)
+    //   month = month >= 10 ? month: '0' + month
+    //   const yearMon = year + '-' + month
 
-      this.$http.get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.diets + `${yearMon}/`, config)
-        .then(res => {
-          this.dietMonthInfo = res.data
-          setTimeout(() => {
-            this.getMonthDiets()
-          }, 10)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
+    //   this.$http.get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.diets + `${yearMon}/`, config)
+    //     .then(res => {
+    //       this.dietMonthInfo = res.data
+    //       // setTimeout(() => {
+    //       //   this.getMonthDiets()
+    //       // }, 10)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+
     // showEvent ({ nativeEvent, event }) {
     //   const open = () => {
     //     this.selectedEvent = event

@@ -40,11 +40,24 @@
 
         <v-card-text v-if="foodInfo && foodInfo[category.type].length">
           <div v-for="food in foodInfo[category.type]" :key="food.id">
-            {{ food }}
-            <!-- <v-spacer></v-spacer> -->
-            <v-icon>
-              mdi-close-circle-outline
-            </v-icon>
+            <div class="d-flex justify-space-between align-center">
+              <span class="ml-5 text-subtitle-1">{{ food.food_name }}</span>
+              <div>
+                <span class="mr-3">{{ food.calorie }} kcal</span>
+                <v-icon
+                  class="mr-5"
+                  @click="deleteDiet({'diet_id': food.diet, 'food_id': food.id})"
+                >
+                  mdi-close-circle-outline
+                </v-icon>
+              </div>
+            </div>
+            
+  
+
+            <!-- food_name, calorie, carbohydrate, protein, fat -->
+            
+            
           </div>
         </v-card-text>
         <v-card-text v-else>
@@ -58,6 +71,7 @@
 <script>
 import SERVER from '@/libs/api'
 import constants from '@/libs/constants'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
@@ -76,9 +90,12 @@ export default {
       type: String
     }
   },
-  created () {
+  mounted () {
   },
   methods: {
+    ...mapActions([
+      'getMonthDiets'
+    ]),
     goToDietsCreate() {
       this.$router.push({ name: constants.URL_TYPE.UPLOAD.DIET, query: { date: this.date, type: this.category.type} })
     },
@@ -114,16 +131,27 @@ export default {
         })
         .catch(err => console.log(err.response.data))
     },
-    // deleteDiet() {
-    //   const config = {
-    //     headers: {
-    //       Authorization: `Token ${this.$cookies.get(`auth-token`)}`
-    //     }
-    //   }
+    deleteDiet(food) {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
+        }
+      }
 
-    //   this.$http
-    //     .delete(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet + 'foods/' + `${}/`)
-    // }
+      this.$http
+        .delete(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet + `${food.diet_id}` + '/foods/' + `${food.food_id}/`, config)
+        .then(() => {
+          const yearMon = window.localStorage.getItem('yearMon')
+          this.getMonthDiets(yearMon)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 }
 </script>
+
+<style scoped>
+
+</style>

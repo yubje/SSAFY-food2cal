@@ -157,20 +157,22 @@ export default {
           created_at: this.$route.query.date,
           category: this.$route.query.type,
         },
-        food: [{
-          food_name: this.foodInfo.food_name,
-          amount: (this.serving + this.remain) * this.foodInfo.amount,
-          calorie: (this.serving + this.remain) * this.foodInfo.calorie,
-          carbohydrate: (this.serving + this.remain) * this.foodInfo.carbohydrate,
-          protein: (this.serving + this.remain) * this.foodInfo.protein,
-          fat: (this.serving + this.remain) * this.foodInfo.fat
-        }]
+        food: [
+          {
+            food_name: this.foodInfo.food_name,
+            amount: (this.serving + this.remain) * this.foodInfo.amount,
+            calorie: (this.serving + this.remain) * this.foodInfo.calorie,
+            carbohydrate: (this.serving + this.remain) * this.foodInfo.carbohydrate,
+            protein: (this.serving + this.remain) * this.foodInfo.protein,
+            fat: (this.serving + this.remain) * this.foodInfo.fat
+          }
+        ]
       }
       
       this.$http
         .post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, dietData, config)
-        .then(res => {
-          console.log(res)
+        .then(() => {
+          // console.log(res)
           this.isSelectModal = true
         })
         .catch(err => console.log(err.response.data))
