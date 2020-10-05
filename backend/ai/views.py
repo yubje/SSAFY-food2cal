@@ -28,7 +28,7 @@ from django.db.models import Q
 
 category = {"bulgogi": "불고기", "eggroll": "계란말이", "friedchicken": "후라이드치킨", "jobgokbab": "쌀밥", "kimbap": "김밥", "kimchi": "김치", "kimchijjigae": "김치찌개", "pizza": "피자", "ramen": "라면", "yangnyeomchicken": "양념치킨"}
 
-@api_view(['GET'])
+@api_view(['POST'])
 def index(request):
     image_url = list(dict(request.data).keys())[0]
     # image_url = 'https://photo-storage-ftc.s3.ap-northeast-2.amazonaws.com/image/2020106202418636.jpeg'
