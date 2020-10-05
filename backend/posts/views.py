@@ -16,7 +16,6 @@ from diets.views import diet_create, food_list
 @api_view(['GET'])
 def post_list(request, page_id=0):
     posts = Post.objects.order_by('-pk')[:page_id*5+1]
-    print(posts)
     serializer = PostListSerializer(posts, many=True)
     return Response(serializer.data)
 
@@ -63,7 +62,6 @@ def comment_list(request, post_id):
         return Response(serializer.data)
     # 댓글 생성 
     elif request.method == 'POST':
-        print(request.data)
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, post_id=post_id)
@@ -100,7 +98,6 @@ def vote(request, post_id, vote_id=0):
             vote.delete()
             return Response({'status': 200})
         elif vote:
-            print(vote.vote)
             if vote_id != vote.vote:
                 serializer = VoteSerializer(data=request.data, instance=vote)
                 if serializer.is_valid(raise_exception=True):
@@ -109,11 +106,10 @@ def vote(request, post_id, vote_id=0):
             else:
                 post.vote.remove()
         else:
-            print('else')
+
             serializer = VoteSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(user=request.user)
-            print(serializer.data)
         return Response(serializer.data)
     elif request.method == 'DELETE':
         vote = Vote.objects.filter(user=request.user, post=post.id)
