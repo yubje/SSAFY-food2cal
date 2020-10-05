@@ -31,13 +31,11 @@ def diet_create(request):
             food_data = food_list(diet.id)
             for food in request.data["food"]:
                 food_data.append(food_create(request, food, diet.id))
-            print(food_data)
             return_data = serializer.data
             return_data["food"] = food_data
 
     # 새로 식단을 생성하는 경우 
     else: 
-
         serializer = DietSerializer(data=diet_info)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
@@ -53,7 +51,6 @@ def diet_create(request):
 @api_view(['GET'])
 def diet_calendar(request, year_month):
     diets = Diet.objects.filter(user=request.user, created_at__startswith=year_month).order_by('created_at')
-    print(diets)
     serializer = DietListSerializer(diets, many=True)
     return_data = defaultdict(lambda: {'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0, 'MO': [], 'LU': [], 'DI': [], 'SN': []})
 
@@ -61,7 +58,6 @@ def diet_calendar(request, year_month):
         date = serializer.data[i]["created_at"][:10]
         category = serializer.data[i]['category']
         food_lst = food_list(serializer.data[i]["id"])
-        print(food_lst)
         for food in food_lst:
             return_data[date]['calorie'] += food['calorie']
             return_data[date]['carbohydrate'] += food['carbohydrate']
@@ -93,7 +89,6 @@ def food_create(request, food, diet_id):
         serializer.save(diet_id=diet_id)
         return serializer.data
 
-
 # post 상세조회에 사용, api 없음 
 def food_list(diet_id):
     foods = Food.objects.filter(diet_id=diet_id)
@@ -104,11 +99,10 @@ def food_list(diet_id):
     return food_data
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def food_delete(request, diet_id, food_id):
     food = get_object_or_404(Food, pk=food_id)
     diet = get_object_or_404(Diet, pk=diet_id)
-    print(food)
-    print(diet)
     if request.user == diet.user:
         food.delete()
         return Response({'status': 200})
