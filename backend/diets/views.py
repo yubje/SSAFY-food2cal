@@ -11,6 +11,7 @@ from .serializers import DietSerializer, FoodSerializer, DietListSerializer
 from users.serializers import UserSerializer
 
 from posts.models import Post
+from ai.models import Nutrition
 import datetime
 from collections import defaultdict
 
@@ -21,35 +22,49 @@ def diet_create(request):
     # User = get_user_model()
     # user = get_object_or_404(User, username=request.user)
     diet_info = request.data.get("diet")
-    serializer = DietSerializer(diet_info)
-    print(serializer.data)
-    diet = Diet.objects.get(user=request.user, created_at__startswith=diet_info["date"], category=diet_info["category"])
+    diet = Diet.objects.filter(user=request.user, created_at__startswith=diet_info["created_at"], category=diet_info["category"])
     # 이미 저장된 식단이 있는 경우 기존 식단에 음식 추가 
     if diet:
-        food_data = food_list(diet.id)
-        for food in request.data["food"]:
-            food_data.append(food_create(request, food, diet.id))
-        print(food_data)
+        serializer = DietSerializer(data=diet_info)
+        if serializer.is_valid(raise_exception=True):
+            diet = Diet.objects.get(user=request.user, created_at__startswith=diet_info["created_at"], category=diet_info["category"])
+            food_data = food_list(diet.id)
+            for food in request.data["food"]:
+                food_data.append(food_create(request, food, diet.id))
+            return_data = serializer.data
+            return_data["food"] = food_data
 
     # 새로 식단을 생성하는 경우 
-    elif serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user)
-        food_data = []
-        for food in request.data["food"]:
-            food_data.append(food_create(request, food, serializer.data["id"]))
-    return_data = serializer.data
-    return_data["food"] = food_data
+    else: 
+        serializer = DietSerializer(data=diet_info)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+            food_data = []
+            for food in request.data["food"]:
+                food_data.append(food_create(request, food, serializer.data["id"]))
+        return_data = serializer.data
+        return_data["food"] = food_data
     return Response(return_data)
 
 
 
 @api_view(['GET'])
 def diet_calendar(request, year_month):
-    diets = Diet.objects.filter(user=request.user, created_at__startswith=year_month)
+    diets = Diet.objects.filter(user=request.user, created_at__startswith=year_month).order_by('created_at')
     serializer = DietListSerializer(diets, many=True)
+    return_data = defaultdict(lambda: {'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0, 'MO': [], 'LU': [], 'DI': [], 'SN': []})
+
     for i in range(len(serializer.data)):
-        serializer.data[i]["food"] = food_list(serializer.data[i]["id"])
-    return Response(serializer.data)
+        date = serializer.data[i]["created_at"][:10]
+        category = serializer.data[i]['category']
+        food_lst = food_list(serializer.data[i]["id"])
+        for food in food_lst:
+            return_data[date]['calorie'] += food['calorie']
+            return_data[date]['carbohydrate'] += food['carbohydrate']
+            return_data[date]['protein'] += food['protein']
+            return_data[date]['fat'] += food['fat']
+            return_data[date][category].append(food)
+    return Response(return_data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -74,7 +89,6 @@ def food_create(request, food, diet_id):
         serializer.save(diet_id=diet_id)
         return serializer.data
 
-
 # post 상세조회에 사용, api 없음 
 def food_list(diet_id):
     foods = Food.objects.filter(diet_id=diet_id)
@@ -85,11 +99,20 @@ def food_list(diet_id):
     return food_data
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def food_delete(request, diet_id, food_id):
     food = get_object_or_404(Food, pk=food_id)
     diet = get_object_or_404(Diet, pk=diet_id)
-    print(food)
-    print(diet)
     if request.user == diet.user:
         food.delete()
         return Response({'status': 200})
+
+@api_view(['POST'])
+def food_search(request):
+    food = Nutrition.objects.filter(food_name=request.data["food_name"])
+    if food:
+        food = Nutrition.objects.get(food_name=request.data["food_name"])
+        serializer = FoodSerializer(food)
+        return Response(serializer.data)
+    else:
+        return Response({'status': 404, 'message': 'does not exist'})

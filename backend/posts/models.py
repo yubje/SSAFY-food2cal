@@ -24,4 +24,4 @@ class Vote(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     vote = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2)])
     def __str__(self):
-        return '%s: %d' % (self.movie, self.rate)
+        return '%s: %d' % (self.post, self.vote)

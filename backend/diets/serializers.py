@@ -22,7 +22,7 @@ class DietSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diet
         fields = '__all__'
-        read_only_fields = ('id', 'user', 'created_at', 'post')
+        read_only_fields = ('id', 'user', 'post')
 
 
 # 식단 리스트
