@@ -9,9 +9,11 @@
         class="comment-username" 
         :to="{ name:constants.URL_TYPE.USER.MYPAGE, params:{ id: comment.userid }}"
       >{{ comment.nickname }}</router-link> -->
-      <p class="comment-time">{{ comment.updated_at }}</p>
-      <p class="comment-time">{{ comment.user.username }}</p>
-      <p class="comment-content">{{ comment.content }}</p>
+      <div class="d-flex align-center mt-2">
+        <p class="comment-time mx-3"><strong>{{ comment.user.username }}</strong></p>
+        <p class="comment-content">{{ comment.content }}</p>
+      </div>
+      
       <!-- <div v-if="checkComment.isComment && comment.commentid === checkComment.commentId">
         <CommentCreate :checkComment="checkComment" @change-comment="updateComment"/>
       </div>
