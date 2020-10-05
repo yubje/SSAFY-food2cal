@@ -3,11 +3,6 @@
     <div v-for="post in posts" :key="post.id">
       <PostsCard :post="post" />
     </div>
-    <v-btn
-      @click="test()"
-    >
-    다이어트 통계 데이터
-    </v-btn>
   </div>
 </template>
 
@@ -35,16 +30,6 @@ export default {
         })
         .catch(err => console.log(err.response.data))
     },
-    test() {
-      this.$http
-        .get(process.env.VUE_APP_SERVER_URL + '/diets/diet_statistics/', 
-            { headers: {  'X-CSRFToken': this.$cookies.get('csrftoken'),
-                          'Authorization': `Token ${this.$cookies.get('auth-token')}`
-        }})
-        .then(res => {
-          console.log(res)
-        })
-    }
   },
   created() {
     this.getPostList()
