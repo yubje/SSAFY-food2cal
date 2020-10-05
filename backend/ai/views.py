@@ -42,7 +42,7 @@ def index(request):
     for food in set(food_list):
         nutritions = Nutrition.objects.filter(food_name=food)
         serializer = NutritionSerializer(nutritions, many=True)
-        context.append(serializer.data)
+        context += serializer.data
     return Response(context)
 
 # Create your views here.
