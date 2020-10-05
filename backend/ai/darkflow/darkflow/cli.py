@@ -3,6 +3,10 @@ import os
 from .net.build import TFNet
 import json
 import cv2
+from urllib.request import urlopen
+from PIL import Image
+import io
+import numpy as np
 
 def cliHandler(image_url):
     FLAGS = argHandler()
@@ -42,12 +46,14 @@ def cliHandler(image_url):
 
     # tfnet.predict()
     # im = '이미지가 들어있는 폴더 경로' + str(image_name) # 이미지가 저장된 폴더 위치 + POST 요청과 함께 받은 이미지 이름
-    im = 'yolo/sample.jpg'
+    # im = 'yolo/sample.jpg'
 
-    print(image_url)
+    # print(image_url)
     im = urlopen(image_url).read()
-    # image = Image.open(io.BytesIO(res))
-    result = tfnet.return_predict(cv2.imread(im))
+    im = Image.open(io.BytesIO(im))
+    image_data = np.asarray(im)
+    # result = tfnet.return_predict(cv2.imread(im, 1))
+    result = tfnet.return_predict(image_data)
     print(result)
     # result = json.dumps(result)
     return result
