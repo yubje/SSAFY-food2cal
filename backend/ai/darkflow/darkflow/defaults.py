@@ -14,7 +14,7 @@ class argHandler(dict):
         self.define('backup', './ckpt/', 'path to backup folder')
         self.define('summary', '', 'path to TensorBoard summaries directory')
         self.define('annotation', '../pascal/VOCdevkit/ANN/', 'path to annotation directory')
-        self.define('threshold', 0.05, 'detection threshold')
+        self.define('threshold', 0.02, 'detection threshold')
         self.define('model', '', 'configuration of choice')
         self.define('trainer', 'rmsprop', 'training algorithm')
         self.define('momentum', 0.0, 'applicable for rmsprop and momentum optimizers')
