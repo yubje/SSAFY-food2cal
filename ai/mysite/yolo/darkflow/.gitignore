@@ -19,7 +19,7 @@ tfnet/yolo/parse-history.txt
 tfnet/yolo/*.parsed
 *.txt
 !requirements*.txt
-*.pb
+# *.pb
 /profile
 /test.py
 
@@ -37,7 +37,7 @@ build/
 summary/
 
 #Built graphs
-built_graph/
+# built_graph/
 
 #Training checkpoints
 ckpt/*
