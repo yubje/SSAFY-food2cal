@@ -1,11 +1,13 @@
 from .defaults import argHandler #Import the default arguments
 import os
 from .net.build import TFNet
+import json
+import cv2
 
-def cliHandler(args):
+def cliHandler(image_name):
     FLAGS = argHandler()
     FLAGS.setDefaults()
-    FLAGS.parseArgs(args)
+    # FLAGS.parseArgs(args)
 
     # make sure all necessary dirs exist
     def _get_dir(dirs):
@@ -38,4 +40,11 @@ def cliHandler(args):
         print('Rebuild a constant version ...')
         tfnet.savepb(); exit('Done')
 
-    tfnet.predict()
+    # tfnet.predict()
+    # im = '이미지가 들어있는 폴더 경로' + str(image_name) # 이미지가 저장된 폴더 위치 + POST 요청과 함께 받은 이미지 이름
+    im = 'yolo/sample.jpg'
+    print(im)
+    result = tfnet.return_predict(cv2.imread(im))
+    print(result)
+    # result = json.dumps(result)
+    return result

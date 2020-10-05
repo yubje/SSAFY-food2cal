@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
+from yolo.darkflow.darkflow.cli import cliHandler
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -7,11 +9,14 @@ from django.shortcuts import render
 # from google.protobuf import text_format
 # from tensorflow.python.platform import gfile
 
-import cv2
-import numpy as np
-from .darkflow.darkflow.net.build import TFNet
+# import cv2
+# import numpy as np
+# from .darkflow.darkflow.net.build import TFNet
 
-def index(request):
+# import sys
+# from .darkflow.darkflow.cli import cliHandler
+
+# def index(request):
 
     # # Load Yolo
     
@@ -76,14 +81,21 @@ def index(request):
 
 
 
-    options = {"pbLoad": "built_graph/my-tiny.pb", "metaLoad": "built_graph/my-tiny.meta", "gpu": 0,"threshold": 0.2}
+    # options = {"pbLoad": "built_graph/my-tiny.pb", "metaLoad": "built_graph/my-tiny.meta", "gpu": 0,"threshold": 0.2}
 
-    tfnet = TFNet(options)
+    # tfnet = TFNet(options)
 
-    imgcv = cv2.imread("sample.jpg")
-    result = tfnet.return_predict(imgcv)
-    context = {
-        'result': result,
-    }
+    # imgcv = cv2.imread("sample.jpg")
+    # result = tfnet.return_predict(imgcv)
+    # context = {
+    #     'result': result,
+    # }
 
-    return render(request, 'yolo/index.html')
+
+    # # cliHandler(sys.argv)
+
+    # return render(request, 'yolo/index.html', context)
+
+def index(request):
+    image_name = 'sample.jpg'
+    return HttpResponse(cliHandler(image_name))
