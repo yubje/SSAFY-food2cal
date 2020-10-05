@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
+/* * {
+  box-sizing: border-box;
+  font-family: 'Do Hyeon', sans-serif;
+  word-break: keep-all;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+} */
+
+:root {
+  --color-one: #FF890E;
+  --color-two: #FFC30D;
+  --color-three: #F84A0D;
+  --color-four: #9AD914;
+  --color-five: #0BA40C;
+}
