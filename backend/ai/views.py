@@ -21,12 +21,17 @@ from sklearn.model_selection import train_test_split
 from openpyxl import load_workbook
 from urllib.request import urlopen
 
+from yolo.darkflow.darkflow.cli import cliHandler
+from django.http import HttpResponse
 
+@api_view(['POST'])
+def index(request):
+    image_url = list(dict(request.data).keys())[0]
+    return HttpResponse(cliHandler(image_url))
 
 # Create your views here.
 @api_view(['POST'])
 def predict(request):
-
 
     category = {"0": "만두", "1": "콩자반", "2": "깻잎장아찌", "3": "갈비탕", "4": "꼬막찜", "5": "새우튀김", "6": "배추김치", "7": "갈비구이", "8": "된장찌개", "9": "육회", "10": "물회", "11": "김치찌개", "12": "소세지볶음", "13": "김밥", "14": "찜닭", "15": "갈치구이", "16": "후라이드치킨", "17": "자장면", "18": "수정과", "19": "삼계탕", "20": "순대", "21": "해물찜", "22": "피자", "23": "족발", "24": "계란찜", "25": "떡볶이", "26": "한과", "27": "감자채볶음", "28": "식혜", "29": "약과"}
 
