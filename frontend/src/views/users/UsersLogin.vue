@@ -44,6 +44,13 @@
             </v-text-field>
           </div>
           
+          <!-- 테스트 코드 -->
+          <!-- <div>
+            <v-text-field v-model="LoginData.username">
+            </v-text-field>
+          </div> -->
+          
+          
           <!-- ** 아이디/비밀번호 찾기 ** -->
           <!-- <div class="login_append">
             <v-checkbox
@@ -100,7 +107,7 @@ export default {
       islogin: false,
       LoginData: {
         username: null,
-        password: null
+        password: null,
       },
     }
   },
@@ -108,8 +115,9 @@ export default {
     UserLogin(LoginData) {
       if (this.islogin === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
+          console.log(this.$cookies.get('csrftoken'))
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/login/', LoginData)
+            .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
             .then(res => {
               this.setCookie(res.data.key)
               this.$emit('submit-login')
