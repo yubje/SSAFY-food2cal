@@ -1,103 +1,35 @@
 <template>
   <v-container>
-    <v-card
-      class="mx-auto text-center"
-      color="green"
-      dark
-      max-width="600"
-    >
-      <!-- 제목 -->
-      <v-card-title>
-        <!-- 아이콘 -->
-        <!-- <v-icon
-          :color="checking ? 'red lighten-2' : 'indigo'"
-          class="mr-12"
-          size="64"
-          @click="takePulse"
-        >
-          mdi-heart-pulse
-        </v-icon> -->
-
-
-        <v-row align="start">
-          <div class="caption grey--text text-uppercase">
-            <span
-              class="display-1 font-color-white"
-              color="white">
-              칼로리
-            </span>
-            
-          </div>
-          <!-- <div>
-            <span
-              class="display-2 font-weight-black"
-              v-text="avg || '—'"
-            ></span>
-            <strong v-if="avg">BPM</strong>
-          </div> -->
-        </v-row>
-
-        <v-spacer></v-spacer>
-
-        <!-- 디테일 화살표 -->
-        <!-- <v-btn
-          icon
-          class="align-self-start"
-          size="28"
-        >
-          <v-icon>mdi-arrow-right-thick</v-icon>
-        </v-btn> -->
-      </v-card-title>
-
-      <!-- 카드 내용 -->
-      <v-card-text>
-        <v-sheet color="rgba(0, 0, 0, .12)">
-          <v-sparkline
-            :value="dates"
-            color="rgba(255, 255, 255, .7)"
-            height="100"
-            padding="24"
-            stroke-linecap="round"
-            smooth
-          >
-            <template v-slot:label="item">
-              ${{ item.value }}
-            </template>
-          </v-sparkline>
-        </v-sheet>
-      </v-card-text>
-
-      <!-- <v-card-text>
-        <div class="display-1 font-weight-thin">
-          Sales Last 24h
-        </div>
-      </v-card-text> -->
-
-      <v-divider></v-divider>
-
-      <!-- <v-card-actions class="justify-center">
-        <v-btn
-          block
-          text
-        >
-          Go to Report
-        </v-btn>
-      </v-card-actions> -->
-    </v-card>
     <div class="Chart">
       <Doughnut
         ref="skills_chart"
         :chart-data="chartData"
         :options="options">
       </Doughnut>
-
     </div>
+    <div>
+      <Line
+      >
+      </Line>
+      <button @click="fillData()">Randomize</button>
+    </div>
+      <line-chart :chart-data="this.datacollection"></line-chart>
+
+
+    <v-btn
+      @click="test()"
+    >
+    다이어트 통계 데이터 받기
+    </v-btn>
   </v-container>
 </template>
 
 <script>
-//
+// 차트 컴포넌트
 import Doughnut from '@/components/chart/Doughnut'
+import Line from '@/components/chart/Line'
+import LineChart from '@/components/chart/LineChart'
+
 // 무작위 컬러 라이브러리
 import randomColor from 'randomcolor'
 
@@ -112,29 +44,25 @@ const options = {
 export default {
   name: 'Mypage',
   components: {
-    Doughnut
+    Doughnut,
+    Line,
+    LineChart
   },
   data() {
     return {
-      dates: [
-        423,
-        446,
-        675,
-        510,
-        590,
-        610,
-        760,
+      calories: [
       ],
       options, 
         chartData: {
-        labels: ['테스트1', '테스트2'],
+        labels: ['탄수화물', '기준 탄수화물'],
         datasets: [
           {
             backgroundColor: [randomColor()],
             data: [1, 2]
           }
         ]
-      }
+      },
+      datacollection: null
     }
   },
 
@@ -143,8 +71,12 @@ export default {
       return this.chartData.datasets[0].data
     }
   },
-  
+
   created() {
+  },
+
+  mounted () {
+    this.fillData()
   },
 
   methods: {
@@ -152,6 +84,45 @@ export default {
     updateChart () {
       this.$refs.skills_chart.update();
     },
+    test() {
+      this.$http
+        .get(process.env.VUE_APP_SERVER_URL + '/diets/statistics/', 
+          { 
+            headers: {  
+            'X-CSRFToken': this.$cookies.get('csrftoken'),
+            'Authorization': `Token ${this.$cookies.get('auth-token')}`
+          }
+        })
+        .then(res => {
+          // console.log(typeof(res.data))
+          for (const value in res.data) {
+            console.log(value, res.data[value])
+            this.calories.push(res.data[value]["calorie"])
+          }
+        })
+    },
+    fillData() {
+      console.log('Click random')
+      this.datacollection = {
+        labels: [this.getRandomInt(), this.getRandomInt()],
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }, 
+          {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }
+        ]
+      }
+      console.log(this.datacollection)
+    },
+    getRandomInt () {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    }
   },
 }
 </script>
