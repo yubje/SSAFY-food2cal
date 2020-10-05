@@ -115,10 +115,10 @@ export default {
     UserLogin(LoginData) {
       if (this.islogin === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
-          console.log(this.$cookies.get('csrftoken'))
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
+            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
             .then(res => {
+              window.sessionStorage.setItem('username', LoginData.username)
               this.setCookie(res.data.key)
               this.$emit('submit-login')
               this.$router.push({ name: 'Home'})
