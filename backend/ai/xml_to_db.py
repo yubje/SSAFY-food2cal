@@ -47,7 +47,8 @@ def excel_to_list(filename):
 	db_list = []
 	category = ["불고기", "계란말이", "후라이드치킨", "쌀밥", "김밥", "김치", "김치찌개", "피자", "라면", "양념치킨"]
 	for row in ws.rows:
-		if row[5].value in category and row[5].value not in db_list:
+		if row[5].value not in db_list:
+		# if row[5].value in category and row[5].value not in db_list:
 			print(row[5].value)
 			id = row[0].value
 			food_name = row[5].value
@@ -109,7 +110,7 @@ def main():
 		if fileCheck(filename) is True:
 			table = input("3. 데이터베이스 테이블명 입력 : ")
 			excel_to_list(filename)
-			answer = input("[*] 테이블 내 기존 데이터가 삭제됩니다. 진행하시겠습니까? (Y,n) : ")
+			answer = input("[*] 기존 데이터가 삭제됩니다. 진행하시겠습니까? (Y,n) : ")
 			if answer == "Y":
 				table_clear(db,table)
 				mysql_insert(db,table,result)
