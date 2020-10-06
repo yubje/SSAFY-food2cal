@@ -1,20 +1,35 @@
 <template>
   <v-container>
-    <div class="Chart">
-      <Doughnut
-        ref="skills_chart"
-        :chart-data="chartData"
-        :options="options">
-      </Doughnut>
-    </div>
-    <div>
+    <v-row justify="center">
+      <h3>평균 칼로리</h3>
+    </v-row>
+    <v-row>
+      
+      <div class="">
+        <Doughnut
+          ref="Calorie_Chart"
+          :chart-data="ChartData"
+          :options="options">
+        </Doughnut>
+      </div>
+    </v-row>
+
+    <!-- <div>
       <Line
       >
       </Line>
-      <button @click="fillData()">Randomize</button>
-    </div>
-      <line-chart :chart-data="this.datacollection"></line-chart>
+    </div> -->
 
+    <div>
+      <line-chart :chart-data="this.datacollection"></line-chart>
+      <v-btn 
+        @click="fillData()"
+        color="primary">Randomize</v-btn>
+    </div>
+
+    <div>
+      <reactive :chart-data="datacollection"></reactive>
+    </div>
 
     <v-btn
       @click="test()"
@@ -27,8 +42,9 @@
 <script>
 // 차트 컴포넌트
 import Doughnut from '@/components/chart/Doughnut'
-import Line from '@/components/chart/Line'
+// import Line from '@/components/chart/Line'
 import LineChart from '@/components/chart/LineChart'
+import Reactive from '@/components/chart/Reactive'
 
 // 무작위 컬러 라이브러리
 import randomColor from 'randomcolor'
@@ -55,20 +71,21 @@ export default {
   name: 'Mypage',
   components: {
     Doughnut,
-    Line,
-    LineChart
+    // Line,
+    LineChart,
+    Reactive
   },
   data() {
     return {
       calories: [
       ],
-      options, 
-        chartData: {
-        labels: ['탄수화물', '기준 탄수화물'],
+      options,
+      ChartData: {
+        labels: ['일일 평균 칼로리', '기준 칼로리'],
         datasets: [
           {
             backgroundColor: [randomColor()],
-            data: [1, 2]
+            data: [2, 1]
           }
         ]
       },
@@ -76,24 +93,25 @@ export default {
     }
   },
 
-  computed: {
-    currentDataSet () {
-      return this.chartData.datasets[0].data
-    }
-  },
+  // computed: {
+  //   currentDataSet () {
+  //     return this.ChartData.datasets[0].data
+  //   }
+  // },
 
   created() {
+    this.fillData()
   },
 
   mounted () {
-    this.fillData()
+    
   },
 
   methods: {
     // Doughnut Chart Data Update
-    updateChart () {
-      this.$refs.skills_chart.update();
-    },
+    // updateChart () {
+    //   this.$refs.skills_chart.update();
+    // },
     test() {
       this.$http
         .get(process.env.VUE_APP_SERVER_URL + '/diets/statistics/', 
@@ -112,17 +130,20 @@ export default {
         })
     },
     fillData() {
-      console.log('Click random')
+      console.log('Click random data fill btn')
       this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 
+          'September', 'October', 'November', 'December'],
         datasets: [
           {
             label: 'Data One',
             backgroundColor: '#f87979',
-            data: [this.getRandomInt(), this.getRandomInt()]
+            data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), 
+              this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), 
+              this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()]
           }, 
           {
-            label: 'Data One',
+            label: 'Data Two',
             backgroundColor: '#f87979',
             data: [this.getRandomInt(), this.getRandomInt()]
           }
