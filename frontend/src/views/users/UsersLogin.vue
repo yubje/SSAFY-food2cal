@@ -116,7 +116,7 @@ export default {
       if (this.islogin === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
+            .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
             .then(res => {
               window.sessionStorage.setItem('username', LoginData.username)
               this.setCookie(res.data.key)
@@ -126,6 +126,7 @@ export default {
             .catch(err => console.log(err))
         }
       } else {
+        this.$router.push({ name: 'Home'})
         alert('이미 로그인 상태입니다.')
       }
     },
