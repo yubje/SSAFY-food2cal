@@ -56,7 +56,7 @@ const routes = [
     path: '/diet',
     name: constants.URL_TYPE.UPLOAD.DIET,
     component: ()  => import('@/views/calendar/DietsCreate')
-  }
+  },
 ]
 
 const router = new VueRouter({
