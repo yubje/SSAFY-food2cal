@@ -45,7 +45,7 @@
       temporary
     >
       <!-- 로그인 false -->
-      <v-list-item v-if="!this.islogin" @click="goToLogin" class="avatar-info">
+      <v-list-item v-if="!LoginFlag" @click="goToLogin" class="avatar-info">
         <!-- 익명 이미지 -->
         <v-list-item-avatar>
           <v-img src="mdi-account"></v-img>
@@ -57,7 +57,7 @@
       </v-list-item>
 
       <!-- 로그인 true -->
-      <v-list-item v-if="this.islogin" class="avatar-info">
+      <v-list-item v-if="LoginFlag" class="avatar-info">
         <!-- 유저 프로필 이미지 -->
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
@@ -109,7 +109,7 @@
             <v-list-item-title>다이어리</v-list-item-title>
           </v-list-item>
 
-          <v-list-item v-if="this.islogin" @click="UserLogout">
+          <v-list-item v-if="LoginFlag" @click="logoutTry">
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
@@ -131,6 +131,7 @@
 
 <script>
 import constants from '@/libs/constants'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data: () => ({
@@ -145,6 +146,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["logoutTry"]),
     UserLogout() {
       const config = {
         headers: {'Authorization': `Token ${this.$cookies.get('auth-token')}`}
@@ -194,8 +196,8 @@ export default {
   mounted() {
     this.islogin = this.$cookies.isKey('auth-token')
   },
-  computed() {
-    this.islogin = this.$cookies.isKey('auth-token')
+  computed: {
+    ...mapState(["LoginFlag"])
   }
 }
 </script>

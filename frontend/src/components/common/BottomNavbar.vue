@@ -21,7 +21,7 @@
     </v-btn> -->
 
     <!-- 로그인(false) -->
-    <v-btn v-if="!this.islogin" @click="goToLogin">
+    <v-btn v-if="!LoginFlag" @click="goToLogin">
       <span>Login</span>
       <v-icon>mdi-login</v-icon>
     </v-btn>
@@ -46,6 +46,7 @@
 
 <script>
 import constants from '@/libs/constants'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'BottomNavbar',
@@ -59,6 +60,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["logoutTry"]),
     goToCamera() {
       this.$router
         .push({ name: constants.URL_TYPE.UPLOAD.CAMERA })
@@ -120,8 +122,8 @@ export default {
   mounted() {
     this.islogin = this.$cookies.isKey('auth-token')
   },
-  computed() {
-    this.islogin = this.$cookies.isKey('auth-token')
+  computed: {
+    ...mapState(["LoginFlag"])
   }
 }
 </script>
