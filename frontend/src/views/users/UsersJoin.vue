@@ -52,9 +52,40 @@
           justify="center" 
           class="mb-4"
         >
+          <h3>당신의 목표 체중은 얼마인가요?</h3>
+        </v-row>
+        <v-row
+          justify="center" 
+          class="mb-4"
+        >
+          <v-form>
+            <v-text-field
+              v-model="this.UserJoinData.goal"
+              label="체중(kg)"
+              type="number"
+              color="#FF890E"
+            ></v-text-field>
+          </v-form>
+        </v-row>
+        <v-btn
+          color="primary"
+          @click="e1 = 2"
+        >
+          다음
+        </v-btn>
+        <v-btn text
+          color="primary"
+        >
+          로그인 화면으로
+        </v-btn>
+      </v-stepper-content>
+      <!-- <v-stepper-content step="1">
+        <v-row 
+          justify="center" 
+          class="mb-4"
+        >
           <h3>당신의 목표는 무엇인가요?</h3>
         </v-row>
-        <!-- 체중 감소 버튼 -->
         <v-row
           justify="center" 
           class="mb-4"
@@ -81,7 +112,6 @@
             체중 감소
           </v-btn>
         </v-row>
-        <!-- 체중 유지 버튼 -->
         <v-row
           justify="center"
           class="mb-4"
@@ -108,7 +138,6 @@
             체중 유지
           </v-btn>
         </v-row>
-        <!-- 체중 증가 버튼 -->
         <v-row
           justify="center"
           class="mb-4"  
@@ -135,7 +164,6 @@
             체중 증가
           </v-btn>
         </v-row>
-        <!-- 스테퍼 버튼 -->
         <v-btn
           color="primary"
           @click="e1 = 2"
@@ -147,7 +175,7 @@
         >
           로그인 화면으로
         </v-btn>
-      </v-stepper-content>
+      </v-stepper-content> -->
 
       <v-stepper-content step="2">
         <v-row

@@ -60,8 +60,8 @@ export default {
             }
           }, 1000)
         })
-        .catch(err => console.log(err))
-    }
+        .catch(err => console.log(err.response.data))
+    },
   },
   created() {
     this.$http.get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.getPost + `${this.limit}/`)
