@@ -60,7 +60,7 @@
         >
           <v-form>
             <v-text-field
-              v-model="this.UserJoinData.goal"
+              v-model="goaltmp"
               label="체중(kg)"
               type="number"
               color="#FF890E"
@@ -69,12 +69,13 @@
         </v-row>
         <v-btn
           color="primary"
-          @click="e1 = 2"
+          @click="onClickGoal()"
         >
           다음
         </v-btn>
         <v-btn text
           color="primary"
+          @click="goToLogin"
         >
           로그인 화면으로
         </v-btn>
@@ -392,6 +393,8 @@
 </template>
 
 <script>
+import constants from '@/libs/constants'
+
 export default {
   name: 'UserJoin',
   data() {
@@ -408,6 +411,7 @@ export default {
         password1: null,
         password2: null,
       },
+      goaltmp: 0
       // emailflag: false
     }
   },
@@ -468,18 +472,27 @@ export default {
       }
     },
 
-    // 목표 입력 메서드
-    onClickGoal(num) {
-      if (num === 1) {
-        this.UserJoinData.goal = "체중 감소"
-      } else if (num === 2) {
-        this.UserJoinData.goal = "체중 유지"
-      } else if (num === 3) {
-        this.UserJoinData.goal = "체중 증가"
-      } else if (num === 4) {
-        this.UserJoinData.goal = null
-      }
+    onClickGoal() {
+      this.e1 = 2
+      this.UserJoinData.goal = this.goaltmp
     },
+    goToLogin() {
+      this.$router
+        .push({ name: constants.URL_TYPE.USER.LOGIN })
+    },
+
+    // 목표 체중 입력 메서드
+    // onClickGoal(num) {
+    //   if (num === 1) {
+    //     this.UserJoinData.goal = "체중 감소"
+    //   } else if (num === 2) {
+    //     this.UserJoinData.goal = "체중 유지"
+    //   } else if (num === 3) {
+    //     this.UserJoinData.goal = "체중 증가"
+    //   } else if (num === 4) {
+    //     this.UserJoinData.goal = null
+    //   }
+    // },
 
     // 키와 몸무게 입력 메서드(다음 버튼)
     onClickBodyspec() {
