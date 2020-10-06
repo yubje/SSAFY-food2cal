@@ -32,7 +32,7 @@
 
           <div class="input_field">
             <v-text-field
-              @keyup.enter="UserLogin(LoginData)"
+              @keyup.enter="loginTry(LoginData)"
               type="password"
               outlined
               placeholder="비밀번호"
@@ -63,7 +63,7 @@
           </div> -->
           
           <!-- 로그인 버튼 -->
-          <div @click="UserLogin(LoginData)" class="login-btn">
+          <div @click="loginTry(LoginData)" class="login-btn">
             <v-btn 
               block 
               depressed 
@@ -99,6 +99,7 @@
 
 <script>
 import constants from '@/libs/constants'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'UsersLogin',
@@ -111,25 +112,29 @@ export default {
       },
     }
   },
+  computed: {
+    ...mapState(["LoginFlag"])
+  },
   methods: {
-    UserLogin(LoginData) {
-      if (this.islogin === false) {
-        if (LoginData.username.trim() && LoginData.password.trim()) {
-          this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
-            .then(res => {
-              window.sessionStorage.setItem('username', LoginData.username)
-              this.setCookie(res.data.key)
-              this.$emit('submit-login')
-              this.$router.push({ name: 'Home'})
-            })
-            .catch(err => console.log(err))
-        }
-      } else {
-        this.$router.push({ name: 'Home'})
-        alert('이미 로그인 상태입니다.')
-      }
-    },
+    ...mapActions(["loginTry"]),
+    // UserLogin(LoginData) {
+    //   if (this.islogin === false) {
+    //     if (LoginData.username.trim() && LoginData.password.trim()) {
+    //       this.$http
+    //         .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
+    //         .then(res => {
+    //           window.sessionStorage.setItem('username', LoginData.username)
+    //           this.setCookie(res.data.key)
+    //           this.$emit('submit-login')
+    //           this.$router.push({ name: 'Home'})
+    //         })
+    //         .catch(err => console.log(err))
+    //     }
+    //   } else {
+    //     this.$router.push({ name: 'Home'})
+    //     alert('이미 로그인 상태입니다.')
+    //   }
+    // },
     goToJoin() {
       this.$router.push({ name: constants.URL_TYPE.USER.JOIN })
     },
