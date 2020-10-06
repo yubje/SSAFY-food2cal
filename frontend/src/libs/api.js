@@ -4,6 +4,7 @@ export default{
     createDiet: '/diets/',
     getPost: '/posts/pages/',
     createPost: '/posts/',
-    // comment: '/posts/:id/comments/'
+    diets: '/diets/',
+    searchFood: '/diets/search/'
   }
 }

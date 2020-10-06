@@ -9,9 +9,9 @@ import django
 # django.setup()
 
 
-wb = openpyxl.load_workbook('nutrition.xlsx')
-sheet = wb['Sheet1']
-rows = sheet['A2':'U2660']
+# wb = openpyxl.load_workbook('nutrition.xlsx')
+# sheet = wb['Sheet1']
+# rows = sheet['A2':'U2660']
 
 
 # for row in rows:
@@ -45,14 +45,13 @@ def excel_to_list(filename):
 	ws = wb.active
 	tmp_data = []
 	db_list = []
-	category = ['후라이드치킨', '갈비탕', '콩자반', '갈비구이', '만두', '식혜', '순대', '새우튀김', '소세지볶음', '수정과', '육회', '깻잎장아찌', '찜닭', '계란찜',
-    '김치찌개', '김밥', '꼬막찜', '갈치구이', '된장찌개', '한과', '떡볶이', '배추김치', '삼계탕', '약과', '해물찜', '족발', '물회', '자장면', '감자채볶음', '피자']
+	category = ["불고기", "계란말이", "후라이드치킨", "쌀밥", "김밥", "김치", "김치찌개", "피자", "라면", "양념치킨"]
 	for row in ws.rows:
 		if row[5].value in category and row[5].value not in db_list:
 			print(row[5].value)
 			id = row[0].value
 			food_name = row[5].value
-			ammount = row[10].value
+			amount = row[10].value
 			calorie = row[14].value
 			carbohydrate = row[20].value
 			protein = row[18].value
@@ -60,7 +59,7 @@ def excel_to_list(filename):
 
 			# tmp_data.append(id)
 			tmp_data.append(food_name)
-			tmp_data.append(ammount)
+			tmp_data.append(amount)
 			tmp_data.append(calorie)
 			tmp_data.append(carbohydrate)
 			tmp_data.append(protein)
@@ -74,7 +73,7 @@ def excel_to_list(filename):
 def mysql_insert(db,table,data):
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO "+table+" (food_name, ammount, calorie, carbohydrate, protein, fat) VALUES (%s, %s, %s, %s, %s, %s)"
+		sql = "INSERT INTO "+table+" (food_name, amount, calorie, carbohydrate, protein, fat) VALUES (%s, %s, %s, %s, %s, %s)"
 		cursor.executemany(sql,data)
 		db.commit()
 		print("[+] Insertion success\n")

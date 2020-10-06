@@ -51,6 +51,11 @@ const routes = [
     path: '/posts/:id',
     name: constants.URL_TYPE.POST.CREATE,
     component: () => import('@/views/posts/PostsCreate')
+  },
+  {
+    path: '/diet',
+    name: constants.URL_TYPE.UPLOAD.DIET,
+    component: ()  => import('@/views/calendar/DietsCreate')
   }
 ]
 

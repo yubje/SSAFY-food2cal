@@ -2,9 +2,10 @@ import os
 import cv2
 from lxml import etree
 import xml.etree.cElementTree as ET
-
+cnt = 0
 
 def write_xml(folder, img, objects, tl, br, savedir):
+    global cnt
     if not os.path.isdir(savedir):
         os.mkdir(savedir)
 
@@ -13,7 +14,7 @@ def write_xml(folder, img, objects, tl, br, savedir):
 
     annotation = ET.Element('annotation')
     ET.SubElement(annotation, 'folder').text = folder
-    ET.SubElement(annotation, 'filename').text = img.filename
+    ET.SubElement(annotation, 'filename').text = img.path[7:]
     ET.SubElement(annotation, 'segmented').text = '0'
     size = ET.SubElement(annotation, 'size')
     ET.SubElement(size, 'width').text = str(width)
@@ -33,15 +34,23 @@ def write_xml(folder, img, objects, tl, br, savedir):
 
     xml_str = ET.tostring(annotation)
     root = etree.fromstring(xml_str)
-    xml_str = etree.tosring(root, pretty_print=True)
-    save_path = os.path.join(savedir, img.name.replace('png', 'xml'))
+    xml_str = etree.tostring(root, pretty_print=True)
+    save_path = os.path.join(savedir, img.name.replace('jpg', 'xml'))
+    cnt += 1
     with open(save_path, 'wb') as temp_xml:
         temp_xml.write(xml_str)
 
 folder = 'images'
-img = [im for im in os.scandir('images') if '000001' in im.name][0]
-objects = ['fidget_spinner']
+img_name = [name for name in os.listdir('images') if 'Img_' in name]
+# print(img_name)
+img = [im for im in os.scandir('images') if 'Img_' in im.name][0]
+
+# ** 앞과 똑같이 음식 이름 하나만 넣어두면 됨.
+objects = ['kimchijjigae']    # 바꿔야할 곳
+
 tl = [(10, 10)]
 br = [(100, 100)]
 savedir = 'annotations'
+
+
 write_xml(folder, img, objects, tl, br, savedir)
