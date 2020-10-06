@@ -88,7 +88,7 @@
             <v-list-item-title>홈</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="goToMyage">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
@@ -102,7 +102,7 @@
             <v-list-item-title>캘린더</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="goToDiary">
             <v-list-item-icon>
               <v-icon>mdi-book-open-outline</v-icon>
             </v-list-item-icon>
@@ -118,7 +118,7 @@
 
           <v-list-item v-else @click="goToLogin">
             <v-list-item-icon>
-              <v-icon>mdi-logout</v-icon>
+              <v-icon>mdi-login</v-icon>
             </v-list-item-icon>
             <v-list-item-title>로그인</v-list-item-title>
           </v-list-item>
@@ -168,6 +168,22 @@ export default {
     goToHome() {
       this.$router
         .push('/')
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ){
+            throw err
+          }
+        })
+    },
+    goToMyage() {
+      this.$router
+        .push({ name: constants.URL_TYPE.USER.MYPAGE })
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ) throw err
+        })
+    },
+    goToDiary() {
+      this.$router
+        .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
         .catch(err => {
           if(err.name != "NavigationDuplicated" ){
             throw err

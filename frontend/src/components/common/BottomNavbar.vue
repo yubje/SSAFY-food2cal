@@ -23,6 +23,11 @@
     <!-- 로그인(false) -->
     <v-btn v-if="!this.islogin" @click="goToLogin">
       <span>Login</span>
+      <v-icon>mdi-login</v-icon>
+    </v-btn>
+
+    <v-btn v-else @click="goToMypage">
+      <span>Mypage</span>
       <v-icon>mdi-account</v-icon>
     </v-btn>
 
@@ -75,6 +80,9 @@ export default {
     goToLogin() {
       this.$router
         .push({ name: constants.URL_TYPE.USER.LOGIN })
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ) throw err
+        })
     },
     goToDiary() {
       this.$router
@@ -83,6 +91,13 @@ export default {
           if(err.name != "NavigationDuplicated" ){
             throw err
           }
+        })
+    },
+    goToMyage() {
+      this.$router
+        .push({ name: constants.URL_TYPE.USER.MYPAGE })
+        .catch(err => {
+          if(err.name != "NavigationDuplicated" ) throw err
         })
     },
     UserLogout() {
