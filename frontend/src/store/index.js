@@ -7,8 +7,7 @@ import SERVER from '@/libs/api'
 import axios from 'axios'
 
 import cookies from 'vue-cookies'
-
-
+import router from '../router'
 
 Vue.use(Vuex)
 
@@ -16,7 +15,8 @@ export default new Vuex.Store({
   state: {
     fileUrl: null,
     dietMonthInfo: null,
-    foodInfo: []
+    foodInfo: [],
+    LoginFlag: false,
   },
   mutations: {
     SET_FILE_URL(state, fileUrl) {
@@ -27,7 +27,17 @@ export default new Vuex.Store({
     },
     SET_DIET_INFO(state, dietMonthInfo) {
       state.dietMonthInfo = dietMonthInfo
-    }
+    },
+    SET_LOGIN_FLAG(state) {
+      state.LoginFlag = this.$cookies.isKey('auth-token')
+    },
+    LOGIN_STATE(state, result) {
+      if ( result === true) {
+        state.LoginFlag = result
+      } else {
+        state.LoginFlag = false
+      }
+    },
   },
   actions: {
     upload({ commit }, fileData) {
@@ -83,6 +93,44 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    loginTry({ state, commit }, LoginData) {
+      if (state.LoginFlag === false) {
+        if (LoginData.username.trim() && LoginData.password.trim()) {
+          axios
+            .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': cookies.get('csrftoken')}})
+            .then(res => {
+              const token = res.data.key
+              cookies.set('auth-token', token)
+              window.sessionStorage.setItem('username', LoginData.username)
+              commit("LOGIN_STATE", true)
+              router.push({ name: 'Home'})
+            })
+            .catch(err => {
+              commit("LOGIN_STATE", false)
+              console.log(err)
+            })
+        }
+      } else {
+        router.push({ name: 'Home'})
+        alert('이미 로그인 상태입니다.')
+      }
+    },
+    logoutTry({ state, commit }) {
+      if (state.LoginFlag === true) {
+        const config = {
+          headers: {'Authorization': `Token ${state.authtoken}`}
+        }
+        axios
+          .post(process.env.VUE_APP_SERVER_URL + '/users/logout/', null, config)
+          .catch(err=>console.log(err.response))
+          .finally(() => {
+            window.sessionStorage.removeItem('username')
+            cookies.remove('auth-token')
+            commit("LOGIN_STATE", false, null)
+            router.push({ name:'Home'})
+          })
+      }
+    }
   },
   modules: {
   }
