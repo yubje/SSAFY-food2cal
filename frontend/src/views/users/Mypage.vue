@@ -27,9 +27,9 @@
         color="primary">Randomize</v-btn>
     </div>
 
-    <div>
+    <!-- <div>
       <reactive :chart-data="datacollection"></reactive>
-    </div>
+    </div> -->
 
     <v-btn
       @click="test()"
@@ -44,7 +44,7 @@
 import Doughnut from '@/components/chart/Doughnut'
 // import Line from '@/components/chart/Line'
 import LineChart from '@/components/chart/LineChart'
-import Reactive from '@/components/chart/Reactive'
+// import Reactive from '@/components/chart/Reactive'
 
 // 무작위 컬러 라이브러리
 import randomColor from 'randomcolor'
@@ -73,7 +73,7 @@ export default {
     Doughnut,
     // Line,
     LineChart,
-    Reactive
+    // Reactive
   },
   data() {
     return {
