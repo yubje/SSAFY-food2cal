@@ -38,7 +38,17 @@ const options = {
   maintainAspectRatio: false, 
   animation: {
     animateRotate: false
-  }
+  },
+  legend: {
+    display: false
+  },
+  //   tooltips: {
+  //       callbacks: {
+  //          label: function(tooltipItem) {
+  //                 return tooltipItem.yLabel;
+  //          }
+  //       }
+  //   }
 }
 
 export default {
