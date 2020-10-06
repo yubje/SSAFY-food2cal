@@ -126,7 +126,7 @@ export default new Vuex.Store({
           .finally(() => {
             window.sessionStorage.removeItem('username')
             cookies.remove('auth-token')
-            commit("LOGIN_STATE", false, null)
+            commit("LOGIN_STATE", false)
             router.push({ name:'Home'})
           })
       }
