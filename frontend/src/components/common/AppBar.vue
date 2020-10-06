@@ -88,7 +88,7 @@
             <v-list-item-title>홈</v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="goToMyage">
+          <v-list-item @click="goToMypage">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
@@ -174,7 +174,7 @@ export default {
           }
         })
     },
-    goToMyage() {
+    goToMypage() {
       this.$router
         .push({ name: constants.URL_TYPE.USER.MYPAGE })
         .catch(err => {

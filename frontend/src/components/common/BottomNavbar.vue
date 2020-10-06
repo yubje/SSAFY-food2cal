@@ -93,7 +93,7 @@ export default {
           }
         })
     },
-    goToMyage() {
+    goToMypage() {
       this.$router
         .push({ name: constants.URL_TYPE.USER.MYPAGE })
         .catch(err => {
