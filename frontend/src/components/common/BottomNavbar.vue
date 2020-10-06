@@ -87,6 +87,11 @@ export default {
         })
     },
     goToDiary() {
+      if (!this.LoginFlag) {
+        alert('로그인이 필요한 페이지 입니다.')
+        this.goToLogin()
+      }
+
       this.$router
         .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
         .catch(err => {

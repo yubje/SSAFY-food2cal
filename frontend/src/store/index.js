@@ -80,14 +80,14 @@ export default new Vuex.Store({
       // let month = +date[0].slice(0, -1)
       // month = month >= 10 ? month: '0' + month
       // const yearMon = year + '-' + month
-
+      // console.log(yearMon)
       window.localStorage.setItem('yearMon', yearMon);
 
       axios.get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.diets + `${yearMon}/`, config)
         .then(res => {
           commit('SET_DIET_INFO', res.data)
           // this.dietMonthInfo = res.data
-          console.log(res.data)
+          // console.log(res.data)
         })
         .catch(err => {
           console.log(err)

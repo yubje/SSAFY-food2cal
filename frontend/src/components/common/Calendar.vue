@@ -29,6 +29,9 @@
             <v-toolbar-title v-if="$refs.calendar" @click="type = 'month'">
               {{ $refs.calendar.title }}
             </v-toolbar-title>
+            <!-- <v-toolbar-title v-else>
+              {{ title }}
+            </v-toolbar-title> -->
 
             <v-btn
               fab
@@ -149,10 +152,13 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    // dietMonthInfo: null
+    title: null
   }),
   mounted () {
     this.$refs.calendar.checkChange()
+    setTimeout(() => {
+      this.title = this.$refs.calendar.title
+    }, 10)
     const yearMon = this.setYearMon(this.$refs.calendar.title)
     this.getMonthDiets(yearMon)
   },
@@ -162,7 +168,10 @@ export default {
   computed: {
     ...mapState([
       'dietMonthInfo'
-    ])
+    ]),
+    setTitle() {
+      return this.$refs.calendar.title
+    }
   },
   methods: {
     ...mapActions([
