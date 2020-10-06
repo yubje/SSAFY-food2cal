@@ -162,13 +162,13 @@
         >
           <v-form>
             <v-text-field
-              v-model="this.UserJoinData.height"
+              v-model="UserJoinData.height"
               label="키(cm)"
               type="number"
               color="#FF890E"
             ></v-text-field>
             <v-text-field
-              v-model="this.UserJoinData.weight"
+              v-model="UserJoinData.weight"
               label="체중(kg)"
               type="number"
               color="#FF890E"
@@ -177,7 +177,7 @@
         </v-row>
         <v-btn
           color="primary"
-          @click="e1 = 3"
+          @click="onClickBodyspec()"
         >
           다음
         </v-btn>
@@ -229,6 +229,7 @@
         <v-btn
           color="primary"
           @click="e1 = 4"
+          
         >
           다음
         </v-btn>
@@ -399,8 +400,9 @@ export default {
       if (UserJoinData.username.trim()) {
         if (UserJoinData.password1 === UserJoinData.password2) {
           this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/signup/', UserJoinData)
+            .post(process.env.VUE_APP_SERVER_URL + '/users/signup/', UserJoinData)
             .then(() => {
+              console.log(UserJoinData)
               // this.setCookie(res.data.key)
               this.$router.push({ name: 'Home'})
             })
@@ -420,7 +422,7 @@ export default {
 
     // 성별 입력 메서드
     onClickWoman() {
-      console.log('Click Woman Icon')
+      // console.log('Click Woman Icon')
       if (this.UserJoinData.gender !== 'femail') {
         this.UserJoinData.gender='femail'
       }
@@ -429,7 +431,7 @@ export default {
       } 
     },
     onClickMan() {
-      console.log('Click Man Icon')
+      // console.log('Click Man Icon')
       if (this.UserJoinData.gender !== 'mail') {
         this.UserJoinData.gender='mail'
       }
@@ -449,6 +451,12 @@ export default {
       } else if (num === 4) {
         this.UserJoinData.goal = null
       }
+    },
+
+    // 키와 몸무게 입력 메서드(다음 버튼)
+    onClickBodyspec() {
+      this.e1 = 3
+      console.log(this.UserJoinData)
     }
   },
 }
