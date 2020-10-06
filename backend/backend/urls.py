@@ -1,6 +1,6 @@
 from django.contrib import admin
-# from django.urls import path, include
-from django.conf.urls import url, path, include
+from django.urls import path, include
+from django.conf.urls import url
 from rest_framework import permissions
 
 from django.conf.urls.static import static
@@ -33,9 +33,9 @@ urlpatterns = [
     path('diets/', include('diets.urls')),
     path('predict/', include('ai.urls')),
     # swagger
-    # path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'), 
-    # path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), 
-    # path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'), 
+    path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), 
+    path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 if settings.DEBUG:
