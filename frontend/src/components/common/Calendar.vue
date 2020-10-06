@@ -35,7 +35,7 @@
               text
               small
               color="grey darken-2"
-              @click="next"
+              @click.prevent="next"
             >
               <v-icon small>
                 mdi-chevron-right
@@ -83,7 +83,7 @@
           v-model="focus"
           color="primary"
           :type="type"
-          @click:date="printDate"
+          @click:date="sendDate"
         ></v-calendar>
         
         
@@ -135,94 +135,154 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      focus: '',
-      type: 'month',
-      typeToLabel: {
-        month: 'Month',
-        day: 'Day',
-      },
-      selectedEvent: {},
-      selectedElement: null,
-      selectedOpen: false,
-      // colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      // names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
-    }),
-    mounted () {
-      this.$refs.calendar.checkChange()
+// import SERVER from '@/libs/api'
+import { mapState, mapActions } from 'vuex'
+
+export default {
+  data: () => ({
+    focus: '',
+    type: 'month',
+    typeToLabel: {
+      month: 'Month',
+      day: 'Day',
     },
-    methods: {
-      viewDay({ date }) {
-        this.focus = date
-        this.type = 'day'
-      },
-      // getEventColor (event) {
-      //   return event.color
-      // },
-      setToday() {
-        this.focus = ''
-      },
-      prev() {
-        this.$refs.calendar.prev()
-      },
-      next() {
-        this.$refs.calendar.next()
-      },
-      printDate() {
-        setTimeout(() => {
-          console.log(this.$refs.calendar.value)
-        }, 100)
-      }
-      // showEvent ({ nativeEvent, event }) {
-      //   const open = () => {
-      //     this.selectedEvent = event
-      //     this.selectedElement = nativeEvent.target
-      //     setTimeout(() => {
-      //       this.selectedOpen = true
-      //     }, 10)
-      //   }
-
-      //   if (this.selectedOpen) {
-      //     this.selectedOpen = false
-      //     setTimeout(open, 10)
-      //   } else {
-      //     open()
-      //   }
-
-      //   nativeEvent.stopPropagation()
-      // },
-
-
-      // updateRange ({ start, end }) {
-      //   const events = []
-
-      //   const min = new Date(`${start.date}T00:00:00`)
-      //   const max = new Date(`${end.date}T23:59:59`)
-      //   const days = (max.getTime() - min.getTime()) / 86400000
-      //   const eventCount = this.rnd(days, days + 20)
-
-      //   for (let i = 0; i < eventCount; i++) {
-      //     const allDay = this.rnd(0, 3) === 0
-      //     const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-      //     const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-      //     const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-      //     const second = new Date(first.getTime() + secondTimestamp)
-
-      //     events.push({
-      //       name: this.names[this.rnd(0, this.names.length - 1)],
-      //       start: first,
-      //       end: second,
-      //       color: this.colors[this.rnd(0, this.colors.length - 1)],
-      //       timed: !allDay,
-      //     })
-      //   }
-
-      //   this.events = events
-      // },
-      // rnd (a, b) {
-      //   return Math.floor((b - a + 1) * Math.random()) + a
-      // },
+    selectedEvent: {},
+    selectedElement: null,
+    selectedOpen: false,
+    // dietMonthInfo: null
+  }),
+  mounted () {
+    this.$refs.calendar.checkChange()
+    const yearMon = this.setYearMon(this.$refs.calendar.title)
+    this.getMonthDiets(yearMon)
+  },
+  updated() {
+    
+  },
+  computed: {
+    ...mapState([
+      'dietMonthInfo'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'getMonthDiets'
+    ]),
+    // viewDay({ date }) {
+    //   this.focus = date
+    //   this.type = 'day'
+    // },
+    // getEventColor (event) {
+    //   return event.color
+    // },
+    // setToday() {
+    //   this.focus = ''
+    // },
+    setYearMon(title) {
+      const date = title.split(' ')
+      let year = +date[1]
+      let month = +date[0].slice(0, -1)
+      month = month >= 10 ? month: '0' + month
+      const yearMon = year + '-' + month
+      return yearMon
     },
-  }
+    prev() {
+      this.$refs.calendar.prev()
+      setTimeout(() => {
+        const yearMon = this.setYearMon(this.$refs.calendar.title)
+        this.getMonthDiets(yearMon)
+      }, 10)
+    },
+    next() {
+      this.$refs.calendar.next()
+      setTimeout(() => {
+        const yearMon = this.setYearMon(this.$refs.calendar.title)
+        this.getMonthDiets(yearMon)
+      }, 10)
+    },
+    sendDate() {
+      setTimeout(() => {
+        const arr = this.dietMonthInfo
+        const date = this.$refs.calendar.value
+        this.$emit('date', date)
+        // this.$emit('food-info', arr[date])
+        this.$emit('food-info', arr)
+      }, 10)
+    },
+    // getMonthDiets() {
+    //   const config = {
+    //     headers: {
+    //       Authorization: `Token ${this.$cookies.get(`auth-token`)}`
+    //     }
+    //   }
+      
+    //   const date = this.$refs.calendar.title.split(' ')
+    //   let year = +date[1]
+    //   let month = +date[0].slice(0, -1)
+    //   month = month >= 10 ? month: '0' + month
+    //   const yearMon = year + '-' + month
+
+    //   this.$http.get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.diets + `${yearMon}/`, config)
+    //     .then(res => {
+    //       this.dietMonthInfo = res.data
+    //       // setTimeout(() => {
+    //       //   this.getMonthDiets()
+    //       // }, 10)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+
+    // showEvent ({ nativeEvent, event }) {
+    //   const open = () => {
+    //     this.selectedEvent = event
+    //     this.selectedElement = nativeEvent.target
+    //     setTimeout(() => {
+    //       this.selectedOpen = true
+    //     }, 10)
+    //   }
+
+    //   if (this.selectedOpen) {
+    //     this.selectedOpen = false
+    //     setTimeout(open, 10)
+    //   } else {
+    //     open()
+    //   }
+
+    //   nativeEvent.stopPropagation()
+    // },
+
+
+    // updateRange ({ start, end }) {
+    //   const events = []
+
+    //   const min = new Date(`${start.date}T00:00:00`)
+    //   const max = new Date(`${end.date}T23:59:59`)
+    //   const days = (max.getTime() - min.getTime()) / 86400000
+    //   const eventCount = this.rnd(days, days + 20)
+
+    //   for (let i = 0; i < eventCount; i++) {
+    //     const allDay = this.rnd(0, 3) === 0
+    //     const firstTimestamp = this.rnd(min.getTime(), max.getTime())
+    //     const first = new Date(firstTimestamp - (firstTimestamp % 900000))
+    //     const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
+    //     const second = new Date(first.getTime() + secondTimestamp)
+
+    //     events.push({
+    //       name: this.names[this.rnd(0, this.names.length - 1)],
+    //       start: first,
+    //       end: second,
+    //       color: this.colors[this.rnd(0, this.colors.length - 1)],
+    //       timed: !allDay,
+    //     })
+    //   }
+
+    //   this.events = events
+    // },
+    // rnd (a, b) {
+    //   return Math.floor((b - a + 1) * Math.random()) + a
+    // },
+  },
+}
 </script>

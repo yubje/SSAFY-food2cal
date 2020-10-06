@@ -39,8 +39,8 @@
         </v-card-text>
         <v-card-actions class="d-flex align-center">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click.prevent="dialog = false; tmp();"><SelectModal /></v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false; addDiet();">Close</v-btn>
+          <v-btn color="blue darken-1" text @click.prevent="dialog = false"><SelectModal /></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -50,6 +50,7 @@
 <script>
 import { mapState } from 'vuex'
 import SelectModal from '@/components/common/SelectModal'
+import SERVER from '@/libs/api'
 
 export default {
   name: 'DietModal',
@@ -82,7 +83,7 @@ export default {
       date = date >= 10 ? date: '0' + date
       return year + '-' + month + '-' + date
     },
-    tmp() {
+    changeSelectModal() {
       this.isSelectModal = true
     },
     addDiet() {
@@ -101,31 +102,28 @@ export default {
       const today = this.getToday()
 
       const dietData = {
-        // post: {
-        //   title: this.title,
-        //   content: this.content,
-        //   category: response_category,
-        //   diet_image_path: this.fileUrl
-        // },
         diet: {
-          date: today,
+          created_at: today,
           category: response_category,
         },
-        food: [
-          {
-            food_name: this.foodInfo.food_name,
-            amount: this.foodInfo.ammount,
-            calorie: this.foodInfo.calorie,
-            carbohydrate: this.foodInfo.carbohydrate,
-            protein: this.foodInfo.protein,
-            fat: this.foodInfo.fat
-          }
-        ]
+        food: []
       }
+
+      this.foodInfo.forEach(food => {
+        dietData.food.push({
+          food_name: food.food_name,
+          amount: food.amount,
+          calorie: food.calorie,
+          carbohydrate: food.carbohydrate,
+          protein: food.protein,
+          fat: food.fat
+        })
+      })
+      
       this.$http
-        .post(process.env.VUE_APP_SERVER_URL + '/createDiet/', dietData, config)
-        .then(() => {
-          // this.$router.push('/')
+        .post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, dietData, config)
+        .then(res => {
+          console.log(res)
           this.isSelectModal = true
         })
         .catch(err => console.log(err.response.data))

@@ -71,7 +71,11 @@ export default {
     //   this.file = null
     // },
     goToCanvas() {
-      this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
+      if (this.$route.query.date) {
+        this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS, query: { date: this.$route.query.date, type: this.$route.query.type } })
+      } else {
+        this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
+      }
     },
     async uploadFile() {
       await this.handleFileUpload(this.$refs.inputUpload.files[0])
@@ -134,6 +138,8 @@ export default {
   mixins: [
     uploadPicture
   ],
+  created() {
+  },
   beforeMount() {
     this.init()
   }

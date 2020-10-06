@@ -41,7 +41,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 DEBUG = True
 
 # ALLOWED_HOSTS = ['j3a411.p.ssafy.io']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'j3a411.p.ssafy.io']
 
 
 # Application definition
@@ -119,21 +119,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
 
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'food2cal',
-    #     'USER': get_secret("USER"),
-    #     'PASSWORD': get_secret("PASSWORD"),
-    #     'HOST': get_secret("HOST"),
-    #     'PORT': '3306',
-    #     'OPTIONS': {
-    #         'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
-    #     }
-    # },
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'food2cal',
+        'USER': get_secret("USER"),
+        'PASSWORD': get_secret("PASSWORD"),
+        'HOST': get_secret("HOST"),
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
+    },
 }
 
 
