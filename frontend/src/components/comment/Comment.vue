@@ -9,33 +9,38 @@
         class="comment-username" 
         :to="{ name:constants.URL_TYPE.USER.MYPAGE, params:{ id: comment.userid }}"
       >{{ comment.nickname }}</router-link> -->
-      <div class="d-flex align-center mt-2">
-        <p class="comment-time mx-3"><strong>{{ comment.user.username }}</strong></p>
-        <p class="comment-content">{{ comment.content }}</p>
+      <div class="d-flex align-center my-2">
+        <div class="d-flex">
+          <!-- <p class="my-auto">{{ comment.content }}</p> -->
+          <!-- <div v-if="checkComment.isComment && comment.comment.user.username === checkComment.commentId"> -->
+          <div v-if="checkComment.isComment">
+            <CommentCreate :checkComment="checkComment" @change-comment="updateComment"/>
+          </div>
+          <div v-else class="d-flex">
+            <p class="mx-3 my-auto"><strong>{{ comment.user.username }}</strong></p>
+            <p class="my-auto">{{ comment.content }}</p>
+          </div>
+        </div>
+        
+        
+        <v-spacer></v-spacer>
+        <!-- <div class="rightbuttons" v-if="!checkComment.isComment && +commentForm.userid === comment.userid"> -->
+        <div class="mr-5 my-auto" v-if="!checkComment.isComment && comment.user.username === setName">
+          <button @click="changeIsComment(comment)">수정</button>
+          <button class="ml-2" @click="deleteComment(comment.id)">삭제</button>
+        </div><br>
       </div>
-      
-      <!-- <div v-if="checkComment.isComment && comment.commentid === checkComment.commentId">
-        <CommentCreate :checkComment="checkComment" @change-comment="updateComment"/>
-      </div>
-      <div v-else>
-        <p class="comment-content">{{ comment.content }}</p>
-      </div> -->
-      
-      <!-- <div class="rightbuttons" v-if="!checkComment.isComment && +commentForm.userid === comment.userid">
-        <button class="create-button" style="margin-right:2px;" @click="changeIsComment(comment)">수정</button>
-        <button class="create-button" @click="deleteComment(comment.id)">삭제</button>
-      </div><br> -->
     </div>
     <hr>
-    <!-- <CommentCreate v-if="isLoggedIn" @submit-comment="createComment" /> -->
-    <CommentCreate @submit-comment="createComment" />
+    <CommentCreate v-if="LoginFlag" @submit-comment="createComment" />
   </div>
 </template>
 
 <script>
 import constants from '@/libs/constants.js'
 import CommentCreate from './CommentCreate.vue'
-// import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
+
 export default {
   name: 'Comment',
   props: {
@@ -55,31 +60,28 @@ export default {
         isComment: false,
         commentId: null,
         commentValue: null,
+        postId: null
       },
       updateCommentForm: {
         content: '',
-        postid: '',
-        userid: '',
-        commentid: '',
-        parentid: '',
-        nickname: ''
+        postId: null,
+        commentId: null,
       }
     }
   },
   computed: {
-    // ...mapGetters('userStore', ['isLoggedIn'])
+    ...mapState(['LoginFlag']),
+    setName() {
+      return window.sessionStorage.getItem('username')
+    }
   },
   methods: {
-    // changeIsComment(comment) {
-    //   this.checkComment.isComment = !this.checkComment.isComment
-    //   this.checkComment.commentId  = comment.commentid
-    //   this.checkComment.commentValue = comment.content
-    //   this.updateCommentForm.postid = comment.postid
-    //   this.updateCommentForm.parentid = comment.parentid
-    //   this.updateCommentForm.nickname = comment.nickname
-    //   this.updateCommentForm.userid = comment.userid
-    //   this.updateCommentForm.commentid = comment.commentid
-    // },
+    changeIsComment(comment) {
+      this.checkComment.isComment = !this.checkComment.isComment
+      this.checkComment.commentId  = comment.id
+      this.checkComment.commentValue = comment.content
+      this.checkComment.postId = comment.post
+    },
     getCommentList() {
       this.$http
         .get(process.env.VUE_APP_SERVER_URL + '/posts/' + `${this.postId}` + '/comments/')
@@ -107,17 +109,27 @@ export default {
         })
         .catch(err => console.log(err.response.data))
     },
-    // updateComment(content) {
-    //   this.updateCommentForm.content = content
-    //   axios.put(`${this.SERVER_URL}/comments/modify`, this.updateCommentForm)
-    //     .then(() => {
-    //       this.checkComment.isComment = false
-    //       this.checkComment.commentId = null
-    //       this.checkComment.commentValue = null
-    //       this.getCommentList()
-    //     })
-    //     .catch(err => console.log(err))
-    // },
+    updateComment(content) {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
+        }
+      }
+
+      const commentInfo = {
+        content: content
+      }
+
+      this.$http.put(process.env.VUE_APP_SERVER_URL + '/posts/' + `${this.checkComment.postId}` + '/comments/' + `${this.checkComment.commentId}/`, commentInfo, config)
+        .then(() => {
+          this.checkComment.isComment = false
+          this.checkComment.commentId = null
+          this.checkComment.commentValue = null
+          this.checkComment.postId = null
+          this.getCommentList()
+        })
+        .catch(err => console.log(err))
+    },
     deleteComment(commentId) {
       const config = {
         headers: {

@@ -9,9 +9,18 @@
       height="200px"
     ></v-img>
 
-    <v-card-title>
-      {{ post.title }} by {{ post.user.username }}
-    </v-card-title>
+    <div class="d-flex align-center justify-space-between">
+      <v-card-title>
+        <p>{{ post.title }}</p>
+        <p class="ml-2 text-subtitle-2">by {{ post.user.username }}</p>
+      </v-card-title>
+
+      <div v-if="post.user.username === setName" class="mr-4">
+        <button @click.prevent="goUpdatePost(post)"><p class="text-subtitle-2 grey--text">수정</p></button> | 
+        <button @click.prevent="deletePost(post)"><p class="text-subtitle-2 grey--text">삭제</p></button>
+      </div>
+    </div>
+    
 
     <v-card-subtitle>
       {{ post.content }}
@@ -43,7 +52,8 @@
 
 <script>
 import Comment from '@/components/comment/Comment'
-// import CommentCreate from '@/components/comment/CommentCreate'
+import constants from '@/libs/constants.js'
+import SERVER from '@/libs/api'
 
 export default {
   name: 'PostsCard',
@@ -56,16 +66,54 @@ export default {
     Comment,
     // CommentCreate
   },
+  computed: {
+    setName() {
+      return window.sessionStorage.getItem('username')
+    }
+  },
   data () {
     return {
       show: false,
-      // commentForm: {
-      //   content: ''
-      // },
     }
   },
   methods: {
-    
+    goUpdatePost(post) {
+      if (this.setName === post.user.username) {
+        this.$router.push({
+          name: constants.URL_TYPE.POST.CREATE,
+          params: {
+            postData: {
+              postId: post.id,
+              title: post.title,
+              content: post.content,
+              diet_image_path: post.diet_image_path
+            }
+          }
+        })
+        return
+      }
+      alert('해당 게시글 작성자만 게시글을 수정할 수 있습니다.')
+    },
+    deletePost(post) {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get(`auth-token`)}`
+        }
+      }
+
+      if (this.setName === post.user.username) {
+        const check = confirm('게시글을 삭제하시겠습니까?')
+        if (check) {
+          this.$http.delete(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createPost + `${post.id}/`, config)
+            .then(() => {
+              alert('게시글이 삭제되었습니다.')
+              this.$router.push({ name: constants.URL_TYPE.POST.DELETE })
+            })
+        }
+        return
+      }
+      alert('해당 게시글 작성자만 게시글을 삭제할 수 있습니다')
+    }
   }
 }
 </script>
