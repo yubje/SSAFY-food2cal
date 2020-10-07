@@ -244,3 +244,17 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'users.User'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CACHES = {  
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        # "LOCATION": "redis:j3a411.p.ssafy.io/1", # 1번 DB
+        "LOCATION": "redis:172.26.6.77:6379/1",
+        'CONFIG': {
+             "hosts": [('127.0.0.1', 6379)],
+         },
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}

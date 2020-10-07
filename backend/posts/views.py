@@ -12,6 +12,8 @@ from diets.models import Diet, Food
 from diets.serializers import DietListSerializer, FoodSerializer
 from diets.views import diet_create, food_list
 
+from django.core.cache import cache
+
 # 글 리스트 
 @api_view(['GET'])
 def post_list(request, page_id=0):
@@ -33,33 +35,43 @@ def post_create(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def post_detail(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
     # 상세조회 
     if request.method == 'GET':
+        post = cache.get(f'post_{post_id}')
+        print(post)
+        if not post:
+            post = get_object_or_404(Post, pk=post_id)
+            cache.set(f'post_{post_id}', post)
         serializer = PostSerializer(post)
         return Response(serializer.data)
-
-    elif request.user == post.user:
-        # 댓글 수정 
-        if request.method == 'PUT':
-            serializer = PostUpdateSerializer(data=request.data, instance=post)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response({'message': 200})
-        # 댓글 삭제 
-        elif request.method == 'DELETE':
-            post.delete()
-            return Response({'message': 200})
     else:
-        return Response({"status": 401})
+        post = get_object_or_404(Post, pk=post_id)
+        if request.user == post.user:
+            # 댓글 수정 
+            if request.method == 'PUT':
+                serializer = PostUpdateSerializer(data=request.data, instance=post)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response({'message': 200})
+            # 댓글 삭제 
+            elif request.method == 'DELETE':
+                post.delete()
+                return Response({'message': 200})
+        else:
+            return Response({"status": 401})
 
 @api_view(['GET', 'POST'])
 def comment_list(request, post_id):
     # 댓글 리스트 반환 
     if request.method == 'GET':
-        comments = Comment.objects.filter(post_id=post_id).order_by('-pk')
-        serializer = CommentListSerializer(comments, many=True)
-        return Response(serializer.data)
+        context = cache.get(f'comment_{post_id}')
+        print(context)
+        if not context:
+            comments = Comment.objects.filter(post_id=post_id).order_by('-pk')
+            serializer = CommentListSerializer(comments, many=True)
+            context = serializer.data
+            cache.set(f'comment_{post_id}', context)
+        return Response(context)
     # 댓글 생성 
     elif request.method == 'POST':
         serializer = CommentSerializer(data=request.data)
