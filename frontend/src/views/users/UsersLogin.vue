@@ -119,7 +119,6 @@ export default {
   name: 'UsersLogin',
   data() {
     return {
-      islogin: false,
       LoginData: {
         username: null,
         password: null,
@@ -131,35 +130,9 @@ export default {
   },
   methods: {
     ...mapActions(["loginTry"]),
-    // UserLogin(LoginData) {
-    //   if (this.islogin === false) {
-    //     if (LoginData.username.trim() && LoginData.password.trim()) {
-    //       this.$http
-    //         .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
-    //         .then(res => {
-    //           window.sessionStorage.setItem('username', LoginData.username)
-    //           this.setCookie(res.data.key)
-    //           this.$emit('submit-login')
-    //           this.$router.push({ name: 'Home'})
-    //         })
-    //         .catch(err => console.log(err))
-    //     }
-    //   } else {
-    //     this.$router.push({ name: 'Home'})
-    //     alert('이미 로그인 상태입니다.')
-    //   }
-    // },
     goToJoin() {
       this.$router.push({ name: constants.URL_TYPE.USER.JOIN })
     },
-    setCookie(token){
-      this.$cookies.set('auth-token',token)
-      this.islogin = !this.islogin
-    },
-  },
-  mounted() {
-    this.islogin = this.$cookies.isKey('auth-token')
-  }
 }
 </script>
 

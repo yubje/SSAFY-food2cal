@@ -7,11 +7,15 @@ import VueCookies from 'vue-cookies'
 import axios from 'axios'
 import VueCharts from 'vue-chartjs'
 
-
 Vue.use(VueCookies)
 
-Vue.prototype.$http = axios;
 Vue.config.productionTip = false
+Vue.prototype.$http = axios;
+const csrf = localStorage.getItem("csrftoken")
+if (csrf){
+  Vue.prototype.$http.defaults.headers.common['X-CSRFToken'] = csrf
+}
+
 
 new Vue({
   router,
