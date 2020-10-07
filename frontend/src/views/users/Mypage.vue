@@ -93,25 +93,14 @@ export default {
     }
   },
 
-  // computed: {
-  //   currentDataSet () {
-  //     return this.ChartData.datasets[0].data
-  //   }
-  // },
-
   created() {
     this.fillData()
   },
 
   mounted () {
-    
   },
 
   methods: {
-    // Doughnut Chart Data Update
-    // updateChart () {
-    //   this.$refs.skills_chart.update();
-    // },
     test() {
       this.$http
         .get(process.env.VUE_APP_SERVER_URL + '/diets/statistics/', 
@@ -122,7 +111,7 @@ export default {
           }
         })
         .then(res => {
-          // console.log(typeof(res.data))
+          console.log(res)
           for (const value in res.data) {
             console.log(value, res.data[value])
             this.calories.push(res.data[value]["calorie"])
@@ -130,7 +119,6 @@ export default {
         })
     },
     fillData() {
-      console.log('Click random data fill btn')
       this.datacollection = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 
           'September', 'October', 'November', 'December'],

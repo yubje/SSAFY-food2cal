@@ -46,7 +46,7 @@
 
 <script>
 import constants from '@/libs/constants'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'BottomNavbar',
@@ -56,7 +56,6 @@ export default {
     return {
       constants,
       activeBtn: 1,
-      islogin: false,
     }
   },
   methods: {
@@ -90,15 +89,15 @@ export default {
       if (!this.LoginFlag) {
         alert('로그인이 필요한 페이지 입니다.')
         this.goToLogin()
+      } else {
+        this.$router
+          .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
+          .catch(err => {
+            if(err.name != "NavigationDuplicated" ){
+              throw err
+            }
+          })
       }
-
-      this.$router
-        .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
-        .catch(err => {
-          if(err.name != "NavigationDuplicated" ){
-            throw err
-          }
-        })
     },
     goToMypage() {
       this.$router
@@ -107,28 +106,11 @@ export default {
           if(err.name != "NavigationDuplicated" ) throw err
         })
     },
-    UserLogout() {
-      const config = {
-        headers: {'Authorization': `Token ${this.$cookies.get('auth-token')}`}
-      }
-      if (this.islogin === true) {
-        this.$http
-          .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/logout/', null, config)
-          .catch(err=>console.log(err.response))
-          .finally(() => {
-            this.$cookies.remove('auth-token')
-            this.$emit('submit-logout')
-            this.islogin != this.islogin
-            this.$router.push({ name:'home'})
-          })
-      }
-    }
   },
   mounted() {
-    this.islogin = this.$cookies.isKey('auth-token')
   },
   computed: {
-    ...mapState(["LoginFlag"])
+    ...mapGetters(['LoginFlag'])
   }
 }
 </script>
