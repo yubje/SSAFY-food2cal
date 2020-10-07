@@ -79,7 +79,7 @@
       >
         <v-list-item-group
           v-model="group"
-          active-class="deep-purple--text text--accent-4"
+          active-class="deep-orange--text text--accent-4"
         >
           <v-list-item @click="goToHome">
             <v-list-item-icon>
