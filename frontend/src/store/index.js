@@ -119,7 +119,13 @@ export default new Vuex.Store({
               cookies.set('auth-token', token)
               commit("SET_TOKEN", token)
               commit("LOGIN_STATE", true)
-              router.push({ name: 'Home'})
+              router
+                .push({ name: 'Home'})
+                .catch(err => {
+                  if(err.name != "NavigationDuplicated" ){
+                    throw err
+                  }
+                })
             })
             .catch(err => {
               commit("LOGIN_STATE", false)
