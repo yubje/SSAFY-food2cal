@@ -1,29 +1,43 @@
 <template>
-  <v-container>
+  <v-container v-if="rerenderflag">
     <!-- 유저 정보 -->
-    <v-row justify="center">
-      <h1>{{ this.username }}</h1>
+    <v-row 
+      justify="center"
+      class="mt-4 mb-4"
+    >
+      <h1>{{ this.username }}님의 F2C와 함께한 기록</h1>
     </v-row>
 
     <!-- 식단 통계 -->
     <v-row justify="center">
-      <h3>2주 평균 칼로리</h3>
+      <h2>최근 15일간 평균 칼로리 </h2>
     </v-row>
-    <v-row justify="center">
-      <div v-if="rerenderflag">
+    <v-row justify="center" class="mt-2">
+      <div>
         <Doughnut
           ref="Calorie_Chart"
           :chart-data="this.Caloriedata">
-          <!-- :options="options"> -->
         </Doughnut>
       </div>
     </v-row>
 
-    <div v-if="rerenderflag">
-      <div
-        v-for="datacollection in datacollections" 
-        :key="datacollection.datasets.label">
-          <line-chart :chart-data="datacollection"></line-chart>
+
+    <div
+      v-for="datacollection in datacollections" 
+      :key="datacollection.datasets.label"
+      class="mt-6 mb-6">
+      <v-row class="mt-6">
+        <v-col cols=10>
+          <h2> {{ datacollection.datasets[0].label }} 섭취량</h2>
+        </v-col>
+      </v-row>
+      <v-row class="mb-2">
+        <v-col cols=9>
+          <h3> 하루 평균 {{ datacollection.datasets[0].label }} 섭취량: {{ datacollection.avg }}g</h3>
+        </v-col>
+      </v-row>
+      <div>
+        <line-chart :chart-data="datacollection"></line-chart>
       </div>
     </div>
 
@@ -36,7 +50,7 @@ import Doughnut from '@/components/chart/Doughnut'
 import LineChart from '@/components/chart/LineChart'
 
 // 무작위 컬러 라이브러리
-import randomColor from 'randomcolor'
+// import randomColor from 'randomcolor'
 
 import { mapActions } from 'vuex'
 
@@ -52,10 +66,10 @@ export default {
       username: window.sessionStorage.getItem('username'),
       calories: 0,
       Caloriedata: {
-        labels: ['섭취한 평균 칼로리', '절약한 칼로리'],
+        labels: ['섭취한 일일 칼로리', '절약한 칼로리'],
         datasets: [
           {
-            backgroundColor: [randomColor(), '#F84A0D'],
+            backgroundColor: ['#9AD914', '#F84A0D'],
             data: []
           }
         ]
@@ -69,7 +83,8 @@ export default {
               backgroundColor: ['#0BA40C'],
               data: []
             },
-          ]
+          ],
+          avg: 0
         },
         {
           labels: [],
@@ -79,7 +94,8 @@ export default {
               backgroundColor: ['#FFC30D'],
               data: []
             }
-          ]
+          ],
+          avg: 0
         },
         {
           labels: [],
@@ -89,9 +105,13 @@ export default {
               backgroundColor: ['#F84A0D'],
               data: []
             }
-          ]
+          ],
+          avg: 0
         }
-      ]
+      ],
+      avg_carbohydrate: 0,
+      avg_protein: 0,
+      avg_fat: 0,
     }
   },
 
@@ -102,6 +122,7 @@ export default {
 
   methods: {
     ...mapActions(['getProfile']),
+
     // 통계 데이터 받아서 갱신하는 함수
     GetStatisticsData() {
       this.calories = 0
@@ -114,25 +135,36 @@ export default {
           }
         })
         .then(res => {
-          console.log(this.datacollections)
+          var data_length = (Object.keys(res.data).length)
           // 일별 영양 성분 정보 정리
           for (const value in res.data) {
-            var tandanji = [res.data[value]['carbohydrate'], res.data[value]['protein'], res.data[value]['fat']]
-            // 도넛 차트 칼로리 
-            this.calories += res.data[value]["calorie"]
-            // 라인 차트
-            this.datacollections[0].labels.push(String(value))
-            this.datacollections[1].labels.push(String(value))
-            this.datacollections[2].labels.push(String(value))
-            this.datacollections[0].datasets[0]['data'].push(tandanji[0])
-            this.datacollections[1].datasets[0]['data'].push(tandanji[1])
-            this.datacollections[2].datasets[0]['data'].push(tandanji[2])
+            // console.log(res.data[value])
+            if (res.data[value]["calorie"] !== 0) {
+              var tandanji = [res.data[value]['carbohydrate'], res.data[value]['protein'], res.data[value]['fat']]
+              // 도넛 차트 칼로리 
+              this.calories += res.data[value]["calorie"]
+              // 라인 차트
+              this.datacollections[0].labels.push(String(value))
+              this.datacollections[1].labels.push(String(value))
+              this.datacollections[2].labels.push(String(value))
+              this.datacollections[0].datasets[0]['data'].push(tandanji[0])
+              this.datacollections[0]['avg'] += tandanji[0]
+              this.datacollections[1].datasets[0]['data'].push(tandanji[1])
+              this.datacollections[1]['avg'] += tandanji[1]
+              this.datacollections[2].datasets[0]['data'].push(tandanji[2])
+              this.datacollections[2]['avg'] += tandanji[2]
+            } 
           }
-          this.Caloriedata.datasets[0]['data'] = [this.calories, window.sessionStorage.getItem('standard')-this.calories]
+          this.Caloriedata.datasets[0]['data'] = [this.calories/(data_length), window.sessionStorage.getItem('standard')-this.calories/(data_length)]
+          this.datacollections[0]['avg'] /= (data_length)
+          this.datacollections[1]['avg'] /= (data_length)
+          this.datacollections[2]['avg'] /= (data_length)
+
           this.forceRerender()
         })
         .catch(err => console.log(err))
     },
+
     forceRerender() {
       this.rerenderflag = false;
       this.$nextTick(() => {
