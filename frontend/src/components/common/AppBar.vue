@@ -31,7 +31,7 @@
         <!-- 3 dots 옵션 -->
         <v-list>
           <v-list-item>
-            <router-link :to="{ name: constants.URL_TYPE.POST.CREATE, params: {id: 1} }">게시글 작성</router-link>
+            <router-link style="color: #000; text-decoration: none;" :to="{ name: constants.URL_TYPE.POST.CREATE, params: {id: 1} }">게시글 작성</router-link>
           </v-list-item>
         </v-list>
       </v-menu>

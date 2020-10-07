@@ -1,6 +1,13 @@
 <template>
   <div>
-    <button @click="goToCamera">camera</button>
+    <div class="pt-7 d-flex justify-center align-center" @click="goToCamera">
+      <p class="my-0">사진을 촬영하거나 파일을 업로드해주세요</p>
+      <v-icon
+        class="ml-2"
+      >
+        mdi-upload
+      </v-icon>
+    </div>
     <v-col
       cols="12"
       sm="6"
@@ -99,13 +106,15 @@
     <div v-else>
       <p class="text-center">{{ message }}</p>
     </div>
-    <v-btn
-      text
-      color="primary"
-      @click="addDiet"
-    >
-      Submit
-    </v-btn>
+    <div class="d-flex justify-center">
+      <v-btn
+        text
+        color="primary"
+        @click="addDiet"
+      >
+        Submit
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -156,6 +165,7 @@ export default {
         diet: {
           created_at: this.$route.query.date,
           category: this.$route.query.type,
+          standard: window.sessionStorage.getItem('standard')
         },
         food: [
           {
@@ -171,9 +181,8 @@ export default {
       
       this.$http
         .post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, dietData, config)
-        .then(res => {
-          console.log(res)
-          // this.isSelectModal = true
+        .then(() => {
+          this.$router.push({ name: constants.URL_TYPE.CALENDAR.DIARY })
         })
         .catch(err => console.log(err.response.data))
     }
