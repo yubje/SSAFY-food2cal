@@ -172,8 +172,9 @@ export default new Vuex.Store({
         Vue.prototype.$http
           .get(process.env.VUE_APP_SERVER_URL + '/users/profiles/', config)
           .then(res => {
-            window.sessionStorage.setItem('username', res.data[0].username)
-            window.sessionStorage.setItem('standard', res.data[0].standard)
+            window.sessionStorage.setItem('username', res.data.user)
+            window.sessionStorage.setItem('standard', res.data.standard)
+            window.sessionStorage.setItem('goal', res.data.goal)
           })
           .catch(err => console.log(err))
       }
