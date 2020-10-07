@@ -72,6 +72,15 @@ def comment_list(request, post_id):
             context = serializer.data
             cache.set(f'comment_{post_id}', context)
         return Response(context)
+    if request.method == 'GET':
+        # context = cache.get(f'comment_{post_id}')
+        # print(context)
+        # if not context:
+        comments = Comment.objects.filter(post_id=post_id).order_by('-pk')
+        serializer = CommentListSerializer(comments, many=True)
+        context = serializer.data
+            # cache.set(f'comment_{post_id}', context)
+        return Response(context)
     # 댓글 생성 
     elif request.method == 'POST':
         serializer = CommentSerializer(data=request.data)
