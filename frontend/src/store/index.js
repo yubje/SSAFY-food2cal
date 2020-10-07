@@ -112,7 +112,7 @@ export default new Vuex.Store({
     loginTry({ state, commit }, LoginData) {
       if (state.LoginFlag === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
-          axios
+          Vue.prototype.$http
             .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': cookies.get('csrftoken')}})
             .then(res => {
               const token = res.data.key
@@ -143,7 +143,7 @@ export default new Vuex.Store({
         const config = {
           headers: {'Authorization': `Token ${state.authToken}`}
         }
-        axios
+        Vue.prototype.$http
           .post(process.env.VUE_APP_SERVER_URL + '/users/logout/', null, config)
           .catch(err=>console.log(err.response))
           .finally(() => {
@@ -161,7 +161,7 @@ export default new Vuex.Store({
             Authorization: `Token ${cookies.get(`auth-token`)}`
           }
         }
-        axios
+        Vue.prototype.$http
           .get(process.env.VUE_APP_SERVER_URL + '/users/profiles/', config)
           .then(res => {
             window.sessionStorage.setItem('username', res.data[0].user)
