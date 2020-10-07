@@ -9,6 +9,7 @@
           v-bind="attrs"
           v-on="on"
           class="my-auto"
+          @click="checkLogin"
         >
           Submit
         </v-btn>
@@ -49,6 +50,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { routeState } from '@/components/mixins/routeState'
 import SelectModal from '@/components/common/SelectModal'
 import SERVER from '@/libs/api'
 
@@ -70,10 +72,18 @@ export default {
   computed: {
     ...mapState([
       'fileUrl',
-      'foodInfo'
+      'foodInfo',
+      'LoginFlag'
     ])
   },
   methods: {
+    checkLogin() {
+      if (!this.LoginFlag) {
+        alert('로그인이 필요한 페이지 입니다.')
+        this.goToLogin()
+        return
+      }
+    },
     getToday() {
       let time = new Date()
       let year = time.getFullYear()
@@ -128,6 +138,9 @@ export default {
         })
         .catch(err => console.log(err.response.data))
     }
-  }
+  },
+  mixins: [
+    routeState
+  ]
 }
 </script>

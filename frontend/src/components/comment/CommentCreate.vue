@@ -1,12 +1,12 @@
 <template>
   <div>
-    <span v-if="checkComment" class="comment-input">
+    <span v-if="checkComment">
       <input @keypress.enter.prevent="changeInput" :value="checkComment.commentValue" @input="newValue=$event.target.value">
-      <button class="create-button" @click.prevent="changeInput" type="submit">수정</button>
+      <button class="ml-5" @click.prevent="changeInput" type="submit">수정</button>
     </span>
-    <span v-else class="comment-input">
+    <span v-else>
       <input @keypress.enter.prevent="onInput" v-model="commentValue" placeholder="댓글을 입력해주세요">
-      <button class="create-button" @click.prevent="onInput" type="submit">제출</button>
+      <button class="ml-3" @click.prevent="onInput" type="submit">제출</button>
     </span>
   </div>
 </template>

@@ -78,10 +78,10 @@ export default {
       .then(res => {
         this.posts = res.data
       })
-    const yearMon = this.getYearMon()
+    // const yearMon = this.getYearMon()
     const today = this.getToday()
     window.localStorage.setItem('date', today)
-    this.getMonthDiets(yearMon)
+    // this.getMonthDiets(yearMon)
   },
 
   mounted() {
