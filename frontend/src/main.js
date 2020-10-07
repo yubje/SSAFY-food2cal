@@ -9,13 +9,13 @@ import VueCharts from 'vue-chartjs'
 
 Vue.use(VueCookies)
 
-Vue.config.productionTip = false
 Vue.prototype.$http = axios;
-const csrf = localStorage.getItem("csrftoken")
+const csrf = VueCookies.get("csrftoken")
 if (csrf){
   Vue.prototype.$http.defaults.headers.common['X-CSRFToken'] = csrf
 }
 
+Vue.config.productionTip = false
 
 new Vue({
   router,
