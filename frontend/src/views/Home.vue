@@ -34,7 +34,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getMonthDiets'
+      'getMonthDiets',
+      'getProfile'
     ]),
     getYearMon() {
       let time = new Date()
@@ -81,7 +82,11 @@ export default {
     const today = this.getToday()
     window.localStorage.setItem('date', today)
     this.getMonthDiets(yearMon)
-  }
+  },
+
+  mounted() {
+    this.getProfile()
+  },
 }
 </script>
 
