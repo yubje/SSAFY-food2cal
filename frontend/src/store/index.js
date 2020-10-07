@@ -153,7 +153,10 @@ export default new Vuex.Store({
         }
         Vue.prototype.$http
           .post(process.env.VUE_APP_SERVER_URL + '/users/logout/', null, config)
-          .catch(err=>console.log(err.response))
+          .catch(err=> {
+            console.log(err.response)
+            alert('로그아웃이 정상적으로 처리되지 않았습니다.')
+          })
           .finally(() => {
             window.sessionStorage.removeItem('username')
             cookies.remove('auth-token')
@@ -176,7 +179,6 @@ export default new Vuex.Store({
             window.sessionStorage.setItem('standard', res.data.standard)
             window.sessionStorage.setItem('goal', res.data.goal)
           })
-          .catch(err => console.log(err))
       }
     }
   },
@@ -184,7 +186,5 @@ export default new Vuex.Store({
     LoginFlag: state => !!state.authToken
   },
 
-
-  modules: {
-  }
+  modules: {}
 })
