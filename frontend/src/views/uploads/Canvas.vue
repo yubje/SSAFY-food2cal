@@ -116,6 +116,7 @@
 <script>
 import { mapState } from 'vuex'
 import DietModal from '@/components/common/DietModal'
+import { routeState } from '@/components/mixins/routeState'
 import SERVER from '@/libs/api'
 
 export default {
@@ -143,7 +144,8 @@ export default {
   computed: {
     ...mapState([
       'fileUrl',
-      'foodInfo'
+      'foodInfo',
+      'LoginFlag'
     ])
   },
   methods: {
@@ -154,6 +156,13 @@ export default {
     //   this.AdjFoodInfo.protein = (this.serving + this.remain) * this.foodInfo.protein
     //   this.AdjFoodInfo.fat = (this.serving + this.remain) * this.foodInfo.fat
     // }
+    checkLogin() {
+      if (!this.LoginFlag) {
+        alert('로그인이 필요한 페이지 입니다.')
+        this.goToLogin()
+        return
+      }
+    },
     addDiet() {
       const config = {
         headers: {
@@ -168,6 +177,12 @@ export default {
         },
         food: []
       }
+
+      // if (!this.checkLogin()) {
+      //   alert('로그인이 필요한 페이지 입니다.')
+      //   this.goToLogin()
+      //   return
+      // }
 
       this.foodInfo.forEach(food => {
         dietData.food.push({
@@ -188,9 +203,9 @@ export default {
         .catch(err => console.log(err.response.data))
     }
   },
-  mounted() {
-    // this.setFoodInfo()
-  },
+  mixins: [
+    routeState
+  ],
 }
 </script>
 

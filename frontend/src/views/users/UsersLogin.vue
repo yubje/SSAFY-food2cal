@@ -1,12 +1,26 @@
 <template>
   <v-container>
-    <v-row justify="center" align="center">
+    <v-row justify="center">
+      <v-divider></v-divider>
+      <v-col cols="2">
+        <v-img 
+          src="../../assets/logo.png"
+        ></v-img>
+      </v-col>
+      <v-divider></v-divider>
+    </v-row>
+    <v-row no-gutters justify="center">
+      <v-col cols="3" sm="4"></v-col>
+      <v-col cols="6" sm="4" align-self="center" class="m-0">
+        <h1 class="text-center">Food To Calorie</h1>
+      </v-col>
+      <v-col cols="3" sm="4"></v-col>
+    </v-row>
+    <v-row justify="center" align="center" class="mt-0">
       <!-- 왼쪽 여백 -->
       <v-col cols="2" md="3"></v-col>
-
-
       <!-- 로그인 폼 -->
-      <v-col cols="8" md="6">
+      <v-col cols="8" md="6" class="mt-0">
         <!-- <v-row>
           <v-col cols="1"></v-col>
           <v-img 
@@ -105,7 +119,6 @@ export default {
   name: 'UsersLogin',
   data() {
     return {
-      islogin: false,
       LoginData: {
         username: null,
         password: null,
@@ -117,35 +130,9 @@ export default {
   },
   methods: {
     ...mapActions(["loginTry"]),
-    // UserLogin(LoginData) {
-    //   if (this.islogin === false) {
-    //     if (LoginData.username.trim() && LoginData.password.trim()) {
-    //       this.$http
-    //         .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': this.$cookies.get('csrftoken')}})
-    //         .then(res => {
-    //           window.sessionStorage.setItem('username', LoginData.username)
-    //           this.setCookie(res.data.key)
-    //           this.$emit('submit-login')
-    //           this.$router.push({ name: 'Home'})
-    //         })
-    //         .catch(err => console.log(err))
-    //     }
-    //   } else {
-    //     this.$router.push({ name: 'Home'})
-    //     alert('이미 로그인 상태입니다.')
-    //   }
-    // },
     goToJoin() {
       this.$router.push({ name: constants.URL_TYPE.USER.JOIN })
     },
-    setCookie(token){
-      this.$cookies.set('auth-token',token)
-      this.islogin = !this.islogin
-    },
-  },
-  mounted() {
-    this.islogin = this.$cookies.isKey('auth-token')
-  }
 }
 </script>
 
