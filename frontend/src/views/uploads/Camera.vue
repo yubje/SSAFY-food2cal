@@ -37,6 +37,8 @@ export default {
       fileUrl: null
     }
   },
+  components: {
+  },
   computed: {
   },
   methods: {
@@ -77,9 +79,10 @@ export default {
         this.$router.push({ name: constants.URL_TYPE.UPLOAD.CANVAS })
       }
     },
-    async uploadFile() {
-      await this.handleFileUpload(this.$refs.inputUpload.files[0])
-      await this.goToCanvas()
+    uploadFile() {
+      this.handleFileUpload(this.$refs.inputUpload.files[0])
+
+      this.goToCanvas()
     },
     dataURItoBlob(dataURI) {
       const binary = atob(dataURI.split(',')[1]);

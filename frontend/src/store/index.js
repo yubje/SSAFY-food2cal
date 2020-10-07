@@ -18,7 +18,8 @@ export default new Vuex.Store({
     foodInfo: [],
     LoginFlag: false,
     standard: null,
-    authToken: cookies.get('auth-token')
+    authToken: cookies.get('auth-token'),
+    isLoading: false
   },
   mutations: {
     SET_FILE_URL(state, fileUrl) {
@@ -53,6 +54,9 @@ export default new Vuex.Store({
     DELETE_TOKEN(state) {
       state.authToken = null
       cookies.remove('auth-token')
+    },
+    SET_LOADING(state, type) {
+      state.isLoading = type
     }
   },
   actions: {
@@ -69,17 +73,20 @@ export default new Vuex.Store({
         'Body' : fileData.file,
         'ContentType': fileData.file.type
       }
+      commit('SET_LOADING', true)
+
       s3.upload(param, (err, data) => {
         if(err) {
           console.log('image upload err : ' + err)
           return
         }
         commit('SET_FILE_URL', data.Location)
-        console.log(data.Location)
+        // console.log(data.Location)
+        
         axios.post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.predict, data.Location)
           .then((res) => {
             commit('SET_FOOD_INFO', res.data)
-            console.log(res.data)
+            commit('SET_LOADING', false)
           })
           .catch(err => console.log(err))
       })
@@ -112,11 +119,12 @@ export default new Vuex.Store({
     loginTry({ state, commit }, LoginData) {
       if (state.LoginFlag === false) {
         if (LoginData.username.trim() && LoginData.password.trim()) {
-          axios
+          Vue.prototype.$http
             .post(process.env.VUE_APP_SERVER_URL + '/users/login/', LoginData, { headers: { 'X-CSRFToken': cookies.get('csrftoken')}})
             .then(res => {
               const token = res.data.key
               cookies.set('auth-token', token)
+              window.sessionStorage.setItem('username', LoginData.username)
               commit("SET_TOKEN", token)
               commit("LOGIN_STATE", true)
               router
@@ -143,7 +151,7 @@ export default new Vuex.Store({
         const config = {
           headers: {'Authorization': `Token ${state.authToken}`}
         }
-        axios
+        Vue.prototype.$http
           .post(process.env.VUE_APP_SERVER_URL + '/users/logout/', null, config)
           .catch(err=>console.log(err.response))
           .finally(() => {
@@ -161,10 +169,10 @@ export default new Vuex.Store({
             Authorization: `Token ${cookies.get(`auth-token`)}`
           }
         }
-        axios
+        Vue.prototype.$http
           .get(process.env.VUE_APP_SERVER_URL + '/users/profiles/', config)
           .then(res => {
-            window.sessionStorage.setItem('username', res.data[0].user)
+            window.sessionStorage.setItem('username', res.data[0].username)
             window.sessionStorage.setItem('standard', res.data[0].standard)
           })
           .catch(err => console.log(err))

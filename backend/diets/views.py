@@ -52,11 +52,12 @@ def diet_create(request):
 def diet_calendar(request, year_month):
     diets = Diet.objects.filter(user=request.user, created_at__startswith=year_month).order_by('created_at')
     serializer = DietListSerializer(diets, many=True)
-    return_data = defaultdict(lambda: {'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0, 'MO': [], 'LU': [], 'DI': [], 'SN': []})
+    return_data = defaultdict(lambda: {'standard': 0, 'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0, 'MO': [], 'LU': [], 'DI': [], 'SN': []})
 
     for i in range(len(serializer.data)):
         date = serializer.data[i]["created_at"][:10]
         category = serializer.data[i]['category']
+        return_data[date]['standard'] = serializer.data[i]['standard']
         food_lst = food_list(serializer.data[i]["id"])
         for food in food_lst:
             return_data[date]['calorie'] += food['calorie']
@@ -71,10 +72,11 @@ def diet_calendar(request, year_month):
 def diet_statistics(request):
     diets = Diet.objects.filter(user=request.user, created_at__range=(datetime.date.today()-datetime.timedelta(days=15), datetime.date.today())).order_by('created_at')
     serializer = DietListSerializer(diets, many=True)
-    return_data = defaultdict(lambda: {'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0})
+    return_data = defaultdict(lambda: {'standard': 0, 'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0})
     for i in range(len(serializer.data)):
         date = serializer.data[i]["created_at"][:10]
         food_lst = food_list(serializer.data[i]["id"])
+        return_data[date]['standard'] = serializer.data[i]['standard']
         for food in food_lst:
             return_data[date]['calorie'] += food['calorie']
             return_data[date]['carbohydrate'] += food['carbohydrate']

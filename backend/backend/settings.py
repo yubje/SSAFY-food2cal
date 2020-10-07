@@ -200,9 +200,9 @@ ACCOUNT_USERNAME_REQUIRED = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ]
 }
 
@@ -249,10 +249,11 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         # "LOCATION": "redis:j3a411.p.ssafy.io/1", # 1번 DB
-        "LOCATION": "redis:172.26.6.77:6379/1",
+        # "LOCATION": "redis:172.26.6.77:6379/1",
         'CONFIG': {
              "hosts": [('127.0.0.1', 6379)],
          },
+        # "LOCATION": "redis://j3a411.p.ssafy.io:6379/1", # 1번 DB
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

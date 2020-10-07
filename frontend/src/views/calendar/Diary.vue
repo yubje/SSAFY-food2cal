@@ -3,10 +3,9 @@
     <!-- <Calendar @food-info="updateFoodInfo" @date="updateDate" /> -->
     <Calendar @date="updateDate" />
     <div v-if="dietMonthInfo[date]"  class="mx-5">
-      <!-- {{ dietMonthInfo[date].calorie }} -->
       <p class="text-center text-h5"><strong>하루 섭취 열량</strong></p>
-      <v-progress-linear color="#FFC30D" value="33" height="20">
-        <strong>{{ Math.ceil(33) }}%</strong>
+      <v-progress-linear color="#FFC30D" :value="dietMonthInfo[date].calorie / setStandard * 100" height="20">
+        <strong>{{ Math.ceil(dietMonthInfo[date].calorie / setStandard * 100) }}%</strong>
       </v-progress-linear>
       
       <p class="text-center mt-7">탄수화물 {{ dietMonthInfo[date].carbohydrate }}g</p>
@@ -34,11 +33,8 @@ export default {
     return {
       // foodInfo: null,
       date: null,
-      // pieData: [
-      //   { color: '#0B6487', value: 30},
-      //   { color: '#9D1F37', value: 40},
-      //   { color: '#F6931C', value: 30},
-      // ]
+      userStandard: 0,
+      isLoading: false
     }
   },
   components: {
@@ -48,9 +44,9 @@ export default {
   },
   created() {
     this.getMonthDiets(window.localStorage.getItem('yearMon'))
+    this.date = window.localStorage.getItem('date')
   },
   mounted() {
-    
   },
   computed: {
     ...mapState([
@@ -58,6 +54,9 @@ export default {
     ]),
     setToday() {
       return window.localStorage.getItem('date')
+    },
+    setStandard() {
+      return window.sessionStorage.getItem('standard')
     }
     // pieStyle() {
     //   let carbohydrate = this.dietMonthInfo.carbohydrate
