@@ -69,7 +69,7 @@ def diet_calendar(request, year_month):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def diet_statistics(request):
-    diets = Diet.objects.filter(user=request.user, created_at__range=(datetime.date.today()-datetime.timedelta(days=15), datetime.date.today())).order_by('-pk')
+    diets = Diet.objects.filter(user=request.user, created_at__range=(datetime.date.today()-datetime.timedelta(days=15), datetime.date.today())).order_by('created_at')
     serializer = DietListSerializer(diets, many=True)
     return_data = defaultdict(lambda: {'calorie': 0, 'carbohydrate': 0, 'protein': 0, 'fat': 0})
     for i in range(len(serializer.data)):
