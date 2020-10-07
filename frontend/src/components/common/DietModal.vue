@@ -40,8 +40,9 @@
         </v-card-text>
         <v-card-actions class="d-flex align-center">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false; addDiet();">Close</v-btn>
-          <v-btn color="blue darken-1" text @click.prevent="dialog = false"><SelectModal /></v-btn>
+          <v-btn color="blue darken-1" text @click="addDiet(0); dialog = false;">다이어리</v-btn>
+          <v-btn color="blue darken-1" text @click="addDiet(1); dialog = false;">게시글</v-btn>
+          <!-- <v-btn color="blue darken-1" text @click="addDiet(1); dialog = false;"><SelectModal /></v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -51,13 +52,14 @@
 <script>
 import { mapState } from 'vuex'
 import { routeState } from '@/components/mixins/routeState'
-import SelectModal from '@/components/common/SelectModal'
+// import SelectModal from '@/components/common/SelectModal'
 import SERVER from '@/libs/api'
+import constants from '@/libs/constants'
 
 export default {
   name: 'DietModal',
   components: {
-    SelectModal
+    // SelectModal
   },
   data () {
     return {
@@ -66,8 +68,12 @@ export default {
       content: null,
       category: null,
       diet_image_path: null,
-      isSelectModal: false
+      // isSelectModal: false,
+      // postFoodInfo: null
     }
+  },
+  created() {
+    console.log(this.LoginFlag)
   },
   computed: {
     ...mapState([
@@ -93,10 +99,11 @@ export default {
       date = date >= 10 ? date: '0' + date
       return year + '-' + month + '-' + date
     },
-    changeSelectModal() {
-      this.isSelectModal = true
-    },
-    addDiet() {
+    // changeSelectModal() {
+    //   this.isSelectModal = true
+    // },
+    addDiet(state) {
+      console.log(1)
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get(`auth-token`)}`
@@ -115,6 +122,7 @@ export default {
         diet: {
           created_at: today,
           category: response_category,
+          standard: window.sessionStorage.getItem('standard')
         },
         food: []
       }
@@ -129,12 +137,17 @@ export default {
           fat: food.fat
         })
       })
+
+      // this.postFoodInfo = dietData
       
       this.$http
         .post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, dietData, config)
-        .then(res => {
-          console.log(res)
-          this.isSelectModal = true
+        .then(() => {
+          if (state) {
+            this.$router.push({ name: constants.URL_TYPE.POST.CREATE, params: { id: 0} })
+          } else {
+            this.$router.push({ name: constants.URL_TYPE.CALENDAR.DIARY })
+          }
         })
         .catch(err => console.log(err.response.data))
     }

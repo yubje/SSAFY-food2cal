@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="!comments">
+    <!-- <div v-if="!LoginFlag || comments.length" class="my-3 ml-2">
       등록된 댓글이 없습니다.
-    </div>
+    </div> -->
     
     <div class="comment" v-for="comment in comments" :key="`comment_${comment.id}`">
       <!-- <router-link
@@ -86,7 +86,7 @@ export default {
       this.$http
         .get(process.env.VUE_APP_SERVER_URL + '/posts/' + `${this.postId}` + '/comments/')
         .then(res => {
-          console.log(res)
+          // console.log(res)
           this.comments = res.data
         })
         .catch(err => console.log(err.response.data))

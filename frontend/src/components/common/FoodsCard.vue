@@ -38,7 +38,7 @@
       <div v-show="show">
         <v-divider></v-divider>
 
-        <v-card-text v-if="dietMonthInfo[date] && dietMonthInfo[date][category.type]">
+        <v-card-text v-if="dietMonthInfo[date] && dietMonthInfo[date][category.type].length !== 0">
           <div v-for="food in dietMonthInfo[date][category.type]" :key="food.id">
             <div class="d-flex justify-space-between align-center">
               <span class="ml-5 text-subtitle-1">{{ food.food_name }}</span>
@@ -52,12 +52,6 @@
                 </v-icon>
               </div>
             </div>
-            
-  
-
-            <!-- food_name, calorie, carbohydrate, protein, fat -->
-            
-            
           </div>
         </v-card-text>
         <v-card-text v-else>

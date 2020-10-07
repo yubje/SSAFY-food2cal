@@ -1,5 +1,6 @@
 <template>
   <v-row class="mx-auto fill-height">
+    <Loading v-if="isLoading" />
     <v-col>
       <v-sheet height="64">
         <v-toolbar
@@ -140,6 +141,7 @@
 <script>
 // import SERVER from '@/libs/api'
 import { mapState, mapActions } from 'vuex'
+import Loading from '@/components/common/Loading'
 
 export default {
   data: () => ({
@@ -152,15 +154,23 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    title: null
+    title: null,
+    isLoading: false
   }),
+  created () {
+    this.isLoading = true
+    setTimeout(() => {
+      this.isLoading = false
+    }, 1)
+  },
   mounted () {
     this.$refs.calendar.checkChange()
     setTimeout(() => {
       this.title = this.$refs.calendar.title
+      const yearMon = this.setYearMon(this.$refs.calendar.title)
+      this.getMonthDiets(yearMon)
     }, 10)
-    const yearMon = this.setYearMon(this.$refs.calendar.title)
-    this.getMonthDiets(yearMon)
+    
   },
   updated() {
     
@@ -172,6 +182,9 @@ export default {
     setTitle() {
       return this.$refs.calendar.title
     }
+  },
+  components: {
+    Loading
   },
   methods: {
     ...mapActions([

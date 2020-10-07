@@ -1,18 +1,18 @@
 <template>
-  <v-container>
+  <v-container class="login-page">
     <v-row justify="center">
-      <v-divider></v-divider>
+
       <v-col cols="2">
         <v-img 
           src="../../assets/logo.png"
         ></v-img>
       </v-col>
-      <v-divider></v-divider>
+
     </v-row>
     <v-row no-gutters justify="center">
       <v-col cols="3" sm="4"></v-col>
       <v-col cols="6" sm="4" align-self="center" class="m-0">
-        <h1 class="text-center">Food To Calorie</h1>
+        <h1 class="text-center">food2cal</h1>
       </v-col>
       <v-col cols="3" sm="4"></v-col>
     </v-row>
@@ -36,7 +36,7 @@
           <div class="input_field">
             <v-text-field
               outlined
-              placeholder="이메일"
+              placeholder="닉네임"
               hide-details
               name="id"
               v-model="LoginData.username"
@@ -137,11 +137,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .login-btn {
   margin: 8px auto;
 }
+
 .input_field {
   margin: 6px auto;
+}
+
+.login-page {
+  position: fixed;
+  top: 20%;
 }
 </style>
