@@ -338,10 +338,6 @@
         >
           이전
         </v-btn>
-        <v-btn
-          @click.prevent="test()">
-          프로필 정보 체크
-        </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="6">
@@ -453,7 +449,8 @@ export default {
       console.log('')
       if (UserJoinData.username && UserJoinData.password1 && UserJoinData.password2) {
         if (UserJoinData.username.trim()) {
-          if (UserJoinData.password1.trim() === UserJoinData.password2.trim()) {
+          if (UserJoinData.password1.trim() || UserJoinData.password2.trim()) {
+            if (UserJoinData.password1.trim() === UserJoinData.password2.trim()) {
             var required_kcal = this.SetupStandard()
             this.UserJoinData.standard = required_kcal-500
             this.$http
@@ -468,11 +465,17 @@ export default {
                 this.$http
                   .post(process.env.VUE_APP_SERVER_URL + '/users/profiles/', this.UserJoinData, config)
                   .then(() => this.$router.push({ path: '/login' }))
-                  .catch(err => console.log(err))
+                  .catch(err => {
+                    console.log(err)
+                    alert('가입할 수 없는 회원 정보입니다.')
+                  })
               })
               .catch(err => console.log(err))
+            } else {
+              alert('비밀번호가 일치하지 않습니다.')
+            }
           } else {
-            alert('비밀번호가 일치하지 않습니다.')
+            alert('비밀번호가 비어있습니다..')
           }
         } else {
           alert('아이디가 비어있습니다.')
@@ -539,12 +542,6 @@ export default {
         else { return 21*Number(this.UserJoinData.height)**2*this.kcalValue/10000}
       }
     },
-    
-    test() {
-      var required_kcal = this.SetupStandard()
-      this.UserJoinData.standard = required_kcal-500
-      console.log(this.UserJoinData.standard)
-    }
   },
 }
 </script>
