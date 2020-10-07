@@ -124,6 +124,7 @@ export default new Vuex.Store({
             .then(res => {
               const token = res.data.key
               cookies.set('auth-token', token)
+              window.sessionStorage.setItem('username', LoginData.username)
               commit("SET_TOKEN", token)
               commit("LOGIN_STATE", true)
               router
