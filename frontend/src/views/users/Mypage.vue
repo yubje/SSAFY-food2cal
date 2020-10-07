@@ -18,19 +18,15 @@
         </Doughnut>
       </div>
     </v-row>
-    <!-- <v-btn
-      @click="GetStatisticsData()"
-    >
-    다이어트 통계 데이터 받기
-    </v-btn> -->
 
     <div v-if="rerenderflag">
-      <line-chart :chart-data="this.datacollection"></line-chart>
-      <!-- <v-btn 
-        @click="fillData()"
-        color="primary">Randomize
-      </v-btn> -->
+      <div
+        v-for="datacollection in datacollections" 
+        :key="datacollection.datasets.label">
+          <line-chart :chart-data="datacollection"></line-chart>
+      </div>
     </div>
+
   </v-container>
 </template>
 
@@ -41,6 +37,8 @@ import LineChart from '@/components/chart/LineChart'
 
 // 무작위 컬러 라이브러리
 import randomColor from 'randomcolor'
+
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Mypage',
@@ -62,35 +60,48 @@ export default {
           }
         ]
       },
-      datacollection: {
-        labels: [],
-        datasets: [
-          {
-            label: '탄수화물',
-            backgroundColor: ['#0BA40C'],
-            data: []
-          },
-          {
-            label: '단백질',
-            backgroundColor: ['#FFC30D'],
-            data: []
-          },
-          {
-            label: '지방',
-            backgroundColor: ['#F84A0D'],
-            data: []
-          },
-        ]
-      }
+      datacollections: [
+        {
+          labels: [],
+          datasets: [
+            {
+              label: '탄수화물',
+              backgroundColor: ['#0BA40C'],
+              data: []
+            },
+          ]
+        },
+        {
+          labels: [],
+          datasets: [
+            {
+              label: '단백질',
+              backgroundColor: ['#FFC30D'],
+              data: []
+            }
+          ]
+        },
+        {
+          labels: [],
+          datasets: [
+            {
+              label: '지방',
+              backgroundColor: ['#F84A0D'],
+              data: []
+            }
+          ]
+        }
+      ]
     }
   },
 
   created() {
-    // this.fillData()
+    this.getProfile()
     this.GetStatisticsData()
   },
 
   methods: {
+    ...mapActions(['getProfile']),
     // 통계 데이터 받아서 갱신하는 함수
     GetStatisticsData() {
       this.calories = 0
@@ -103,16 +114,19 @@ export default {
           }
         })
         .then(res => {
+          console.log(this.datacollections)
           // 일별 영양 성분 정보 정리
           for (const value in res.data) {
             var tandanji = [res.data[value]['carbohydrate'], res.data[value]['protein'], res.data[value]['fat']]
             // 도넛 차트 칼로리 
             this.calories += res.data[value]["calorie"]
             // 라인 차트
-            this.datacollection.labels.push(String(value))
-            this.datacollection.datasets[0]['data'].push(tandanji[0])
-            this.datacollection.datasets[1]['data'].push(tandanji[1])
-            this.datacollection.datasets[2]['data'].push(tandanji[2])
+            this.datacollections[0].labels.push(String(value))
+            this.datacollections[1].labels.push(String(value))
+            this.datacollections[2].labels.push(String(value))
+            this.datacollections[0].datasets[0]['data'].push(tandanji[0])
+            this.datacollections[1].datasets[0]['data'].push(tandanji[1])
+            this.datacollections[2].datasets[0]['data'].push(tandanji[2])
           }
           this.Caloriedata.datasets[0]['data'] = [this.calories, window.sessionStorage.getItem('standard')-this.calories]
           this.forceRerender()
