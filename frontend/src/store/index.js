@@ -18,7 +18,8 @@ export default new Vuex.Store({
     foodInfo: [],
     LoginFlag: false,
     standard: null,
-    authToken: cookies.get('auth-token')
+    authToken: cookies.get('auth-token'),
+    isLoading: false
   },
   mutations: {
     SET_FILE_URL(state, fileUrl) {
@@ -53,6 +54,9 @@ export default new Vuex.Store({
     DELETE_TOKEN(state) {
       state.authToken = null
       cookies.remove('auth-token')
+    },
+    SET_LOADING(state, type) {
+      state.isLoading = type
     }
   },
   actions: {
@@ -69,17 +73,20 @@ export default new Vuex.Store({
         'Body' : fileData.file,
         'ContentType': fileData.file.type
       }
+      commit('SET_LOADING', true)
+
       s3.upload(param, (err, data) => {
         if(err) {
           console.log('image upload err : ' + err)
           return
         }
         commit('SET_FILE_URL', data.Location)
-        console.log(data.Location)
+        // console.log(data.Location)
+        
         axios.post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.predict, data.Location)
           .then((res) => {
             commit('SET_FOOD_INFO', res.data)
-            console.log(res.data)
+            commit('SET_LOADING', false)
           })
           .catch(err => console.log(err))
       })
