@@ -1,12 +1,26 @@
 <template>
   <v-container>
-    <v-row justify="center" align="center">
+    <v-row justify="center">
+      <v-divider></v-divider>
+      <v-col cols="2">
+        <v-img 
+          src="../../assets/logo.png"
+        ></v-img>
+      </v-col>
+      <v-divider></v-divider>
+    </v-row>
+    <v-row no-gutters justify="center">
+      <v-col cols="3" sm="4"></v-col>
+      <v-col cols="6" sm="4" align-self="center" class="m-0">
+        <h1 class="text-center">Food To Calorie</h1>
+      </v-col>
+      <v-col cols="3" sm="4"></v-col>
+    </v-row>
+    <v-row justify="center" align="center" class="mt-0">
       <!-- 왼쪽 여백 -->
       <v-col cols="2" md="3"></v-col>
-
-
       <!-- 로그인 폼 -->
-      <v-col cols="8" md="6">
+      <v-col cols="8" md="6" class="mt-0">
         <!-- <v-row>
           <v-col cols="1"></v-col>
           <v-img 
