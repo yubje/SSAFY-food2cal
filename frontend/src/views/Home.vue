@@ -82,6 +82,7 @@ export default {
     const today = this.getToday()
     window.localStorage.setItem('date', today)
     // this.getMonthDiets(yearMon)
+    this.getProfile()
   },
 
   mounted() {
