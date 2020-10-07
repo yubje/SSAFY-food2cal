@@ -15,7 +15,7 @@
         color="#F84A0D"
         :complete="e1 > 2"
       >
-        몸무게
+        활동 수준
       </v-stepper-step>
 
       <v-divider></v-divider>
@@ -24,7 +24,7 @@
         color="#F84A0D"
         :complete="e1 > 3"
       >
-        성별
+        몸무게
       </v-stepper-step>
 
       <v-divider></v-divider>
@@ -33,12 +33,21 @@
         color="#F84A0D"
         :complete="e1 > 4"
       >
-        생년월일
+        성별
       </v-stepper-step>
 
       <v-divider></v-divider>
 
       <v-stepper-step step="5"
+        color="#F84A0D"
+        :complete="e1 > 5"
+      >
+        생년월일
+      </v-stepper-step>
+
+      <v-divider></v-divider>
+
+      <v-stepper-step step="6"
         color="#F84A0D"
       >
         회원 정보 입력
@@ -67,8 +76,9 @@
             ></v-text-field>
           </v-form>
         </v-row>
-        <v-btn
-          color="primary"
+        <v-btn 
+          class="white--text"
+          color="#0BA40C"
           @click="onClickGoal()"
         >
           다음
@@ -80,37 +90,38 @@
           로그인 화면으로
         </v-btn>
       </v-stepper-content>
-      <!-- <v-stepper-content step="1">
+      
+      <v-stepper-content step="2">
         <v-row 
           justify="center" 
           class="mb-4"
         >
-          <h3>당신의 목표는 무엇인가요?</h3>
+          <h3>당신의 평소 활동 수준은 어느 정도인가요?</h3>
         </v-row>
         <v-row
           justify="center" 
           class="mb-4"
         >
           <v-btn
-            v-if="this.UserJoinData.goal === '체중 감소'"
-            @click="onClickGoal(4)"
+            v-if="this.UserJoinData.activity === '가벼운 활동'"
+            @click="onClickActivity(5)"
             large
             color="#FF890E"
             dark
             elevation="3"
           >
-            체중 감소
+            가벼운 활동
           </v-btn>
           <v-btn
             v-else
-            @click="onClickGoal(1)"
+            @click="onClickActivity(1)"
             large
             outlined
             color="#FF890E"
             dark
             elevation="3"
           >
-            체중 감소
+            가벼운 활동
           </v-btn>
         </v-row>
         <v-row
@@ -118,25 +129,25 @@
           class="mb-4"
         >
           <v-btn
-            v-if="this.UserJoinData.goal === '체중 유지'"
-            @click="onClickGoal(4)"
+            v-if="this.UserJoinData.activity === '중등도 활동'"
+            @click="onClickActivity(5)"
             large
             color="#FF890E"
             dark
             elevation="3"
           >
-            체중 유지
+            중등도 활동
           </v-btn>
           <v-btn
             v-else
-            @click="onClickGoal(2)"
+            @click="onClickActivity(2)"
             large
             outlined
             color="#FF890E"
             dark
             elevation="3"
           >
-            체중 유지
+            중등도 활동
           </v-btn>
         </v-row>
         <v-row
@@ -144,41 +155,69 @@
           class="mb-4"  
         >
           <v-btn
-            v-if="this.UserJoinData.goal === '체중 증가'"
-            @click="onClickGoal(4)"
+            v-if="this.UserJoinData.activity === '강한 활동'"
+            @click="onClickActivity(5)"
             large
             color="#FF890E"
             dark
             elevation="3"
           >
-            체중 증가
+            강한 활동
           </v-btn>
           <v-btn
             v-else
-            @click="onClickGoal(3)"
+            @click="onClickActivity(3)"
             large
             outlined
             color="#FF890E"
             dark
             elevation="3"
           >
-            체중 증가
+            강한 활동
+          </v-btn>
+        </v-row>
+        <v-row
+          justify="center"
+          class="mb-4"  
+        >
+          <v-btn
+            v-if="this.UserJoinData.activity === '아주 강한 활동'"
+            @click="onClickActivity(5)"
+            large
+            color="#FF890E"
+            dark
+            elevation="3"
+          >
+            아주 강한 활동
+          </v-btn>
+          <v-btn
+            v-else
+            @click="onClickActivity(4)"
+            large
+            outlined
+            color="#FF890E"
+            dark
+            elevation="3"
+          >
+            아주 강한 활동
           </v-btn>
         </v-row>
         <v-btn
-          color="primary"
-          @click="e1 = 2"
+          class="white--text"
+          color="#0BA40C"
+          @click="e1 = 3"
         >
           다음
         </v-btn>
         <v-btn text
           color="primary"
+          @click="e1 = 1"
         >
-          로그인 화면으로
+          이전
         </v-btn>
-      </v-stepper-content> -->
+      </v-stepper-content>
 
-      <v-stepper-content step="2">
+      <v-stepper-content step="3">
         <v-row
           justify="center"
           class="mb-4"
@@ -205,19 +244,21 @@
           </v-form>
         </v-row>
         <v-btn
-          color="primary"
-          @click="onClickBodyspec()"
+          class="white--text"
+          color="#0BA40C"
+          @click="onClickBodySpec()"
         >
           다음
         </v-btn>
         <v-btn text
-          @click="e1 = 1"
+          color="primary"
+          @click="e1 = 2"
         >
           이전
         </v-btn>
       </v-stepper-content>
 
-      <v-stepper-content step="3">
+      <v-stepper-content step="4">
         <v-row justify="center">
           <h3>당신의 성별은 무엇인가요?</h3>
         </v-row>
@@ -247,7 +288,7 @@
               x-large
               color="#FF890E"
             >mdi-face</v-icon>
-            <v-icon 
+            <v-icon
               v-else
               @click="onClickMan"  
               x-large
@@ -256,20 +297,21 @@
         </v-row>
         
         <v-btn
-          color="primary"
-          @click="e1 = 4"
-          
+          class="white--text"
+          color="#0BA40C"
+          @click="e1 = 5"
         >
           다음
         </v-btn>
         <v-btn text
-          @click="e1 = 2"
+          color="primary"
+          @click="e1 = 3"
         >
           이전
         </v-btn>
       </v-stepper-content>
 
-      <v-stepper-content step="4">
+      <v-stepper-content step="5">
         <v-row
           justify="center">
           <h3>당신의 생일은 언제인가요?</h3>
@@ -280,22 +322,29 @@
           <v-date-picker 
             v-model="UserJoinData.birth"
             locale="ko-kr"
+            color="orange"
           ></v-date-picker>
         </v-row>
         <v-btn
-          color="primary"
-          @click="e1 = 5"
+          class="white--text mr-2"
+          color="#0BA40C"
+          @click="e1 = 6"
         >
           다음
         </v-btn>
         <v-btn text
-          @click="e1 = 3"
+          color="primary"
+          @click="e1 = 4"
         >
           이전
         </v-btn>
+        <v-btn
+          @click.prevent="test()">
+          프로필 정보 체크
+        </v-btn>
       </v-stepper-content>
 
-      <v-stepper-content step="5">
+      <v-stepper-content step="6">
         <v-container>
           <v-row justify="center" align="center">
             <!-- 왼쪽 여백 -->
@@ -306,7 +355,7 @@
                 <div class="input_field">
                   <v-text-field
                     outlined
-                    placeholder="닉네임을 입력해주세요"
+                    placeholder="아이디를 입력해주세요"
                     hide-details
                     name="username"
                     v-model="UserJoinData.username"
@@ -314,26 +363,6 @@
                   </v-text-field>
                 </div>
                 <div class="input_field">
-                  <v-text-field
-                    outlined
-                    placeholder="이메일을 입력해주세요"
-                    hide-details
-                    name="email"
-                    v-model="UserJoinData.email"
-                  >
-                  </v-text-field>
-                  <!-- ** 이메일 중복체크 버튼 ** -->
-                  <!-- <v-btn
-                    v-if="!emailflag"
-                    @click="CheckEmail"
-                    class="checkemail-btn white--text"
-                    block 
-                    depressed 
-                    color="#FF4500"
-                    height="48px"
-                  >
-                    이메일 중복확인
-                  </v-btn> -->
                 </div>
                 <div class="input_field">
                   <v-text-field
@@ -383,7 +412,7 @@
         </v-container>
         <!-- 버튼 -->
         <v-btn text
-          @click="e1 = 4"
+          @click="e1 = 5"
         >
           이전
         </v-btn>
@@ -401,60 +430,59 @@ export default {
     return {
       e1: 1,
       UserJoinData: {
-        goal: null,
-        weight: null,
-        height: null,
-        birth: new Date().toISOString().substr(0, 10),
-        gender: null,
         username: null,
-        email: null,
         password1: null,
         password2: null,
+        goal: null,
+        weight: undefined,
+        height: undefined,
+        birth: new Date().toISOString().substr(0, 10),
+        gender: null,
+        activity: null,
+        standard: null,
+        profile_image_path: 'pass',
+        nickname: null
       },
-      goaltmp: 0
-      // emailflag: false
+      goaltmp: undefined,
+      kcalValue: null,
     }
   },
   methods: {
-    // ** 이메일 중복체크 **
-    // CheckEmail() {
-    //   this.$http
-    //     .post(process.env.VUE_APP_SERVER_URL + 'rest-auth/signup/verify-email/', {'Key': this.UserJoinData.email})
-    //     .then(res => {
-    //       console.log(res)
-    //       this.emailflag =! this.emailflag  
-    //     })
-    //     .catch(err => console.log(err))
-    // },
     // 회원가입
     UserJoin(UserJoinData) {
-      // if (UserJoinData)
-      if (UserJoinData.username.trim()) {
-        if (UserJoinData.password1 === UserJoinData.password2) {
-          this.$http
-            .post(process.env.VUE_APP_SERVER_URL + '/users/signup/', UserJoinData)
-            .then(() => {
-              console.log(UserJoinData)
-              // this.setCookie(res.data.key)
-              this.$router.push({ name: 'Home'})
-            })
-            .catch(err => console.log(err))
+      console.log('')
+      if (UserJoinData.username && UserJoinData.password1 && UserJoinData.password2) {
+        if (UserJoinData.username.trim()) {
+          if (UserJoinData.password1.trim() === UserJoinData.password2.trim()) {
+            var required_kcal = this.SetupStandard()
+            this.UserJoinData.standard = required_kcal-500
+            this.$http
+              .post(process.env.VUE_APP_SERVER_URL + '/users/signup/', UserJoinData)
+              .then(res => {
+                const config = {
+                  headers: {
+                    Authorization: `Token ${res.data.key}`
+                  }
+                }
+                this.UserJoinData.nickname = this.UserJoinData.username
+                this.$http
+                  .post(process.env.VUE_APP_SERVER_URL + '/users/profiles/', this.UserJoinData, config)
+                  .then(() => this.$router.push({ path: '/login' }))
+                  .catch(err => console.log(err))
+              })
+              .catch(err => console.log(err))
+          } else {
+            alert('비밀번호가 일치하지 않습니다.')
+          }
         } else {
-          alert('비밀번호가 일치하지 않습니다.')
+          alert('아이디가 비어있습니다.')
         }
       } else {
-        alert('닉네임이 비어있습니다.')
+        alert('아이디, 비밀번호는 필수 입력값입니다.')
       }
     },
-    // 회원가입과 동시에 인증키 쿠키 셋팅
-    setCookie(token){
-      this.$cookies.set('auth-token',token)
-      this.islogin = !this.islogin
-    },
-
     // 성별 입력 메서드
     onClickWoman() {
-      // console.log('Click Woman Icon')
       if (this.UserJoinData.gender !== 'femail') {
         this.UserJoinData.gender='femail'
       }
@@ -463,7 +491,6 @@ export default {
       } 
     },
     onClickMan() {
-      // console.log('Click Man Icon')
       if (this.UserJoinData.gender !== 'mail') {
         this.UserJoinData.gender='mail'
       }
@@ -471,33 +498,52 @@ export default {
         this.UserJoinData.gender = null
       }
     },
-
+    // 목표 체중 입력 메서드
     onClickGoal() {
       this.e1 = 2
       this.UserJoinData.goal = this.goaltmp
     },
+    // 키, 몸무게 입력 메서드
+    onClickBodySpec() {
+      this.e1 = 4
+      this.UserJoinData.goal = Number(this.goaltmp) - Number(this.UserJoinData.weight)
+    },
+    // 활동 수준 입력 메서드
+    onClickActivity(num) {
+      if (num === 1) {
+        this.UserJoinData.activity = "가벼운 활동"
+        this.kcalValue = 25
+      } else if (num === 2) {
+        this.UserJoinData.activity = "중등도 활동"
+        this.kcalValue = 30
+      } else if (num === 3) {
+        this.UserJoinData.activity = "강한 활동"
+        this.kcalValue = 35
+      } else if (num === 4) {
+        this.UserJoinData.activity = "아주 강한 활동"
+        this.kcalValue = 40
+      } else if (num) {
+        this.UserJoinData.activity = null
+        this.kcalValue = null
+      }
+    },
+
     goToLogin() {
       this.$router
         .push({ name: constants.URL_TYPE.USER.LOGIN })
     },
 
-    // 목표 체중 입력 메서드
-    // onClickGoal(num) {
-    //   if (num === 1) {
-    //     this.UserJoinData.goal = "체중 감소"
-    //   } else if (num === 2) {
-    //     this.UserJoinData.goal = "체중 유지"
-    //   } else if (num === 3) {
-    //     this.UserJoinData.goal = "체중 증가"
-    //   } else if (num === 4) {
-    //     this.UserJoinData.goal = null
-    //   }
-    // },
-
-    // 키와 몸무게 입력 메서드(다음 버튼)
-    onClickBodyspec() {
-      this.e1 = 3
-      console.log(this.UserJoinData)
+    SetupStandard() {
+      if (this.gender !== null) {
+        if (this.gender === 'male') { return 22*Number(this.UserJoinData.height)**2*this.kcalValue/10000}
+        else { return 21*Number(this.UserJoinData.height)**2*this.kcalValue/10000}
+      }
+    },
+    
+    test() {
+      var required_kcal = this.SetupStandard()
+      this.UserJoinData.standard = required_kcal-500
+      console.log(this.UserJoinData.standard)
     }
   },
 }
@@ -505,9 +551,6 @@ export default {
 
 <style>
 .input_field {
-  margin: 6px auto;
-}
-.checkemail-btn {
   margin: 6px auto;
 }
 </style>
