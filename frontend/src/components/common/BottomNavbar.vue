@@ -47,6 +47,7 @@
 <script>
 import constants from '@/libs/constants'
 import { mapState, mapActions } from 'vuex'
+import { routeState } from '@/components/mixins/routeState'
 
 export default {
   name: 'BottomNavbar',
@@ -79,17 +80,18 @@ export default {
           }
         })
     },
-    goToLogin() {
-      this.$router
-        .push({ name: constants.URL_TYPE.USER.LOGIN })
-        .catch(err => {
-          if(err.name != "NavigationDuplicated" ) throw err
-        })
-    },
+    // goToLogin() {
+    //   this.$router
+    //     .push({ name: constants.URL_TYPE.USER.LOGIN })
+    //     .catch(err => {
+    //       if(err.name != "NavigationDuplicated" ) throw err
+    //     })
+    // },
     goToDiary() {
       if (!this.LoginFlag) {
         alert('로그인이 필요한 페이지 입니다.')
         this.goToLogin()
+        return
       }
 
       this.$router
@@ -129,7 +131,10 @@ export default {
   },
   computed: {
     ...mapState(["LoginFlag"])
-  }
+  },
+  mixins: [
+    routeState
+  ],
 }
 </script>
 
