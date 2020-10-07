@@ -4,7 +4,6 @@
       <h3>평균 칼로리</h3>
     </v-row>
     <v-row>
-      
       <div class="">
         <Doughnut
           ref="Calorie_Chart"
@@ -14,22 +13,12 @@
       </div>
     </v-row>
 
-    <!-- <div>
-      <Line
-      >
-      </Line>
-    </div> -->
-
     <div>
       <line-chart :chart-data="this.datacollection"></line-chart>
       <v-btn 
         @click="fillData()"
         color="primary">Randomize</v-btn>
     </div>
-
-    <!-- <div>
-      <reactive :chart-data="datacollection"></reactive>
-    </div> -->
 
     <v-btn
       @click="test()"
@@ -42,9 +31,7 @@
 <script>
 // 차트 컴포넌트
 import Doughnut from '@/components/chart/Doughnut'
-// import Line from '@/components/chart/Line'
 import LineChart from '@/components/chart/LineChart'
-// import Reactive from '@/components/chart/Reactive'
 
 // 무작위 컬러 라이브러리
 import randomColor from 'randomcolor'
@@ -58,22 +45,13 @@ const options = {
   legend: {
     display: false
   },
-  //   tooltips: {
-  //       callbacks: {
-  //          label: function(tooltipItem) {
-  //                 return tooltipItem.yLabel;
-  //          }
-  //       }
-  //   }
 }
 
 export default {
   name: 'Mypage',
   components: {
     Doughnut,
-    // Line,
     LineChart,
-    // Reactive
   },
   data() {
     return {
