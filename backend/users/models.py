@@ -15,6 +15,7 @@ class Profile(models.Model):
     height = models.IntegerField()
     weight = models.IntegerField()
     goal = models.IntegerField()
+    standard = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

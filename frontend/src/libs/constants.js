@@ -22,6 +22,7 @@ export default {
     },
     POST: {
       CREATE: 'create',
+      DELETE: 'delete'
     },
     CALENDAR: {
       DIARY: 'diary'

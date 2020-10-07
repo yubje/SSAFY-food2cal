@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <div v-show="!isLoading" class="progress-loading">
+    <!-- <div v-show="!isLoading" class="progress-loading">
       <Loading />
-    </div>
+    </div> -->
     
     <div v-for="post in posts" :key="post.id">
       <PostsCard :post="post" />
@@ -13,10 +13,10 @@
 
 <script>
 import PostsCard from '@/components/common/PostsCard'
-import Loading from '@/components/common/Loading'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/libs/api'
 import { mapActions } from 'vuex'
+// import Loading from '@/components/common/Loading'
 
 export default {
   name: 'Home',
@@ -29,19 +29,29 @@ export default {
   },
   components: {
     PostsCard,
-    Loading,
     InfiniteLoading
+    // Loading,
   },
   methods: {
     ...mapActions([
-      'getMonthDiets'
+      'getMonthDiets',
+      'getProfile'
     ]),
-    getToday() {
+    getYearMon() {
       let time = new Date()
       let year = time.getFullYear()
       let month = time.getMonth() + 1
       month = month >= 10 ? month: '0' + month
       return year + '-' + month
+    },
+    getToday() {
+      let time = new Date()
+      let year = time.getFullYear()
+      let month = time.getMonth() + 1
+      month = month >= 10 ? month: '0' + month
+      let date = time.getDate()
+      date = date >= 10 ? date: '0' + date
+      return year + '-' + month + '-' + date
     },
     infiniteHandler($state) {
       this.$http
@@ -68,9 +78,15 @@ export default {
       .then(res => {
         this.posts = res.data
       })
-    const yearMon = this.getToday()
-    this.getMonthDiets(yearMon)
-  }
+    // const yearMon = this.getYearMon()
+    const today = this.getToday()
+    window.localStorage.setItem('date', today)
+    // this.getMonthDiets(yearMon)
+  },
+
+  mounted() {
+    this.getProfile()
+  },
 }
 </script>
 

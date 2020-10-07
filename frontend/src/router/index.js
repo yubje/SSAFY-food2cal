@@ -57,6 +57,11 @@ const routes = [
     name: constants.URL_TYPE.UPLOAD.DIET,
     component: ()  => import('@/views/calendar/DietsCreate')
   },
+  {
+    path: '/posts/delete',
+    name: constants.URL_TYPE.POST.DELETE,
+    component: () => import('@/views/posts/PostsDelete')
+  }
 ]
 
 const router = new VueRouter({

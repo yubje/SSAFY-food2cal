@@ -38,8 +38,8 @@
       <div v-show="show">
         <v-divider></v-divider>
 
-        <v-card-text v-if="foodInfo && foodInfo[category.type].length">
-          <div v-for="food in foodInfo[category.type]" :key="food.id">
+        <v-card-text v-if="dietMonthInfo[date] && dietMonthInfo[date][category.type]">
+          <div v-for="food in dietMonthInfo[date][category.type]" :key="food.id">
             <div class="d-flex justify-space-between align-center">
               <span class="ml-5 text-subtitle-1">{{ food.food_name }}</span>
               <div>
@@ -71,7 +71,7 @@
 <script>
 import SERVER from '@/libs/api'
 import constants from '@/libs/constants'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -83,14 +83,20 @@ export default {
     category: {
       type: Object
     },
-    foodInfo: {
-      type: Object
-    },
+    // foodInfo: {
+    //   type: Object
+    // },
     date: {
       type: String
     }
   },
-  mounted () {
+  created () {
+    // console.log(this.dietMonthInfo)
+  },
+  computed: {
+    ...mapState([
+      'dietMonthInfo'
+    ]),
   },
   methods: {
     ...mapActions([

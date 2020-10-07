@@ -171,9 +171,9 @@ export default {
       
       this.$http
         .post(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.createDiet, dietData, config)
-        .then(() => {
-          // console.log(res)
-          this.isSelectModal = true
+        .then(res => {
+          console.log(res)
+          // this.isSelectModal = true
         })
         .catch(err => console.log(err.response.data))
     }

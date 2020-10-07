@@ -79,7 +79,7 @@
       >
         <v-list-item-group
           v-model="group"
-          active-class="deep-purple--text text--accent-4"
+          active-class="deep-orange--text text--accent-4"
         >
           <v-list-item @click="goToHome">
             <v-list-item-icon>
@@ -109,7 +109,7 @@
             <v-list-item-title>다이어리</v-list-item-title>
           </v-list-item>
 
-          <v-list-item v-if="LoginFlag" @click="logoutTry">
+          <v-list-item v-if="LoginFlag" @click="logoutTry" @keypress.enter="logoutTry">
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
@@ -131,38 +131,22 @@
 
 <script>
 import constants from '@/libs/constants'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data: () => ({
     constants,
     drawer: false,
     group: null,
-    islogin: false,
+    // islogin: false,
   }),
-  watch: {
+  watch: { 
     group () {
       this.drawer = false
     },
   },
   methods: {
     ...mapActions(["logoutTry"]),
-    UserLogout() {
-      const config = {
-        headers: {'Authorization': `Token ${this.$cookies.get('auth-token')}`}
-      }
-      if (this.islogin === true) {
-        this.$http
-          .post(process.env.VUE_APP_SERVER_URL + '/rest-auth/logout/', null, config)
-          .catch(err=>console.log(err.response))
-          .finally(() => {
-            this.$cookies.remove('auth-token')
-            this.$emit('submit-logout')
-            this.islogin != this.islogin  
-            this.$router.push({ name:'Home'})
-          })
-      }
-    },
     goToLogin() {
       this.$router
         .push({ name: constants.URL_TYPE.USER.LOGIN })
@@ -197,7 +181,8 @@ export default {
     this.islogin = this.$cookies.isKey('auth-token')
   },
   computed: {
-    ...mapState(["LoginFlag"])
+    ...mapGetters(['LoginFlag']),
+    // ...mapState(["LoginFlag"])
   }
 }
 </script>

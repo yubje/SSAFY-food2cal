@@ -17,6 +17,8 @@ export default new Vuex.Store({
     dietMonthInfo: null,
     foodInfo: [],
     LoginFlag: false,
+    standard: null,
+    authToken: cookies.get('auth-token')
   },
   mutations: {
     SET_FILE_URL(state, fileUrl) {
@@ -29,15 +31,29 @@ export default new Vuex.Store({
       state.dietMonthInfo = dietMonthInfo
     },
     SET_LOGIN_FLAG(state) {
-      state.LoginFlag = this.$cookies.isKey('auth-token')
+      state.LoginFlag = !!state.authToken
     },
     LOGIN_STATE(state, result) {
       if ( result === true) {
         state.LoginFlag = result
       } else {
         state.LoginFlag = false
+        state.authToken = null
       }
     },
+    SET_STANDARD(state) {
+      if (state.LoginFlag === true) {
+        console.log('hi')
+      }
+    },
+    SET_TOKEN(state, token) {
+      state.authToken = token
+      cookies.set('auth-token', token)
+    },
+    DELETE_TOKEN(state) {
+      state.authToken = null
+      cookies.remove('auth-token')
+    }
   },
   actions: {
     upload({ commit }, fileData) {
@@ -80,14 +96,14 @@ export default new Vuex.Store({
       // let month = +date[0].slice(0, -1)
       // month = month >= 10 ? month: '0' + month
       // const yearMon = year + '-' + month
-
+      // console.log(yearMon)
       window.localStorage.setItem('yearMon', yearMon);
 
       axios.get(process.env.VUE_APP_SERVER_URL + SERVER.ROUTES.diets + `${yearMon}/`, config)
         .then(res => {
           commit('SET_DIET_INFO', res.data)
           // this.dietMonthInfo = res.data
-          console.log(res.data)
+          // console.log(res.data)
         })
         .catch(err => {
           console.log(err)
@@ -101,24 +117,31 @@ export default new Vuex.Store({
             .then(res => {
               const token = res.data.key
               cookies.set('auth-token', token)
-              window.sessionStorage.setItem('username', LoginData.username)
+              commit("SET_TOKEN", token)
               commit("LOGIN_STATE", true)
-              router.push({ name: 'Home'})
+              router
+                .push({ name: 'Home'})
+                .catch(err => {
+                  if(err.name != "NavigationDuplicated" ){
+                    throw err
+                  }
+                })
             })
             .catch(err => {
               commit("LOGIN_STATE", false)
               console.log(err)
             })
+          
         }
       } else {
         router.push({ name: 'Home'})
         alert('이미 로그인 상태입니다.')
       }
     },
-    logoutTry({ state, commit }) {
-      if (state.LoginFlag === true) {
+    logoutTry({ state, getters, commit }) {
+      if (getters.LoginFlag === true) {
         const config = {
-          headers: {'Authorization': `Token ${state.authtoken}`}
+          headers: {'Authorization': `Token ${state.authToken}`}
         }
         axios
           .post(process.env.VUE_APP_SERVER_URL + '/users/logout/', null, config)
@@ -130,8 +153,29 @@ export default new Vuex.Store({
             router.push({ name:'Home'})
           })
       }
+    },
+    getProfile() {
+      console.log('try getprofile')
+      const config = {
+        headers: {
+          Authorization: `Token ${cookies.get(`auth-token`)}`
+        }
+      }
+      axios
+        .get(process.env.VUE_APP_SERVER_URL + '/users/profiles/', config)
+        .then(res => {
+          console.log(res.data)
+          window.sessionStorage.setItem('username', res.data[0].user)
+          window.sessionStorage.setItem('standard', res.data[0].standard)
+        })
+        .catch(err => console.log(err))
     }
   },
+  getters: {
+    LoginFlag: state => !!state.authToken
+  },
+
+
   modules: {
   }
 })
