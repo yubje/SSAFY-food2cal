@@ -154,21 +154,21 @@ export default new Vuex.Store({
           })
       }
     },
-    getProfile() {
-      console.log('try getprofile')
-      const config = {
-        headers: {
-          Authorization: `Token ${cookies.get(`auth-token`)}`
+    getProfile({ state }) {
+      if (state.authToken) {
+        const config = {
+          headers: {
+            Authorization: `Token ${cookies.get(`auth-token`)}`
+          }
         }
+        axios
+          .get(process.env.VUE_APP_SERVER_URL + '/users/profiles/', config)
+          .then(res => {
+            window.sessionStorage.setItem('username', res.data[0].user)
+            window.sessionStorage.setItem('standard', res.data[0].standard)
+          })
+          .catch(err => console.log(err))
       }
-      axios
-        .get(process.env.VUE_APP_SERVER_URL + '/users/profiles/', config)
-        .then(res => {
-          console.log(res.data)
-          window.sessionStorage.setItem('username', res.data[0].user)
-          window.sessionStorage.setItem('standard', res.data[0].standard)
-        })
-        .catch(err => console.log(err))
     }
   },
   getters: {

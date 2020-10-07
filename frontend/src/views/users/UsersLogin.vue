@@ -133,6 +133,7 @@ export default {
     goToJoin() {
       this.$router.push({ name: constants.URL_TYPE.USER.JOIN })
     },
+  }
 }
 </script>
 
