@@ -90,15 +90,17 @@ export default {
       if (!this.LoginFlag) {
         alert('로그인이 필요한 페이지 입니다.')
         this.goToLogin()
+      } else {
+        this.$router
+          .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
+          .catch(err => {
+            if(err.name != "NavigationDuplicated" ){
+              throw err
+            }
+          })
       }
 
-      this.$router
-        .push({ name: constants.URL_TYPE.CALENDAR.DIARY })
-        .catch(err => {
-          if(err.name != "NavigationDuplicated" ){
-            throw err
-          }
-        })
+      
     },
     goToMypage() {
       this.$router
