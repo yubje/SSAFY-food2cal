@@ -60,12 +60,12 @@
       <v-list-item v-if="LoginFlag" class="avatar-info">
         <!-- 유저 프로필 이미지 -->
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          <v-icon>mdi-menu-down</v-icon>
         </v-list-item-avatar>
 
         <!-- 유저 닉네임 -->
         <v-list-item-content>
-          <v-list-item-title>John Leider</v-list-item-title>
+          <v-list-item-title class="">메뉴 리스트</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -138,7 +138,7 @@ export default {
     constants,
     drawer: false,
     group: null,
-    // islogin: false,
+    username: window.sessionStorage.getItem('username'),
   }),
   watch: { 
     group () {

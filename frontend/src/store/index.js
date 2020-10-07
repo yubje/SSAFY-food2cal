@@ -177,10 +177,7 @@ export default new Vuex.Store({
           .then(res => {
             window.sessionStorage.setItem('username', res.data.user)
             window.sessionStorage.setItem('standard', res.data.standard)
-          })
-          .catch(err => {
-            console.log(err)
-            alert('유저 프로필 정보를 받아오는데 실패했습니다.')
+            window.sessionStorage.setItem('goal', res.data.goal)
           })
       }
     }
