@@ -156,9 +156,9 @@ export default {
             } 
           }
           this.Caloriedata.datasets[0]['data'] = [this.calories/(data_length), window.sessionStorage.getItem('standard')-this.calories/(data_length)]
-          this.datacollections[0]['avg'] /= (data_length)
-          this.datacollections[1]['avg'] /= (data_length)
-          this.datacollections[2]['avg'] /= (data_length)
+          this.datacollections[0]['avg'] /= parseInt(data_length)
+          this.datacollections[1]['avg'] /= parseInt(data_length)
+          this.datacollections[2]['avg'] /= parseInt(data_length)
 
           this.forceRerender()
         })
