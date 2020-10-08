@@ -7,6 +7,9 @@ export default {
   NOT_FOUND: {
     PAGE_NOT_FOUND: '',
   },
+  INTRO: {
+    INTRO: 'intro'
+  },
   URL_TYPE: {
     UPLOAD: {
       CAMERA: 'camera',

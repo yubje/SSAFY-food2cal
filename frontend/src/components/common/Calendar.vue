@@ -81,12 +81,14 @@
           </v-menu> -->
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="300">
+      <v-sheet height="400">
         <v-calendar
           ref="calendar"
           v-model="focus"
           color="primary"
           :type="type"
+          :events="events"
+          :event-color="getEventColor"
           @click:date="sendDate"
         ></v-calendar>
         
@@ -155,7 +157,19 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     title: null,
-    isLoading: false
+    isLoading: false,
+    events: [
+      {
+        name: 'Sucess',
+        start: '2020-10-07',
+        color: 'green'
+      },
+      {
+        name: 'Fail',
+        start: '2020-10-06',
+        color: 'red'
+      }
+    ],
   }),
   created () {
     this.isLoading = true
@@ -170,7 +184,7 @@ export default {
       const yearMon = this.setYearMon(this.$refs.calendar.title)
       this.getMonthDiets(yearMon)
     }, 10)
-    
+    this.setCalendarEvent()
   },
   updated() {
     
@@ -194,9 +208,9 @@ export default {
     //   this.focus = date
     //   this.type = 'day'
     // },
-    // getEventColor (event) {
-    //   return event.color
-    // },
+    getEventColor (event) {
+      return event.color
+    },
     // setToday() {
     //   this.focus = ''
     // },
@@ -231,6 +245,50 @@ export default {
         this.$emit('food-info', arr)
       }, 10)
     },
+    setCalendarEvent() {
+      const arr = Object.keys(this.dietMonthInfo)
+      const daily = window.sessionStorage.getItem('standard')
+      const goal = parseInt(window.sessionStorage.getItem('goal'))
+      // const daily = 1800
+      const events = []
+
+      arr.forEach(el => {
+        if (goal <= 0 && this.dietMonthInfo[el].calorie > daily) {
+          events.push(
+            {
+              name: 'Fail',
+              start: el,
+              color: 'red'
+            },
+          )
+        } else if (goal <= 0 && this.dietMonthInfo[el].calorie <= daily) {
+          events.push(
+            {
+              name: 'Sucess',
+              start: el,
+              color: 'green'
+            },
+          )
+        } else if (+goal > 0 && this.dietMonthInfo[el].calorie > daily) {
+          events.push(
+            {
+              name: 'Sucess',
+              start: el,
+              color: 'green'
+            }
+          )
+        } else {
+          events.push(
+            {
+              name: 'Fail',
+              start: el,
+              color: 'red'
+            },
+          )
+        }
+      })
+      this.events = events
+    }
     // getMonthDiets() {
     //   const config = {
     //     headers: {

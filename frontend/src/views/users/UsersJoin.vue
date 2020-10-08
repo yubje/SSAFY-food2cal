@@ -452,7 +452,7 @@ export default {
           if (UserJoinData.password1.trim() || UserJoinData.password2.trim()) {
             if (UserJoinData.password1.trim() === UserJoinData.password2.trim()) {
             var required_kcal = this.SetupStandard()
-            this.UserJoinData.standard = required_kcal-500
+            this.UserJoinData.standard = parseInt(required_kcal-500)
             this.$http
               .post(process.env.VUE_APP_SERVER_URL + '/users/signup/', UserJoinData)
               .then(res => {
@@ -467,7 +467,7 @@ export default {
                   .then(() => this.$router.push({ path: '/login' }))
                   .catch(err => {
                     console.log(err)
-                    alert('가입할 수 없는 회원 정보입니다.')
+                    alert('프로필 정보 갱신에 실패했습니다.')
                   })
               })
               .catch(err => console.log(err))

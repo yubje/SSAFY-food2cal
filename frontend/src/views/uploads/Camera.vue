@@ -45,7 +45,8 @@ export default {
     ...mapActions(['upload']),
     init() {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        navigator.mediaDevices.getUserMedia({video: true})
+        // navigator.mediaDevices.getUserMedia({video: true})
+        navigator.mediaDevices.getUserMedia({video: { facingMode: { exact: "environment" } }})
           .then(stream => {
             const videoPlayer = document.querySelector('video')
             videoPlayer.srcObject = stream;

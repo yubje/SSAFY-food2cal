@@ -61,7 +61,12 @@ const routes = [
     path: '/posts/delete',
     name: constants.URL_TYPE.POST.DELETE,
     component: () => import('@/views/posts/PostsDelete')
-  }
+  },
+  // {
+  //   path: '/',
+  //   name: constants.INTRO.INTRO,
+  //   component: () => import('@/views/Intro')
+  // }
 ]
 
 const router = new VueRouter({
