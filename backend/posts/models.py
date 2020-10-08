@@ -20,13 +20,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    def save(self, *args, **kwargs):
-        cache.delete(f'comment_{post.id}')
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        cache.delete(f'comment_{post.id}')
-        super().delete(*args, **kwargs)
+    
 
 class Vote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

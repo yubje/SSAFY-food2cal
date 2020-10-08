@@ -74,6 +74,7 @@ def comment_list(request, post_id):
         return Response(context)
     # 댓글 생성 
     elif request.method == 'POST':
+        cache.delete(f'comment_{post_id}')
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, post_id=post_id)
