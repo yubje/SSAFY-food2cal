@@ -247,11 +247,13 @@ export default {
     },
     setCalendarEvent() {
       const arr = Object.keys(this.dietMonthInfo)
-      // const daily = window.sessionStorage.getItem('standard')
-      const daily = 1800
+      const daily = window.sessionStorage.getItem('standard')
+      const goal = parseInt(window.sessionStorage.getItem('goal'))
+      // const daily = 1800
       const events = []
+
       arr.forEach(el => {
-        if (this.dietMonthInfo[el].calorie > daily) {
+        if (goal <= 0 && this.dietMonthInfo[el].calorie > daily) {
           events.push(
             {
               name: 'Fail',
@@ -259,12 +261,28 @@ export default {
               color: 'red'
             },
           )
-        } else {
+        } else if (goal <= 0 && this.dietMonthInfo[el].calorie <= daily) {
           events.push(
             {
               name: 'Sucess',
               start: el,
               color: 'green'
+            },
+          )
+        } else if (+goal > 0 && this.dietMonthInfo[el].calorie > daily) {
+          events.push(
+            {
+              name: 'Sucess',
+              start: el,
+              color: 'green'
+            }
+          )
+        } else {
+          events.push(
+            {
+              name: 'Fail',
+              start: el,
+              color: 'red'
             },
           )
         }
