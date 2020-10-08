@@ -27,7 +27,7 @@
         <!-- <div class="rightbuttons" v-if="!checkComment.isComment && +commentForm.userid === comment.userid"> -->
         <div class="mr-5 my-auto" v-if="!checkComment.isComment && comment.user.username === setName">
           <button @click="changeIsComment(comment)">수정</button>
-          <button class="ml-2" @click="deleteComment(comment.id)">삭제</button>
+          <button class="ml-2" @click="deleteComment(comment)">삭제</button>
         </div><br>
       </div>
     </div>
@@ -130,7 +130,7 @@ export default {
         })
         .catch(err => console.log(err))
     },
-    deleteComment(commentId) {
+    deleteComment(comment) {
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get(`auth-token`)}`
@@ -138,7 +138,8 @@ export default {
       }
 
       this.$http
-        .delete(process.env.VUE_APP_SERVER_URL + '/comments/' + `${commentId}/`, config)
+        .delete(process.env.VUE_APP_SERVER_URL + '/posts/' + `${comment.post}` 
+        + '/comments/' + `${comment.id}/`, config)
         .then(() => {
           alert("댓글이 삭제되었습니다.")
           this.getCommentList()

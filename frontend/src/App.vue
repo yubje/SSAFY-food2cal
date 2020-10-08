@@ -23,9 +23,14 @@ export default {
     AppBar,
     BottomNavbar
   },
-  data: () => ({
-  }),
+  data() {
+    return {
+      isAppBar: false
+    }
+  },
   methods: {
+  },
+  created() {
   }
 };
 </script>

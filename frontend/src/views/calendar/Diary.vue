@@ -81,7 +81,7 @@ export default {
     updateDate(date) {
       window.localStorage.setItem('date', date)
       this.date = date
-      console.log(this.date)
+      // console.log(this.date)
     }
   }
 }
