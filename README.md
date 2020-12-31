@@ -38,7 +38,7 @@
 
 **Flask**: food2cal 의 머신러닝 기능 구현
 
-**Tensorflow**: 머신러닝 기능 구현
+**YOLO v2**: 머신러닝 기능 구현
 
 **Vue.js**: food2cal의 프론트엔드 기능 구현
 
